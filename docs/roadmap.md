@@ -22,8 +22,6 @@ acceptance criteria. A milestone passes only with an attached reproducible repor
 | O1 | Base OS prototype selection | Fedora/bootc versus Debian installation/update/recovery report | R3 |
 | O2 | Installable developer preview | Bootable artifact, offline model pack, working applications and recovery | O1, A1 |
 | O3 | Supported OS pilot | Bare-metal hardware matrix, signed updates, isolation and support procedures | O2, R7 if accelerator advertised |
-| B1 | Paid design partner | Named buyer problem, baseline, acceptance contract and payment | Discovery can begin at D0 |
-| B2 | Repeatable commercial deployment | Second deployment, cost/support report and renewal evidence when available | B1, relevant runtime/OS gates |
 | L1 | Optimization observation | Scoped telemetry, static/heuristic baseline and no control mutation | R4 |
 | L2 | Bounded automatic tuning | Held-out benefit, policy enforcement, watchdog and rollback tests | L1, O3 |
 | S1 | Security advisory research | Labeled evaluation, false-alert/overhead report, poisoning tests | Security baseline established |
@@ -106,5 +104,7 @@ Choose protocol encoding, per-user/system service deployment, exact ABI layouts,
 dynamic output allocation, worker isolation granularity, model candidates and
 initial device. After prototypes, choose OS base version, installer, update trust
 roots, desktop and storage layout. Before public distribution, decide naming,
-licenses, governance and support lifecycle. These are concrete next decisions,
+third-party asset rights, specification IP governance and support lifecycle.
+Community licenses are selected in [LICENSE-SCOPE.md](../LICENSE-SCOPE.md).
+These are concrete next decisions,
 not claims that the current repository contains an implementation.

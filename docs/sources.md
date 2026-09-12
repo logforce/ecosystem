@@ -7,7 +7,7 @@ Documentation at moving URLs can change; pin versions during implementation.
 
 ## Project Baseline
 
-- [Original v0.1 specification](../ecOS_CogPOSIX_Project_Specification_v0.1.docx), dated 11 September 2026. Preserved unchanged.
+- Original v0.1 planning specification, dated 11 September 2026; historical attachment excluded from the public distribution.
 - Subsequent user direction: controlled specialized models, CogPOSIX as the central interface, an installable sovereign OS, bounded learning and cybersecurity research. Captured in [SPEC.md](../SPEC.md).
 
 ## Runtime and Competition
@@ -50,10 +50,12 @@ wiki; a production base and desktop image have not been verified.
 | [Linux seccomp](https://docs.kernel.org/userspace-api/seccomp_filter.html) | Syscall filtering and its limitations |
 | [NIST adversarial-ML taxonomy, 2025 announcement](https://www.nist.gov/news-events/news/2025/03/nist-trustworthy-and-responsible-ai-report-adversarial-machine-learning) | Poisoning, evasion and privacy threats to learned systems |
 
-## Commercial Context and Naming
+## Licensing and Naming
 
-- [Edge Impulse about page](https://www.edgeimpulse.com/about): company-reported acquisition by Qualcomm in March 2025; adjacent strategic activity only.
 - [eCos project](https://ecos.sourceware.org/): established RTOS naming overlap.
+- [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0): software license.
+- [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.en): documentation license.
+- [DCO](https://developercertificate.org/): contribution origin certification.
 
-No market size, price benchmark, investor interest or customer ROI has been verified.
-Illustrations in [business impact](business-impact.md) are explicitly hypothetical.
+Licensing and publication scope are defined in [LICENSE-SCOPE.md](../LICENSE-SCOPE.md)
+and [PUBLICATION.md](../PUBLICATION.md), respectively.

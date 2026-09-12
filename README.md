@@ -10,14 +10,13 @@ time-series analysis and language models. An LLM is one possible provider.
 
 ## Status
 
-This repository currently contains design and business documentation. There is no
+This repository currently contains design documentation and publication tooling. There is no
 runtime, SDK, model bundle, installer or bootable ecOS image yet. Examples are
 proposed contracts, not commands or APIs that can currently be executed.
 
-The original [v0.1 specification](ecOS_CogPOSIX_Project_Specification_v0.1.docx)
-is retained unchanged. The [specification guide](SPEC.md) explains how the expanded
-documentation relates to it. Research and commercial claims are explicitly
-separated from release requirements and demonstrated results.
+The [specification guide](SPEC.md) introduces the public design baseline.
+Research proposals are separated from release requirements and demonstrated results.
+The original planning attachment is not part of the public distribution.
 
 ## Two Names, Two Responsibilities
 
@@ -64,11 +63,13 @@ flowchart TD
 | [Installable OS](docs/operating-system.md) | Why Linux, which distribution approach, and what about mobile? |
 | [Security](docs/security.md) | What are the trust boundaries and how can learning help defense? |
 | [Adaptive optimization](docs/adaptive-optimization.md) | Can learning tune the system or change kernel behavior? |
-| [Business impact](docs/business-impact.md) | Who pays, why, how much might work, and what attracts investment? |
 | [Roadmap and validation](docs/roadmap.md) | What must be proven before runtime, OS and commercial releases? |
 | [Decisions](docs/decisions.md) | Which choices are recorded and which remain provisional? |
 | [Sources](docs/sources.md) | Which primary references informed the analysis? |
 | [Contribution and governance](CONTRIBUTING.md) | How should this proposed interface evolve? |
+| [License scope](LICENSE-SCOPE.md) | Which software and documentation licenses apply? |
+| [Community terms](TERMS.md) | How does community use differ from optional paid services? |
+| [Publication boundary](PUBLICATION.md) | Which files may be included in a public release? |
 
 ## Initial Technical Direction
 
@@ -90,6 +91,17 @@ promise zero-cost computation, hard real-time inference, automatic prevention of
 all cyberattacks, or unrestricted autonomous kernel modification.
 
 Both names are provisional. The existing [eCos RTOS](https://ecos.sourceware.org/)
-creates a naming collision. Publication naming and licensing remain unresolved;
-an intention to develop an open interface is not a license grant for these files
-or third-party models. See [governance](CONTRIBUTING.md).
+creates a naming collision; naming clearance remains unresolved. Public project
+software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
+[license scope](LICENSE-SCOPE.md). Third-party assets retain their own terms.
+
+## Community and Optional Enterprise Services
+
+The intended community runtime and installable OS work without mandatory accounts,
+telemetry or LOGFORCE. Baseline policy enforcement and security remain community
+features. Open event contracts can support optional analyzers, including a basic
+open LOGFORCE bridge; proprietary intelligence and enterprise services are separate.
+These integrations are planned, not implemented.
+
+Maintainers must use the [allowlisted publication procedure](PUBLICATION.md).
+The mixed working repository's history must not seed a public remote directly.

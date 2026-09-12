@@ -8,7 +8,7 @@ implemented because its documentation exists.
 
 ## Documentation Changes
 
-Keep the original DOCX unchanged. Update the canonical topic document and record
+Update the canonical public topic document and record
 material architecture changes in [decisions](docs/decisions.md). Use relative links
 within the repository and primary-source links for external technical claims.
 Label experimental APIs, financial hypotheses and unverified hardware support.
@@ -30,18 +30,34 @@ more than one application; standardization claims need independent adoption.
 Maintain distinct versioning for core ABI, wire protocol, capability profiles,
 packages and OS releases. Commercial features must not silently redefine a public
 capability contract. Independent implementations should be able to run the same
-conformance suite under the eventual chosen license.
+conformance suite under Apache-2.0. Certification marks remain separately controlled.
 
 ## Licensing and Naming
 
-No project license is selected yet, and this repository does not grant additional
-copyright permissions through a placeholder license. Choose documentation and
-software terms explicitly before public release. The open-interface business
-strategy is a proposal, not an already effective licensing arrangement.
+The explicit grants and exclusions are in [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
+Listed community code is Apache-2.0; listed public prose is CC BY 4.0. Original code
+examples embedded in public prose are additionally Apache-2.0. Internal material,
+private models and unreviewed assets are excluded; no rights to another repository
+are granted by a contribution here.
 
 Third-party software, model weights, datasets, firmware and adapters retain their
 own terms. Inventory redistribution and modification rights for every shipped
 artifact. Both ecOS and CogPOSIX remain working names.
+
+## Contribution Certification
+
+Submit contributions under the license applicable to each changed public file,
+including the additional Apache grant for original embedded code examples. Retain
+third-party notices and identify imported content and its license. Add a
+`Signed-off-by: Name <email>` line to certify the
+[Developer Certificate of Origin 1.1](https://developercertificate.org/).
+Use a public contact identity you are authorized to supply; sign-off becomes part
+of public Git history. DCO certifies origin/authority and is not copyright assignment
+or blanket patent clearance. No separate copyright-assignment CLA is required.
+
+Do not submit proprietary LOGFORCE code, internal business notes, confidential
+examples or customer data. New public files need an explicit
+[publication manifest](PUBLICATION.json) entry and content/license review.
 
 ## Security Reporting
 

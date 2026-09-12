@@ -1,5 +1,8 @@
 # Business Impact and Commercial Strategy
 
+Classification: INTERNAL - DO NOT PUBLISH.
+Excluded from public licensing and export. See the internal publication policy.
+
 Status: founder discussion and validation plan, 12 September 2026. No customer
 interviews, paid pilots, measured savings, funding commitments or revenues are
 documented in this repository. Financial examples are hypotheses, not forecasts.
@@ -67,8 +70,8 @@ whether extending an existing server achieves the customer outcome with less wor
 
 ## 5. Revenue Model
 
-Keep a useful execution interface and reference runtime accessible under a future
-explicit license. Candidate paid services include maintained hardware profiles,
+The approved community interface, runtime and reference tooling use Apache-2.0;
+public prose uses CC BY 4.0. Candidate paid services include maintained hardware profiles,
 validated model packs, long-term updates, deployment support, administration and
 integration. Model redistribution rights must permit the chosen offer.
 
@@ -90,7 +93,7 @@ Measure the buyer's incremental total cost, not just tokens avoided:
 
 ```text
 Annual buyer benefit =
-  genuinely avoidable cloud charges
+  avoidable cloud charges
   + measured labor savings
   + hardware cost avoided
   + defensibly measured operational savings
@@ -171,7 +174,8 @@ proof that an ecOS acquisition will occur.
 
 An open interface can broaden adoption while reducing exclusive control. Paid
 features should provide operational value rather than deliberately break protocol
-interoperability. License and governance choices need an explicit founder decision.
+interoperability. The permissive licensing split is approved; formal specification
+IP governance and certification remain to be established.
 
 ## 11. Commercial Validation Gates
 

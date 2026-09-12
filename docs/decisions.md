@@ -18,8 +18,12 @@ repository; it does not imply implemented or tested behavior.
 | ADR-011 | Research only | Security learning starts advisory | False positives, poisoning and recovery require evidence |
 | ADR-012 | Deferred | Android/AOSP device-specific mobile port | Need hardware, service permissions and maintained boot/update integration |
 | ADR-013 | Open | Public project/product names | Existing eCos collision and standardization implications require review |
-| ADR-014 | Open | Documentation, code and model licensing | Avoid silently granting rights; choose compatible terms before public distribution |
+| ADR-014 | Selected | Apache-2.0 software; CC BY 4.0 public prose | Explicit file scope; third-party/model terms preserved; optional proprietary modules separate |
 | ADR-015 | Experimental | C ABI and protocol until conformance freeze | Resolve lifecycle and extension rules before long-term compatibility promises |
+| ADR-016 | Selected | Complete community foundation; optional LOGFORCE | Open event schema/basic bridge; baseline security and execution require no proprietary service |
+| ADR-017 | Selected | Fresh allowlisted public export | Mixed working history cannot be published; private files excluded by default |
+
+See [license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
 
 ## Reconsideration Criteria
 

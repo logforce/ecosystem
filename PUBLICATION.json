@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "default": "exclude",
+  "files": [
+    { "path": ".gitignore", "license": "Apache-2.0" },
+    { "path": "LICENSE", "license": "License-Text" },
+    { "path": "LICENSES/CC-BY-4.0.txt", "license": "License-Text" },
+    { "path": "NOTICE", "license": "Apache-2.0" },
+    { "path": "LICENSE-SCOPE.md", "license": "CC-BY-4.0" },
+    { "path": "TERMS.md", "license": "CC-BY-4.0" },
+    { "path": "TRADEMARKS.md", "license": "CC-BY-4.0" },
+    { "path": "PUBLICATION.md", "license": "CC-BY-4.0" },
+    { "path": "PUBLICATION.json", "license": "Apache-2.0" },
+    { "path": "README.md", "license": "CC-BY-4.0" },
+    { "path": "SPEC.md", "license": "CC-BY-4.0" },
+    { "path": "CONTRIBUTING.md", "license": "CC-BY-4.0" },
+    { "path": "docs/vision.md", "license": "CC-BY-4.0" },
+    { "path": "docs/architecture.md", "license": "CC-BY-4.0" },
+    { "path": "docs/cogposix.md", "license": "CC-BY-4.0" },
+    { "path": "docs/models-and-capabilities.md", "license": "CC-BY-4.0" },
+    { "path": "docs/operating-system.md", "license": "CC-BY-4.0" },
+    { "path": "docs/security.md", "license": "CC-BY-4.0" },
+    { "path": "docs/adaptive-optimization.md", "license": "CC-BY-4.0" },
+    { "path": "docs/roadmap.md", "license": "CC-BY-4.0" },
+    { "path": "docs/decisions.md", "license": "CC-BY-4.0" },
+    { "path": "docs/sources.md", "license": "CC-BY-4.0" },
+    { "path": "scripts/publication.mjs", "license": "Apache-2.0" },
+    { "path": "tests/publication.test.mjs", "license": "Apache-2.0" }
+  ]
+}

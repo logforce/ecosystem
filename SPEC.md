@@ -5,8 +5,8 @@ is asserted.
 
 ## Authority and Scope
 
-The original [v0.1 DOCX](ecOS_CogPOSIX_Project_Specification_v0.1.docx) is the
-historical runtime baseline. The Markdown documents record the subsequent product
+The original v0.1 planning document is the historical runtime baseline and is not
+distributed here. The Markdown documents record the subsequent product
 direction: controlled multi-model capabilities, an installable sovereign OS,
 bounded adaptive optimization and defensive security assistance.
 
@@ -69,6 +69,7 @@ All requirements describe intended behavior. They do not describe shipped code.
 ## Unresolved Before Interface Freeze
 
 Exact function signatures, wire schema, extension identifiers, capability ontology,
-numeric ABI layouts, error enum values, language binding ergonomics and licensing
-are not final. The documents deliberately avoid presenting a compilable SDK that
+numeric ABI layouts, error enum values and language binding ergonomics
+are not final. Community licensing is recorded in [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
+The documents deliberately avoid presenting a compilable SDK that
 would conceal these unresolved choices.
