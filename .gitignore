@@ -1,0 +1,10 @@
+.DS_Store
+~$*.docx
+/target/
+/dist/
+/build/
+/artifacts/
+/model-cache/
+.env
+.env.*
+!.env.example
