@@ -126,6 +126,9 @@ before the subsequent documentation and additional crash/fallback checks. Reprod
 
 ## Remaining Work
 
+The [R2 review checkpoint](r2-review.md) records the reviewed boundaries, follow-up
+fix and sanitizer coverage before the next milestone.
+
 Longer adversarial stress, cross-UID isolation tests, wider kernel coverage and
 independent ABI/security review remain outstanding. Mutable mappings, output
 buffer rotation, device memory and dynamic shapes are not implemented. The next

@@ -52,8 +52,10 @@ fn run() -> io::Result<()> {
     }
     let _server = ecos_daemon::Server::bind(&socket)?;
     println!(
-        "READY {} (mock backend; experimental protocol 1.0)",
-        socket.display()
+        "READY {} (mock backend; experimental protocol {}.{})",
+        socket.display(),
+        cog_protocol::MAJOR,
+        cog_protocol::MINOR
     );
     if stdin_shutdown {
         let mut line = String::new();

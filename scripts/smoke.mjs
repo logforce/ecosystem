@@ -45,6 +45,12 @@ try {
     run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', 'tests/c-ancillary.c',
       'crates/cog-shm/src/linux.c', '-o', ancillary]);
     run(ancillary, []);
+    const sanitized = path.join(scratch, 'c-ancillary-sanitized');
+    run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', '-fsanitize=address,undefined',
+      '-fno-omit-frame-pointer', 'tests/c-ancillary.c', 'crates/cog-shm/src/linux.c', '-o', sanitized]);
+    // LeakSanitizer's ptrace requirements differ across restricted containers.
+    // This test checks descriptor counts itself; address/UB checks remain enabled.
+    run('env', ['ASAN_OPTIONS=detect_leaks=0:halt_on_error=1', 'UBSAN_OPTIONS=halt_on_error=1', sanitized]);
     const shmTest = path.join(scratch, 'c-shm-test');
     run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', '-Iinclude', 'tests/c-shm.c',
       '-L', libraryDir, '-lcogposix', `-Wl,-rpath,${libraryDir}`, '-o', shmTest]);
