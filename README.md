@@ -13,6 +13,8 @@ time-series analysis and language models. An LLM is one possible provider.
 The first experimental runtime is implemented: a local daemon, Rust client, C ABI,
 CLI and deterministic mock backend. It exercises resource ownership, asynchronous
 jobs, cancellation and cleanup without downloading models or contacting a service.
+Linux also supports descriptor-passed, sealed shared inputs and immutable output
+snapshots. See the [shared-memory contract](docs/shared-memory.md).
 There is no real inference engine, model bundle, installer or bootable ecOS image
 yet. The ABI is experimental, not frozen; the wider design remains a roadmap.
 
@@ -72,6 +74,7 @@ flowchart TD
 | [Development](docs/development.md) | How do I build, run and test the working prototype? |
 | [Implemented protocol](docs/protocol.md) | Which messages and lifecycle rules work now? |
 | [R1 evidence](docs/implementation-r1.md) | What has been tested, and what is still missing? |
+| [Shared memory](docs/shared-memory.md) | How does R2 exchange immutable tensor data outside the socket? |
 | [Vision and product](docs/vision.md) | What are we building, for whom, and what does sovereignty mean? |
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
 | [CogPOSIX contracts](docs/cogposix.md) | What does an application rely on? What is portable? |
@@ -91,8 +94,9 @@ flowchart TD
 
 Linux x86-64 remains the runtime target. The Rust mock prototype is verified on
 macOS and in a non-root, offline Linux x86-64 validation container. It uses
-Unix-domain sockets and bounded inline byte buffers. Shared host memory and an
-isolated ONNX Runtime CPU worker are the next milestones, not existing features.
+Unix-domain sockets, bounded inline byte buffers and an experimental sealed
+shared-memory path on Linux. An isolated ONNX Runtime CPU worker is the next
+inference milestone, not an existing feature.
 Hardware acceleration follows correctness and a representative customer benchmark.
 Runtime packaging for existing Linux systems precedes the full OS.
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 use cog_backend_api::Backend;
 use cog_core::*;
-use cog_protocol::{put32, put64, Request, FEATURE_INLINE_MOCK};
+use cog_protocol::{put32, put64, Request, FEATURES};
 use std::{
     collections::{HashMap, VecDeque},
     panic::{catch_unwind, AssertUnwindSafe},
@@ -12,8 +12,29 @@ use std::{
     thread,
 };
 
+enum Storage {
+    Inline(Vec<u8>),
+    #[cfg(target_os = "linux")]
+    Shared(Arc<cog_shm::SharedBuffer>),
+}
+impl Storage {
+    fn bytes(&self) -> &[u8] {
+        match self {
+            Self::Inline(bytes) => bytes,
+            #[cfg(target_os = "linux")]
+            Self::Shared(shared) => shared.bytes(),
+        }
+    }
+    fn writable(&mut self) -> Result<&mut [u8]> {
+        match self {
+            Self::Inline(bytes) => Ok(bytes),
+            #[cfg(target_os = "linux")]
+            Self::Shared(_) => Err(Error::Permission),
+        }
+    }
+}
 struct BufferData {
-    bytes: Vec<u8>,
+    storage: Storage,
     busy: bool,
 }
 struct Buffer {
@@ -78,13 +99,23 @@ impl Job {
             inner.status = JobStatus::Running;
             inner.resources.take().unwrap()
         };
-        let input = resources.input.buffer.data.lock().unwrap().bytes
-            [resources.input.range.clone()]
-        .to_vec();
+        let input = {
+            let data = resources.input.buffer.data.lock().unwrap();
+            match &data.storage {
+                Storage::Inline(bytes) => Storage::Inline(bytes.clone()),
+                #[cfg(target_os = "linux")]
+                Storage::Shared(shared) => Storage::Shared(shared.clone()),
+            }
+        };
         let result = catch_unwind(AssertUnwindSafe(|| {
-            backend.execute(&input, self.delay_ms, &self.cancelled)
+            backend.execute(
+                &input.bytes()[resources.input.range.clone()],
+                self.delay_ms,
+                &self.cancelled,
+            )
         }))
         .unwrap_or(Err(Error::Backend));
+        drop(input);
         let mut inner = self.inner.lock().unwrap();
         let result = if self.cancelled.load(Ordering::Acquire) {
             Err(Error::Cancelled)
@@ -95,8 +126,15 @@ impl Job {
             if bytes.len() != resources.output.range.len() {
                 return Err(Error::Backend);
             }
-            resources.output.buffer.data.lock().unwrap().bytes[resources.output.range.clone()]
-                .copy_from_slice(&bytes);
+            resources
+                .output
+                .buffer
+                .data
+                .lock()
+                .unwrap()
+                .storage
+                .writable()?[resources.output.range.clone()]
+            .copy_from_slice(&bytes);
             Ok(())
         });
         // Publish terminal status only after backend access has ended and buffers are unpinned.
@@ -262,7 +300,7 @@ impl Runtime {
         match request {
             Request::Hello => {
                 let mut out = vec![];
-                put64(&mut out, FEATURE_INLINE_MOCK);
+                put64(&mut out, FEATURES);
                 put32(&mut out, MAX_BUFFER as u32);
                 put32(&mut out, MAX_RANK as u32);
                 Ok(out)
@@ -305,7 +343,10 @@ impl Runtime {
                 session_bytes.fetch_add(size, Ordering::AcqRel);
                 self.bytes.fetch_add(size, Ordering::AcqRel);
                 let buffer = Arc::new(Buffer {
-                    data: Mutex::new(BufferData { bytes, busy: false }),
+                    data: Mutex::new(BufferData {
+                        storage: Storage::Inline(bytes),
+                        busy: false,
+                    }),
                     size,
                     session_bytes,
                     global_bytes: self.bytes.clone(),
@@ -320,10 +361,10 @@ impl Runtime {
                 if inner.busy {
                     return Err(Error::Busy);
                 }
-                if inner.bytes.len() != data.len() {
+                if inner.storage.bytes().len() != data.len() {
                     return Err(Error::Invalid);
                 }
-                inner.bytes.copy_from_slice(&data);
+                inner.storage.writable()?.copy_from_slice(&data);
                 Ok(vec![])
             }
             Request::BufferRead(handle) => {
@@ -334,8 +375,9 @@ impl Runtime {
                 if inner.busy {
                     return Err(Error::Busy);
                 }
-                Ok(inner.bytes.clone())
+                Ok(inner.storage.bytes().to_vec())
             }
+            Request::BufferImport(_) | Request::BufferExport(_) => Err(Error::Unsupported),
             Request::TensorCreate { buffer, desc } => {
                 let Object::Buffer(buffer) = Self::object(&state, owner, buffer)? else {
                     return Err(Error::Invalid);
@@ -391,6 +433,7 @@ impl Runtime {
                     if a.busy || b.busy {
                         return Err(Error::Busy);
                     }
+                    b.storage.writable()?;
                     a.busy = true;
                     b.busy = true;
                 }
@@ -460,5 +503,50 @@ impl Runtime {
                 Ok(vec![])
             }
         }
+    }
+
+    #[cfg(target_os = "linux")]
+    pub fn import(&self, owner: u64, file: std::fs::File, size: u32) -> Result<Vec<u8>> {
+        let mut state = self.state.lock().unwrap();
+        let session = state.sessions.get(&owner).ok_or(Error::Disconnected)?;
+        let size = size as usize;
+        if size == 0 || size > MAX_BUFFER {
+            return Err(Error::Invalid);
+        }
+        if session.objects.len() >= MAX_OBJECTS {
+            return Err(Error::Busy);
+        }
+        if session.bytes.load(Ordering::Acquire) + size > SESSION_MEMORY
+            || self.bytes.load(Ordering::Acquire) + size > GLOBAL_MEMORY
+        {
+            return Err(Error::NoMemory);
+        }
+        let shared = cog_shm::SharedBuffer::from_file(file, size)?;
+        let session_bytes = session.bytes.clone();
+        session_bytes.fetch_add(size, Ordering::AcqRel);
+        self.bytes.fetch_add(size, Ordering::AcqRel);
+        let buffer = Arc::new(Buffer {
+            data: Mutex::new(BufferData {
+                storage: Storage::Shared(Arc::new(shared)),
+                busy: false,
+            }),
+            size,
+            session_bytes,
+            global_bytes: self.bytes.clone(),
+        });
+        Self::insert(&mut state, owner, Object::Buffer(buffer))
+    }
+
+    #[cfg(target_os = "linux")]
+    pub fn export(&self, owner: u64, handle: Handle) -> Result<cog_shm::SharedBuffer> {
+        let state = self.state.lock().unwrap();
+        let Object::Buffer(buffer) = Self::object(&state, owner, handle)? else {
+            return Err(Error::Invalid);
+        };
+        let data = buffer.data.lock().unwrap();
+        if data.busy {
+            return Err(Error::Busy);
+        }
+        cog_shm::SharedBuffer::from_bytes(data.storage.bytes())
     }
 }

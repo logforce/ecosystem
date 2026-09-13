@@ -4,11 +4,18 @@ use cog_core::{Error, Handle, Result, TensorDesc, MAX_BUFFER, MAX_RANK};
 use std::io::{self, Read, Write};
 
 pub const MAJOR: u16 = 1;
-pub const MINOR: u16 = 0;
+pub const MINOR: u16 = 1;
 pub const HEADER_SIZE: usize = 28;
 pub const MAX_PAYLOAD: usize = MAX_BUFFER + 128;
 pub const RESPONSE: u16 = 1;
 pub const FEATURE_INLINE_MOCK: u64 = 1;
+pub const FEATURE_SEALED_SHM: u64 = 2;
+pub const FEATURES: u64 = FEATURE_INLINE_MOCK
+    | if cfg!(target_os = "linux") {
+        FEATURE_SEALED_SHM
+    } else {
+        0
+    };
 
 #[derive(Debug)]
 pub struct Frame {
@@ -24,6 +31,43 @@ fn invalid() -> io::Error {
 }
 
 impl Frame {
+    pub fn read_socket(
+        stream: &mut std::os::unix::net::UnixStream,
+    ) -> io::Result<(Self, Option<std::fs::File>)> {
+        #[cfg(target_os = "linux")]
+        {
+            let mut reader = cog_shm::DescriptorReader::new(stream);
+            let frame = Self::read(&mut reader)?;
+            Ok((frame, reader.file))
+        }
+        #[cfg(not(target_os = "linux"))]
+        {
+            Ok((Self::read(stream)?, None))
+        }
+    }
+    pub fn write_socket(
+        &self,
+        stream: &mut std::os::unix::net::UnixStream,
+        file: Option<&std::fs::File>,
+    ) -> io::Result<()> {
+        #[cfg(target_os = "linux")]
+        {
+            let mut bytes = Vec::new();
+            self.write(&mut bytes)?;
+            cog_shm::send_first(stream, bytes[0], file)?;
+            stream.write_all(&bytes[1..])
+        }
+        #[cfg(not(target_os = "linux"))]
+        {
+            if file.is_some() {
+                return Err(io::Error::new(
+                    io::ErrorKind::Unsupported,
+                    "Linux shared memory required",
+                ));
+            }
+            self.write(stream)
+        }
+    }
     pub fn read(reader: &mut impl Read) -> io::Result<Self> {
         let mut h = [0u8; HEADER_SIZE];
         reader.read_exact(&mut h)?;
@@ -84,6 +128,8 @@ pub enum Request {
     },
     BufferRead(Handle),
     BufferFree(Handle),
+    BufferImport(u32),
+    BufferExport(Handle),
     TensorCreate {
         buffer: Handle,
         desc: TensorDesc,
@@ -169,6 +215,14 @@ impl Request {
                 put64(&mut b, *h);
                 23
             }
+            Self::BufferImport(n) => {
+                put32(&mut b, *n);
+                24
+            }
+            Self::BufferExport(h) => {
+                put64(&mut b, *h);
+                25
+            }
             Self::TensorCreate { buffer, desc } => {
                 put64(&mut b, *buffer);
                 put64(&mut b, desc.offset);
@@ -241,6 +295,8 @@ impl Request {
             }
             22 => Self::BufferRead(d.u64()?),
             23 => Self::BufferFree(d.u64()?),
+            24 => Self::BufferImport(d.u32()?),
+            25 => Self::BufferExport(d.u64()?),
             30 => {
                 let buffer = d.u64()?;
                 let offset = d.u64()?;
@@ -277,6 +333,37 @@ impl Request {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn malformed_frames_drop_descriptors_and_midframe_rights_are_rejected() {
+        use std::{fs, os::unix::net::UnixStream};
+        let shared = cog_shm::SharedBuffer::from_bytes(&[1]).unwrap();
+        let (mut a, mut b) = UnixStream::pair().unwrap();
+        let count = || fs::read_dir("/proc/self/fd").unwrap().count();
+        let baseline = count();
+        let frame = Frame {
+            id: 1,
+            opcode: 1,
+            flags: 0,
+            status: 0,
+            body: vec![],
+        };
+        let mut bytes = Vec::new();
+        frame.write(&mut bytes).unwrap();
+        // Descriptor at byte 1 rather than byte 0 is always invalid.
+        a.write_all(&bytes[..1]).unwrap();
+        cog_shm::send_first(&a, bytes[1], Some(shared.file())).unwrap();
+        a.write_all(&bytes[2..]).unwrap();
+        assert!(Frame::read_socket(&mut b).is_err());
+        assert_eq!(count(), baseline);
+        drop((a, b));
+        let (mut a, mut b) = UnixStream::pair().unwrap();
+        let baseline = count();
+        cog_shm::send_first(&a, 0, Some(shared.file())).unwrap();
+        a.write_all(&bytes[1..]).unwrap();
+        assert!(Frame::read_socket(&mut b).is_err());
+        assert_eq!(count(), baseline);
+    }
     #[test]
     fn rejects_bad_frames_before_payload_allocation() {
         let frame = Frame {
@@ -288,7 +375,7 @@ mod tests {
         };
         let mut bytes = vec![];
         frame.write(&mut bytes).unwrap();
-        for (offset, replacement) in [(0, 0), (4, 2), (6, 1), (18, 2)] {
+        for (offset, replacement) in [(0, 0), (4, 2), (6, 2), (18, 2)] {
             let mut bad = bytes.clone();
             bad[offset] = replacement;
             assert!(Frame::read(&mut bad.as_slice()).is_err());

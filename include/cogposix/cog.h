@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-/* Experimental ABI 0.1. Linux/macOS 64-bit, native C alignment.
+/* Experimental ABI 0.2. Linux/macOS 64-bit, native C alignment.
  * All handles require their originating context. No raw pointer crosses IPC.
  * All functions return COG_OK or a positive error code. Output handles are zeroed
  * on failure when a valid output pointer is supplied. Pointers must be aligned,
@@ -17,7 +17,9 @@ extern "C" {
  * Do not use this library in a child after fork; exec before opening new contexts.
  */
 #define COG_ABI_MAJOR 0
-#define COG_ABI_MINOR 1
+#define COG_ABI_MINOR 2
+#define COG_FEATURE_INLINE_MOCK 1
+#define COG_FEATURE_SEALED_SHM 2
 #define COG_MAX_RANK 8
 #define COG_DTYPE_U8 1
 typedef uint64_t cog_context_t;
@@ -40,6 +42,14 @@ typedef struct cog_tensor_desc {
 
 cog_status_t cog_context_create(const char *socket, cog_context_t *out);
 cog_status_t cog_context_destroy(cog_context_t context);
+cog_status_t cog_context_features(cog_context_t context, uint64_t *out);
+/* Linux only: import an immutable memfd with WRITE/GROW/SHRINK/SEAL seals and
+ * exact declared size. fd is borrowed through this call; the daemon owns a copy.
+ * Imported buffers are input-only. No process may retain a writable shared map.
+ * Export creates a sealed snapshot, not a live view; caller closes out_fd.
+ * Both return EUNSUPPORTED when sealed shared memory is unavailable. */
+cog_status_t cog_buffer_import_fd(cog_context_t context, int32_t fd, uint64_t size, cog_handle_t *out);
+cog_status_t cog_buffer_export_fd(cog_context_t context, cog_handle_t buffer, int32_t *out_fd, uint64_t *out_size);
 cog_status_t cog_model_open(cog_context_t context, const char *name, cog_handle_t *out);
 cog_status_t cog_model_close(cog_context_t context, cog_handle_t model);
 cog_status_t cog_buffer_alloc(cog_context_t context, uint64_t size, cog_handle_t *out);

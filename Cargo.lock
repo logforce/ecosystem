@@ -30,6 +30,7 @@ version = "0.1.0"
 dependencies = [
  "cog-core",
  "cog-protocol",
+ "cog-shm",
 ]
 
 [[package]]
@@ -38,6 +39,14 @@ version = "0.1.0"
 
 [[package]]
 name = "cog-protocol"
+version = "0.1.0"
+dependencies = [
+ "cog-core",
+ "cog-shm",
+]
+
+[[package]]
+name = "cog-shm"
 version = "0.1.0"
 dependencies = [
  "cog-core",
@@ -52,4 +61,5 @@ dependencies = [
  "cog-client",
  "cog-core",
  "cog-protocol",
+ "cog-shm",
 ]

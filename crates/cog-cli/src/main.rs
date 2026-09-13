@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 use cogposix::{Client, TensorDesc};
 use std::time::Duration;
+#[cfg(target_os = "linux")]
+mod bench;
 
 fn main() {
     if let Err(error) = run() {
@@ -11,7 +13,7 @@ fn main() {
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.len() == 1 && args[0] == "--help" {
-        println!("cog --socket PATH demo [byte,byte,...]\ncog --socket PATH stats");
+        println!("cog --socket PATH demo [byte,byte,...]\ncog --socket PATH stats\ncog --socket PATH transport-bench (Linux)");
         return Ok(());
     }
     if args.len() < 3 || args[0] != "--socket" {
@@ -19,6 +21,8 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     }
     let mut client = Client::connect(&args[1])?;
     match args[2].as_str() {
+        #[cfg(target_os = "linux")]
+        "transport-bench" if args.len() == 3 => bench::run(&mut client)?,
         "stats" if args.len() == 3 => println!("{:?}", client.stats()?),
         "demo" if args.len() <= 4 => {
             let data = args

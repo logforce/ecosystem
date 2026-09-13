@@ -2,7 +2,9 @@
 //! Synchronous local control client; submitted computation is asynchronous.
 mod ffi;
 pub use cog_core::{Error, Handle, JobStatus, Result, Stats, TensorDesc, MAX_BUFFER, MAX_RANK};
-use cog_protocol::{Decoder, Frame, Request, FEATURE_INLINE_MOCK, RESPONSE};
+use cog_protocol::{Decoder, Frame, Request, FEATURE_INLINE_MOCK, FEATURE_SEALED_SHM, RESPONSE};
+#[cfg(target_os = "linux")]
+pub use cog_shm::SharedBuffer;
 use std::{
     net::Shutdown,
     os::unix::net::UnixStream,
@@ -15,6 +17,8 @@ pub struct Client {
     stream: Option<UnixStream>,
     next: u64,
     process: u32,
+    features: u64,
+    traffic: (u64, u64),
 }
 
 impl Client {
@@ -30,10 +34,13 @@ impl Client {
             stream: Some(stream),
             next: 1,
             process: std::process::id(),
+            features: 0,
+            traffic: (0, 0),
         };
         let body = client.request(Request::Hello)?;
         let mut d = Decoder::new(&body);
-        if d.u64()? != FEATURE_INLINE_MOCK
+        client.features = d.u64()?;
+        if client.features & FEATURE_INLINE_MOCK == 0
             || d.u32()? != MAX_BUFFER as u32
             || d.u32()? != MAX_RANK as u32
         {
@@ -44,6 +51,13 @@ impl Client {
     }
 
     pub fn request(&mut self, request: Request) -> Result<Vec<u8>> {
+        self.exchange(request, None).map(|(body, _)| body)
+    }
+    fn exchange(
+        &mut self,
+        request: Request,
+        file: Option<&std::fs::File>,
+    ) -> Result<(Vec<u8>, Option<std::fs::File>)> {
         if self.process != std::process::id() {
             return Err(Error::Disconnected);
         }
@@ -59,18 +73,25 @@ impl Client {
         };
         let result = (|| {
             let stream = self.stream.as_mut().ok_or(Error::Disconnected)?;
-            frame.write(stream).map_err(|_| Error::Disconnected)?;
-            let reply = Frame::read(stream).map_err(|_| Error::Disconnected)?;
+            frame
+                .write_socket(stream, file)
+                .map_err(|_| Error::Disconnected)?;
+            self.traffic.0 += (cog_protocol::HEADER_SIZE + frame.body.len()) as u64;
+            let (reply, received) = Frame::read_socket(stream).map_err(|_| Error::Disconnected)?;
+            self.traffic.1 += (cog_protocol::HEADER_SIZE + reply.body.len()) as u64;
             if reply.id != id || reply.opcode != opcode || reply.flags != RESPONSE {
                 return Err(Error::Disconnected);
             }
             if reply.status != 0 {
-                if !reply.body.is_empty() {
+                if !reply.body.is_empty() || received.is_some() {
                     return Err(Error::Disconnected);
                 }
                 return Err(Error::from_code(reply.status).ok_or(Error::Disconnected)?);
             }
-            Ok(reply.body)
+            if received.is_some() != (opcode == 25) {
+                return Err(Error::Disconnected);
+            }
+            Ok((reply.body, received))
         })();
         if matches!(result, Err(Error::Disconnected)) {
             if let Some(stream) = self.stream.take() {
@@ -78,6 +99,49 @@ impl Client {
             }
         }
         result
+    }
+    pub fn features(&self) -> u64 {
+        self.features
+    }
+    /// Successfully transferred application frame bytes, excluding SCM_RIGHTS metadata.
+    pub fn traffic(&self) -> (u64, u64) {
+        self.traffic
+    }
+    pub fn buffer_import_file(&mut self, file: &std::fs::File, size: usize) -> Result<Handle> {
+        if !cfg!(target_os = "linux") || self.features & FEATURE_SEALED_SHM == 0 {
+            return Err(Error::Unsupported);
+        }
+        if size == 0 || size > MAX_BUFFER {
+            return Err(Error::Invalid);
+        }
+        let (body, _) = self.exchange(Request::BufferImport(size as u32), Some(file))?;
+        let mut d = Decoder::new(&body);
+        let handle = d.u64()?;
+        d.finish()?;
+        if handle == 0 {
+            return Err(Error::Invalid);
+        }
+        Ok(handle)
+    }
+    pub fn buffer_export_file(&mut self, handle: Handle) -> Result<(std::fs::File, usize)> {
+        if !cfg!(target_os = "linux") || self.features & FEATURE_SEALED_SHM == 0 {
+            return Err(Error::Unsupported);
+        }
+        let (body, file) = self.exchange(Request::BufferExport(handle), None)?;
+        let mut d = Decoder::new(&body);
+        let size = d.u32()? as usize;
+        d.finish()?;
+        let file = file.ok_or(Error::Disconnected)?;
+        #[cfg(target_os = "linux")]
+        {
+            let shared = SharedBuffer::from_file(file, size)?;
+            Ok((shared.file().try_clone().map_err(|_| Error::Io)?, size))
+        }
+        #[cfg(not(target_os = "linux"))]
+        {
+            let _ = (file, size);
+            Err(Error::Unsupported)
+        }
     }
     fn handle(&mut self, request: Request) -> Result<Handle> {
         let body = self.request(request)?;

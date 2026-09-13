@@ -4,6 +4,10 @@ Date: 13 September 2026. Status: experimental mock runtime, not a release or ful
 milestone sign-off. The [development guide](development.md) supplies reproduction
 commands; the [protocol](protocol.md) describes the implemented contract.
 
+This is the historical R1 evidence record. The subsequent
+[R2 shared-memory report](shared-memory.md) supersedes its inline-only limitations
+and earlier ABI/protocol versions; the R1 results below remain a record of that step.
+
 ## Implemented
 
 - Seven-crate Rust workspace with no third-party dependencies.

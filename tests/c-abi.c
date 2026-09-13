@@ -22,6 +22,16 @@ int main(int argc, char **argv) {
     assert(cog_context_create(NULL, &a) == COG_EINVAL);
     assert(cog_context_create(argv[1], &a) == COG_OK);
     assert(cog_context_create(argv[1], &b) == COG_OK);
+    uint64_t features = 0;
+    assert(cog_context_features(a, &features) == COG_OK);
+    assert(features & COG_FEATURE_INLINE_MOCK);
+#ifndef __linux__
+    assert(!(features & COG_FEATURE_SEALED_SHM));
+    int32_t unsupported_fd = 0; uint64_t unsupported_size = 1;
+    assert(cog_buffer_import_fd(a, -1, 4, &input) == COG_EUNSUPPORTED && input == 0);
+    assert(cog_buffer_export_fd(a, 0, &unsupported_fd, &unsupported_size) == COG_EUNSUPPORTED);
+    assert(unsupported_fd == -1 && unsupported_size == 0);
+#endif
     assert(cog_model_open(a, "mock.increment.v1", &model) == COG_OK);
     assert(cog_buffer_alloc(a, 4, &input) == COG_OK);
     assert(cog_buffer_alloc(a, 4, &output) == COG_OK);

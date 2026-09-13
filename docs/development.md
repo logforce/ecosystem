@@ -6,12 +6,15 @@ Read the [implementation limits](implementation-r1.md) before deployment.
 ## Prerequisites
 
 - Rust 1.85 or newer with Cargo, rustfmt and Clippy.
-- A C11 compiler and pthreads for the C integration tests.
+- A C11 compiler, system headers and `ar` for native Linux builds; pthreads for C tests.
 - Node.js 20 or newer for smoke tests and publication tooling.
 - macOS or Linux with Unix-domain sockets; Linux x86-64 is the intended target.
 
 There are no third-party Rust dependencies or model downloads. With the toolchain
 already installed, builds and tests run offline. No API key or account is required.
+The Linux shared-memory crate compiles a small C shim against the system's socket
+and mapping headers. Cross-compiling that shim is not supported by the initial
+build script; use a native Linux host or the validation container.
 
 ## Build and Verify
 
@@ -35,6 +38,9 @@ cleanup test; it should not be invoked directly without that test's environment.
 The smoke script compiles and links the actual C shared library, runs the CLI and
 C tests against a temporary daemon, tests graceful termination and removes its
 temporary files. It does not leave a background service running.
+On Linux it also checks sealed mappings, ancillary-message descriptor cleanup and
+runs the bounded transport benchmark. macOS retains the inline path and explicitly
+reports shared memory as unsupported.
 
 ## Linux Validation Container
 
@@ -90,6 +96,7 @@ is no longer running. The optional `--shutdown-on-stdin` mode stops on a line or
 | Component | Responsibility |
 | --- | --- |
 | [cog-core](../crates/cog-core/src/lib.rs) | Error values, shapes, job states and resource limits |
+| [cog-shm](../crates/cog-shm/src/linux.rs) | Sealed Linux mappings and descriptor-aware stream I/O |
 | [cog-protocol](../crates/cog-protocol/src/lib.rs) | Bounded framing and typed message encoding |
 | [ecos-daemon](../crates/ecos-daemon/src/lib.rs) | Socket lifecycle, peer identity and sessions |
 | [runtime](../crates/ecos-daemon/src/runtime.rs) | Handles, quotas, retained resources and worker queue |
@@ -104,6 +111,17 @@ is no longer running. The optional `--shutdown-on-stdin` mode stops on a line or
 Cargo produces `ecosd`, `cog` and `libcogposix` under `target/debug`. The library
 has Rust, static C and shared C artifacts (`.dylib` on macOS, `.so` on Linux).
 The [smoke script](../scripts/smoke.mjs) records exact compiler/linker arguments.
+
+For the Linux buffer-transport benchmark against a running daemon:
+
+```sh
+target/debug/cog --socket /tmp/ecos-dev/ecos.sock transport-bench
+```
+
+It reports application-frame byte counts and P50/P95 timings for 16 measured
+1 MiB round trips after two warmups per mode. Input creation and output snapshots
+are included; inference is not. Read the [copy accounting](shared-memory.md)
+before using these numbers in a performance claim.
 
 ## Publication
 

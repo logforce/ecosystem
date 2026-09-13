@@ -4,7 +4,8 @@ Status: proposed design. The first runtime scope remains the original Linux CPU
 prototype; production requirements below are tied to the roadmap.
 
 The [R1 implementation report](implementation-r1.md) identifies the current
-working subset: a per-user mock daemon with inline buffers. The component table
+working subset: a per-user mock daemon, now extended with
+[sealed Linux shared buffers](shared-memory.md). The component table
 below describes the target architecture, not services already delivered.
 
 ## 1. Components and Authority

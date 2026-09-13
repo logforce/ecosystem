@@ -11,6 +11,86 @@ use std::{
 };
 
 type SharedClient = Arc<Mutex<Client>>;
+
+/// # Safety
+/// `out` points to writable u64 storage.
+#[no_mangle]
+pub unsafe extern "C" fn cog_context_features(ctx: u64, out: *mut u64) -> i32 {
+    status(|| {
+        if out.is_null() {
+            return Err(Error::Invalid);
+        }
+        unsafe {
+            *out = 0;
+        }
+        let features = with(ctx, |c| Ok(c.features()))?;
+        unsafe {
+            *out = features;
+        }
+        Ok(())
+    })
+}
+
+/// # Safety
+/// `out` is writable. The caller keeps fd open throughout the call.
+#[no_mangle]
+pub unsafe extern "C" fn cog_buffer_import_fd(
+    ctx: u64,
+    fd: i32,
+    size: u64,
+    out: *mut Handle,
+) -> i32 {
+    status(|| {
+        if out.is_null() {
+            return Err(Error::Invalid);
+        }
+        unsafe {
+            *out = 0;
+        }
+        #[cfg(target_os = "linux")]
+        {
+            let file = cog_shm::duplicate_fd(fd)?;
+            let size = usize::try_from(size).map_err(|_| Error::Invalid)?;
+            let handle = with(ctx, |c| c.buffer_import_file(&file, size))?;
+            unsafe {
+                *out = handle;
+            }
+            Ok(())
+        }
+        #[cfg(not(target_os = "linux"))]
+        {
+            let _ = (ctx, fd, size);
+            Err(Error::Unsupported)
+        }
+    })
+}
+
+/// # Safety
+/// `out_fd` and `out_size` point to separate writable storage. Caller closes the returned fd.
+#[no_mangle]
+pub unsafe extern "C" fn cog_buffer_export_fd(
+    ctx: u64,
+    buffer: Handle,
+    out_fd: *mut i32,
+    out_size: *mut u64,
+) -> i32 {
+    status(|| {
+        if out_fd.is_null() || out_size.is_null() {
+            return Err(Error::Invalid);
+        }
+        unsafe {
+            *out_fd = -1;
+            *out_size = 0;
+        }
+        let (file, size) = with(ctx, |c| c.buffer_export_file(buffer))?;
+        use std::os::fd::IntoRawFd;
+        unsafe {
+            *out_fd = file.into_raw_fd();
+            *out_size = size as u64;
+        }
+        Ok(())
+    })
+}
 struct Contexts {
     next: u64,
     clients: HashMap<u64, SharedClient>,

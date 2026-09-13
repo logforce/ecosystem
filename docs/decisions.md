@@ -26,6 +26,7 @@ repository; it does not imply implemented or tested behavior.
 | ADR-019 | Implemented experiment, 13 September 2026 | Explicit context on C resource operations | Make connection ownership unambiguous; experimental ABI 0.1, wire protocol 1.0; neither is frozen |
 | ADR-020 | Implemented experiment, 13 September 2026 | Per-user mock service with macOS development support | Linux remains the deployment target; same-UID socket access is not application sandboxing; in-process trusted mock only |
 | ADR-021 | Verified experiment, 13 September 2026 | Validate the public snapshot in non-root offline Linux containers | Digest-pinned tooling images and bounded disposable execution; private working tree never mounted; container evidence is not OS certification |
+| ADR-022 | Implemented experiment, 13 September 2026 | R2 imports fully sealed immutable inputs and exports sealed snapshots | Kernel seals prevent sender mutation/truncation; no live writable output maps or fully zero-copy claim; wire 1.1 and C ABI 0.2 require rebuilt endpoints |
 
 See [license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
 

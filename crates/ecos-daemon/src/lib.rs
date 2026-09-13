@@ -32,19 +32,39 @@ fn serve(mut stream: UnixStream, runtime: Arc<Runtime>, backend: Arc<dyn Backend
     let _ = stream.set_write_timeout(Some(Duration::from_secs(5)));
     let mut last_id = 0;
     let mut greeted = false;
-    while let Ok(frame) = Frame::read(&mut stream) {
+    while let Ok((frame, file)) = Frame::read_socket(&mut stream) {
         if frame.flags != 0 || frame.status != 0 || frame.id <= last_id {
             break;
         }
         last_id = frame.id;
         let request = Request::decode(frame.opcode, &frame.body);
+        if file.is_some() && !matches!(request, Ok(Request::BufferImport(_))) {
+            break;
+        }
         if !greeted && !matches!(request, Ok(Request::Hello)) {
             break;
         }
         if greeted && matches!(request, Ok(Request::Hello)) {
             break;
         }
-        let result = request.and_then(|request| runtime.request(owner, request, backend.as_ref()));
+        #[allow(unused_mut)]
+        let mut output_file = None;
+        let result = request.and_then(|request| {
+            #[cfg(target_os = "linux")]
+            match request {
+                Request::BufferImport(size) => {
+                    return runtime.import(owner, file.ok_or(cog_core::Error::Invalid)?, size)
+                }
+                Request::BufferExport(handle) => {
+                    let shared = runtime.export(owner, handle)?;
+                    let body = (shared.bytes().len() as u32).to_le_bytes().to_vec();
+                    output_file = Some(shared.file().try_clone().map_err(|_| cog_core::Error::Io)?);
+                    return Ok(body);
+                }
+                _ => {}
+            }
+            runtime.request(owner, request, backend.as_ref())
+        });
         let (status, body) = match result {
             Ok(body) => (0, body),
             Err(error) => (error as i32, vec![]),
@@ -56,7 +76,10 @@ fn serve(mut stream: UnixStream, runtime: Arc<Runtime>, backend: Arc<dyn Backend
             status,
             body,
         };
-        if response.write(&mut stream).is_err() {
+        if response
+            .write_socket(&mut stream, output_file.as_ref())
+            .is_err()
+        {
             break;
         }
         greeted = true;

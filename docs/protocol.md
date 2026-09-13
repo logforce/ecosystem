@@ -1,8 +1,10 @@
-# Experimental R1 Protocol
+# Experimental Runtime Protocol
 
 This document describes the implemented mock transport, not the complete
-[CogPOSIX design](cogposix.md). Wire version is 1.0; the C ABI is experimental 0.1.
+[CogPOSIX design](cogposix.md). Wire version is 1.1; the C ABI is experimental 0.2.
 Both may change with an explicit version revision before interface freeze.
+R1 wire 1.0 peers are rejected; rebuild daemon and clients together. The new
+[R2 shared-memory subset](shared-memory.md) supplements, not replaces, inline I/O.
 
 ## Transport and Framing
 
@@ -18,7 +20,7 @@ field rather than copied from a native struct.
 | --- | --- | --- |
 | 0 | 4 bytes | ASCII `COGP` |
 | 4 | u16 | Major version, 1 |
-| 6 | u16 | Minor version, 0 |
+| 6 | u16 | Minor version, 1 |
 | 8 | u64 | Positive, strictly increasing request ID |
 | 16 | u16 | Opcode |
 | 18 | u16 | Flags: 0 request, 1 response; other bits invalid |
@@ -35,11 +37,15 @@ provided; each context serializes request/response exchanges.
 ## Messages
 
 `h` is a session-owned u64 handle. `bytes` means the remaining exact payload.
-No descriptor passing or shared memory exists in R1.
+On Linux, import requests and successful export replies carry one `SCM_RIGHTS`
+descriptor attached to the first frame byte. No other message carries descriptors.
+The receiver reads the first byte separately, checks every subsequent read for
+misplaced rights, rejects extra/truncated ancillary data and closes received
+descriptors on failure. Receipt uses close-on-exec. macOS has no descriptor path.
 
 | Opcode | Request | Success response |
 | --- | --- | --- |
-| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline mock), max buffer u32, max rank u32 |
+| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline mock, 2 = sealed shared memory), max buffer u32, max rank u32 |
 | 2 STATS | Empty | Object count u32, backing buffer bytes u64, retained jobs u32 |
 | 10 MODEL_OPEN | UTF-8 byte length u32, name bytes, at most 128 | h |
 | 11 MODEL_CLOSE | h | Empty |
@@ -47,6 +53,8 @@ No descriptor passing or shared memory exists in R1.
 | 21 BUFFER_WRITE | h, byte length u32, bytes | Empty; must fill the entire buffer |
 | 22 BUFFER_READ | h | Entire buffer bytes |
 | 23 BUFFER_FREE | h | Empty |
+| 24 BUFFER_IMPORT | Exact size u32 and one sealed file descriptor | h; immutable input-only buffer |
+| 25 BUFFER_EXPORT | h | Size u32 and one descriptor for an immutable snapshot |
 | 30 TENSOR_CREATE | Buffer h, offset u64, rank u32, dimensions u64[rank] | Tensor h |
 | 31 TENSOR_RELEASE | h | Empty |
 | 40 SUBMIT | Model h, input tensor h, output tensor h, delay milliseconds u32 | Job h |
@@ -74,6 +82,9 @@ a daemon's lifetime. Stale or foreign handles are invalid, not transferable toke
 Accepted jobs pin both buffers exclusively. Buffer reads and writes return Busy
 until pinning ends; a second job using either buffer is also Busy. One trusted
 worker processes a bounded FIFO queue. No priorities or fairness guarantee exist.
+Imported shared buffers reject writes and use as output with Permission. Export
+returns Busy while the source buffer is pinned. See the shared-memory contract for
+seal validation and the distinction between a snapshot and a live output view.
 
 States: Queued=1, Running=2, Completed=3, Failed=4, Cancelled=5. The last three are
 terminal. Queued cancellation removes work and releases pins. Running cancellation

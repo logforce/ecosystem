@@ -472,7 +472,24 @@ fn crash_child() {
     let socket = std::env::var("COG_TEST_SOCKET").unwrap();
     let mut c = Client::connect(socket).unwrap();
     let w = work(&mut c);
-    c.submit(w.model, w.a, w.b, 5000).unwrap();
+    #[allow(unused_mut)]
+    let mut input = w.a;
+    #[cfg(target_os = "linux")]
+    if std::env::var_os("COG_TEST_SHARED").is_some() {
+        let shared = cogposix::SharedBuffer::from_bytes(&[1; 4]).unwrap();
+        let buffer = c.buffer_import_file(shared.file(), 4).unwrap();
+        input = c
+            .tensor_create(
+                buffer,
+                TensorDesc {
+                    offset: 0,
+                    shape: vec![2, 2],
+                },
+            )
+            .unwrap();
+        c.buffer_free(buffer).unwrap();
+    }
+    c.submit(w.model, input, w.b, 5000).unwrap();
     fs::write(std::env::var("COG_TEST_READY").unwrap(), "ready").unwrap();
     loop {
         thread::sleep(Duration::from_secs(1));
@@ -482,8 +499,20 @@ fn crash_child() {
 #[test]
 fn killed_client_reclaims_resources() {
     let f = Fixture::new();
-    let ready = f.dir.join("ready");
-    let mut child = Command::new(std::env::current_exe().unwrap())
+    kill_client(&f, false);
+    #[cfg(target_os = "linux")]
+    kill_client(&f, true);
+}
+
+fn kill_client(f: &Fixture, shared: bool) {
+    let ready = f.dir.join(format!("ready-{shared}"));
+    let mut command = Command::new(std::env::current_exe().unwrap());
+    if shared {
+        command.env("COG_TEST_SHARED", "1");
+    } else {
+        command.env_remove("COG_TEST_SHARED");
+    }
+    let mut child = command
         .args(["--exact", "crash_child", "--ignored"])
         .env("COG_TEST_SOCKET", &f.socket)
         .env("COG_TEST_READY", &ready)
@@ -499,5 +528,121 @@ fn killed_client_reclaims_resources() {
     let _ = child.kill();
     child.wait().unwrap();
     assert!(was_ready, "crash helper did not start");
+    f.empty();
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn shared_import_inference_and_export_preserve_ownership() {
+    let f = Fixture::new();
+    let mut c = f.client();
+    let shared = cogposix::SharedBuffer::from_bytes(&[0, 1, 254, 255]).unwrap();
+    assert_ne!(c.features() & cog_protocol::FEATURE_SEALED_SHM, 0);
+    let input = c.buffer_import_file(shared.file(), 4).unwrap();
+    drop(shared);
+    let output = c.buffer_alloc(4).unwrap();
+    let model = c.model_open("mock.increment.v1").unwrap();
+    let desc = TensorDesc {
+        offset: 0,
+        shape: vec![4],
+    };
+    let a = c.tensor_create(input, desc.clone()).unwrap();
+    let b = c.tensor_create(output, desc).unwrap();
+    assert_eq!(c.buffer_write(input, &[8; 4]), Err(Error::Permission));
+    assert_eq!(c.submit(model, b, a, 0), Err(Error::Permission));
+    let job = c.submit(model, a, b, 20).unwrap();
+    assert!(matches!(c.buffer_export_file(output), Err(Error::Busy)));
+    c.buffer_free(input).unwrap();
+    c.tensor_release(a).unwrap();
+    c.wait(job, Duration::from_secs(5)).unwrap();
+    assert_eq!(c.stats().unwrap().live_bytes, 4);
+    let (file, size) = c.buffer_export_file(output).unwrap();
+    let snapshot = cogposix::SharedBuffer::from_file(file, size).unwrap();
+    c.buffer_write(output, &[7; 4]).unwrap();
+    drop(c);
+    f.empty();
+    assert_eq!(snapshot.bytes(), &[1, 2, 255, 0]);
+    assert!(snapshot.file().set_len(1).is_err());
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn shared_import_validation_and_disconnect_reclaim_quota() {
+    let f = Fixture::new();
+    let mut c = f.client();
+    let shared = cogposix::SharedBuffer::from_bytes(&vec![1; MAX_BUFFER]).unwrap();
+    assert_eq!(c.buffer_import_file(shared.file(), 1), Err(Error::Invalid));
+    let path = f.dir.join("ordinary-file");
+    fs::write(&path, [1; 4]).unwrap();
+    assert_eq!(
+        c.buffer_import_file(&fs::File::open(path).unwrap(), 4),
+        Err(Error::Permission)
+    );
+    assert_eq!(c.request(Request::BufferImport(4)), Err(Error::Invalid));
+    assert_eq!(c.stats().unwrap().live_bytes, 0);
+    for _ in 0..8 {
+        c.buffer_import_file(shared.file(), MAX_BUFFER).unwrap();
+    }
+    assert_eq!(
+        c.buffer_import_file(shared.file(), MAX_BUFFER),
+        Err(Error::NoMemory)
+    );
+    drop(c);
+    f.empty();
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn shared_cancellation_does_not_commit_output() {
+    let f = Fixture::new();
+    let mut c = f.client();
+    let shared = cogposix::SharedBuffer::from_bytes(&[2; 4]).unwrap();
+    let w = work(&mut c);
+    let input = c.buffer_import_file(shared.file(), 4).unwrap();
+    let a = c
+        .tensor_create(
+            input,
+            TensorDesc {
+                offset: 0,
+                shape: vec![2, 2],
+            },
+        )
+        .unwrap();
+    let job = c.submit(w.model, a, w.b, 5000).unwrap();
+    until(|| c.job_status(job).unwrap().0 == JobStatus::Running);
+    c.buffer_free(input).unwrap();
+    c.tensor_release(a).unwrap();
+    c.job_cancel(job).unwrap();
+    assert_eq!(c.wait(job, Duration::from_secs(5)), Err(Error::Cancelled));
+    let (file, size) = c.buffer_export_file(w.output).unwrap();
+    assert_eq!(
+        cogposix::SharedBuffer::from_file(file, size)
+            .unwrap()
+            .bytes(),
+        &[0; 4]
+    );
+    drop(c);
+    f.empty();
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn descriptors_on_wrong_requests_close_the_session() {
+    let f = Fixture::new();
+    let shared = cogposix::SharedBuffer::from_bytes(&[1]).unwrap();
+    let mut socket = UnixStream::connect(&f.socket).unwrap();
+    socket
+        .set_read_timeout(Some(Duration::from_secs(2)))
+        .unwrap();
+    Frame {
+        id: 1,
+        opcode: 1,
+        flags: 0,
+        status: 0,
+        body: vec![],
+    }
+    .write_socket(&mut socket, Some(shared.file()))
+    .unwrap();
+    assert!(Frame::read_socket(&mut socket).is_err());
     f.empty();
 }

@@ -13,6 +13,7 @@ path = "src/main.rs"
 
 [dependencies]
 cog-core.workspace = true
+cog-shm.workspace = true
 cog-protocol.workspace = true
 cog-backend-api.workspace = true
 cog-backend-mock.workspace = true

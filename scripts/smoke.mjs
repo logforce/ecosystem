@@ -40,6 +40,17 @@ try {
   run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', '-pthread', '-Iinclude', 'tests/c-abi.c',
     '-L', libraryDir, '-lcogposix', `-Wl,-rpath,${libraryDir}`, '-o', abiTest]);
   run(abiTest, [socket]);
+  if (process.platform === 'linux') {
+    const ancillary = path.join(scratch, 'c-ancillary-test');
+    run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', 'tests/c-ancillary.c',
+      'crates/cog-shm/src/linux.c', '-o', ancillary]);
+    run(ancillary, []);
+    const shmTest = path.join(scratch, 'c-shm-test');
+    run('cc', ['-std=c11', '-Wall', '-Wextra', '-Werror', '-Iinclude', 'tests/c-shm.c',
+      '-L', libraryDir, '-lcogposix', `-Wl,-rpath,${libraryDir}`, '-o', shmTest]);
+    run(shmTest, [socket]);
+    run(path.join(root, 'target/debug/cog'), ['--socket', socket, 'transport-bench']);
+  }
   daemon.kill('SIGTERM');
   const result = await Promise.race([exited, new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error('daemon shutdown timed out')), 5000);

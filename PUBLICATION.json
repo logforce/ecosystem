@@ -55,6 +55,15 @@
     { "path": "docs/protocol.md", "license": "CC-BY-4.0" },
     { "path": "docs/implementation-r1.md", "license": "CC-BY-4.0" },
     { "path": "containers/validation.Dockerfile", "license": "Apache-2.0" },
-    { "path": "scripts/validate-linux.mjs", "license": "Apache-2.0" }
+    { "path": "scripts/validate-linux.mjs", "license": "Apache-2.0" },
+    { "path": "crates/cog-shm/Cargo.toml", "license": "Apache-2.0" },
+    { "path": "crates/cog-shm/build.rs", "license": "Apache-2.0" },
+    { "path": "crates/cog-shm/src/lib.rs", "license": "Apache-2.0" },
+    { "path": "crates/cog-shm/src/linux.rs", "license": "Apache-2.0" },
+    { "path": "crates/cog-shm/src/linux.c", "license": "Apache-2.0" },
+    { "path": "tests/c-shm.c", "license": "Apache-2.0" },
+    { "path": "crates/cog-cli/src/bench.rs", "license": "Apache-2.0" },
+    { "path": "tests/c-ancillary.c", "license": "Apache-2.0" },
+    { "path": "docs/shared-memory.md", "license": "CC-BY-4.0" }
   ]
 }
