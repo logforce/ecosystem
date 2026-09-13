@@ -237,6 +237,88 @@ fn memory_objects_and_sessions_are_bounded() {
 }
 
 #[test]
+fn global_memory_limit_counts_tensor_retained_buffers_and_recovers() {
+    let f = Fixture::new();
+    let mut clients = Vec::new();
+    let mut retained = Vec::new();
+    for _ in 0..cog_core::GLOBAL_MEMORY / cog_core::SESSION_MEMORY {
+        let mut c = f.client();
+        for _ in 0..cog_core::SESSION_MEMORY / MAX_BUFFER {
+            let buffer = c.buffer_alloc(MAX_BUFFER).unwrap();
+            let tensor = c
+                .tensor_create(
+                    buffer,
+                    TensorDesc {
+                        offset: 0,
+                        shape: vec![1],
+                    },
+                )
+                .unwrap();
+            c.buffer_free(buffer).unwrap();
+            retained.push(tensor);
+        }
+        assert_eq!(
+            c.stats().unwrap().live_bytes,
+            cog_core::SESSION_MEMORY as u64
+        );
+        clients.push(c);
+    }
+    let mut extra = f.client();
+    assert_eq!(extra.buffer_alloc(1), Err(Error::NoMemory));
+    assert_eq!(
+        f.server.as_ref().unwrap().metrics().live_bytes,
+        cog_core::GLOBAL_MEMORY
+    );
+    clients[0].tensor_release(retained[0]).unwrap();
+    let replacement = extra.buffer_alloc(MAX_BUFFER).unwrap();
+    assert_eq!(extra.buffer_alloc(1), Err(Error::NoMemory));
+    extra.buffer_free(replacement).unwrap();
+    drop(extra);
+    drop(clients);
+    f.empty();
+}
+
+#[test]
+fn cancellation_completion_stress_never_commits_cancelled_output() {
+    let f = Fixture::new();
+    let threads: Vec<_> = (0..4)
+        .map(|client_index| {
+            let socket = f.socket.clone();
+            thread::spawn(move || {
+                let mut c = Client::connect(socket).unwrap();
+                let w = work(&mut c);
+                for iteration in 0..64 {
+                    c.buffer_write(w.output, &[73; 4]).unwrap();
+                    let job = c.submit(w.model, w.a, w.b, iteration % 3).unwrap();
+                    match (iteration + client_index) % 3 {
+                        0 => thread::yield_now(),
+                        1 => thread::sleep(Duration::from_millis(1)),
+                        _ => thread::sleep(Duration::from_millis(3)),
+                    }
+                    c.job_cancel(job).unwrap();
+                    let result = c.wait(job, Duration::from_secs(5));
+                    let bytes = c.buffer_read(w.output).unwrap();
+                    match result {
+                        Ok(JobStatus::Completed) => assert_eq!(bytes, vec![1, 2, 255, 0]),
+                        Err(Error::Cancelled) => assert_eq!(bytes, vec![73; 4]),
+                        other => panic!("unexpected terminal result: {other:?}"),
+                    }
+                    let terminal = c.job_status(job).unwrap();
+                    c.job_cancel(job).unwrap();
+                    assert_eq!(c.job_status(job).unwrap(), terminal);
+                    c.job_release(job).unwrap();
+                    assert_eq!(c.stats().unwrap().jobs, 0);
+                }
+            })
+        })
+        .collect();
+    for thread in threads {
+        thread.join().unwrap();
+    }
+    f.empty();
+}
+
+#[test]
 fn malformed_and_ungreeted_connections_are_reclaimed() {
     let f = Fixture::new();
     for (op, body) in [(20, 4u32.to_le_bytes().to_vec()), (1, vec![0])] {

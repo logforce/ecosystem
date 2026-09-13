@@ -17,18 +17,18 @@ commands; the [protocol](protocol.md) describes the implemented contract.
 
 ## Evidence
 
-Local environment: macOS, Darwin x86-64, Rust 1.90.0. No downloaded model, external
-inference service or API token is involved. This record is functional evidence,
+Environments: macOS Darwin x86-64 and Linux x86-64, Rust 1.90.0. No downloaded
+model, external inference service or API token is involved. This record is functional evidence,
 not a latency, energy, commercial saving or security certification benchmark.
 
 | Check | Local result |
 | --- | --- |
 | Offline workspace build | Passed |
-| Rust tests | 18 passed; one ignored subprocess helper is exercised by the crash test |
+| Rust tests | 20 passed on macOS and Linux; one ignored subprocess helper is exercised by the crash test |
 | rustfmt and Clippy with warnings denied | Passed |
 | CLI and compiled C smoke suite | Passed, including graceful SIGTERM shutdown |
 | Publication tooling tests | 14 passed |
-| Publication allowlist validation | Passed, 52 files; no upload performed |
+| Publication allowlist validation | Passed, 54 files; no upload performed |
 
 The Rust suite covers framing, bounds/overflow, independent clients, cross-session
 handle rejection, pinned-resource lifetime, timeouts, queued/running cancellation,
@@ -44,9 +44,31 @@ switch to blocking I/O before receiving requests; the integration suite passes
 with that fix. Tests are intended to detect lifecycle regressions, not establish
 exhaustive race freedom.
 
-Linux execution is not yet verified. The local Docker daemon is unavailable, and
-macOS success must not be represented as Linux conformance. Linux CI or a disposable
-Linux VM must repeat the build, Rust suite and C smoke suite before R1 acceptance.
+Linux execution was verified after starting Docker Desktop. The repeatable
+[runner](../scripts/validate-linux.mjs) validated the public snapshot with digest
+`28485edec7d546f8242075738ab9f812ea49aa7226df8408015aa2ff5db72d0e`
+before these documentation-only evidence updates. Its base was implementation
+commit `321abac` plus the new validation harness and two additional runtime tests.
+
+Linux profile: Debian Bookworm userland, kernel 5.15.49-linuxkit, x86-64, Rust
+1.90.0, Node.js 22.19.0 and GCC 12.2.0. Docker Engine 20.10.21 ran the suite as UID
+10001 with networking disabled, a read-only image, no added capabilities, two CPUs
+and a 2 GiB memory limit. Toolchain-image construction used network downloads;
+project compilation and all tests ran offline. The full build, formatting,
+Clippy, Rust suite, compiled C/CLI smoke suite and publication suite passed.
+
+The additional stress test submits 256 jobs across four concurrent clients with
+varied cancellation timing. Completed jobs must expose the expected output;
+cancelled jobs must leave the sentinel output unchanged. Both retain a stable
+terminal state and release admission capacity. The global-memory test fills the
+64 MiB backing quota across eight sessions using tensor-retained buffers after
+their buffer handles close, rejects a ninth session's allocation, then verifies
+that releasing a tensor restores exactly the freed allocation capacity.
+
+The container harness needed explicit temporary-directory permissions for the
+host's restrictive umask and this older Docker engine. No runtime permissions or
+non-root restrictions were relaxed. This is one Linux container profile, not
+bare-metal, distro-wide, cross-UID security or installable-OS conformance.
 
 ## Deliberate Boundaries
 
@@ -67,8 +89,9 @@ No production hardening, performance benefit or ABI stability is claimed.
 
 ## Next Acceptance Work
 
-1. Repeat this evidence on Linux x86-64 and review the experimental ABI/protocol.
-2. Expand adversarial cancellation/completion stress and global memory-pressure tests.
+1. Review the experimental ABI/protocol before interface freeze; retain both
+   Linux and macOS validation on future changes.
+2. Expand bounded stress into longer adversarial campaigns and cross-UID tests.
 3. Implement R2 descriptor-passed shared host memory, including race-safe bounds
    and permissions validation, while preserving the ownership tests.
 4. Implement R3 as an isolated ONNX CPU worker with a reviewed fixed model artifact

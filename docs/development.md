@@ -36,6 +36,28 @@ The smoke script compiles and links the actual C shared library, runs the CLI an
 C tests against a temporary daemon, tests graceful termination and removes its
 temporary files. It does not leave a background service running.
 
+## Linux Validation Container
+
+With Docker running, execute from the repository root:
+
+```sh
+node scripts/validate-linux.mjs
+```
+
+The [runner](../scripts/validate-linux.mjs) exports only the publication allowlist
+to a disposable directory. It never mounts the working repository or its Git
+history. The [tooling image](../containers/validation.Dockerfile) pins Rust 1.90.0
+and Node.js 22.19.0 base images by digest. Initial image construction downloads
+public toolchains and requires network access; it is not an offline bootstrap.
+
+The actual build, lint, Rust/C/CLI and publication tests run on Linux amd64 with
+networking disabled, as UID 10001, with dropped capabilities, no privilege
+escalation and a read-only image. Only temporary directories are writable. Limits
+are two CPUs, 2 GiB memory and 256 processes. The container is removed after the
+run; the tooling image remains cached locally. This is a development validation
+image, not an ecOS distribution or a production base image. The Docker service
+itself is outside the test container's security boundary.
+
 ## Run Manually
 
 In one terminal, as an ordinary user:

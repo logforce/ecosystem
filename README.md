@@ -89,8 +89,8 @@ flowchart TD
 
 ## Initial Technical Direction
 
-Linux x86-64 remains the runtime target. The Rust mock prototype also runs on
-macOS for development; local verification currently covers macOS only. It uses
+Linux x86-64 remains the runtime target. The Rust mock prototype is verified on
+macOS and in a non-root, offline Linux x86-64 validation container. It uses
 Unix-domain sockets and bounded inline byte buffers. Shared host memory and an
 isolated ONNX Runtime CPU worker are the next milestones, not existing features.
 Hardware acceleration follows correctness and a representative customer benchmark.

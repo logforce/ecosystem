@@ -5,9 +5,10 @@ starts unverified. Runtime, OS, commercial and learning work have different
 acceptance criteria. A milestone passes only with an attached reproducible report.
 
 As of 13 September 2026, an experimental R0/R1 subset is implemented and tested
-on macOS. See the [evidence report](implementation-r1.md). Linux validation,
-full cancellation stress testing and interface review remain required before
-declaring those gates complete. R2 and later are not implemented.
+on macOS and in a non-root, offline Linux x86-64 container. See the
+[evidence report](implementation-r1.md). Bounded cancellation stress and global
+memory-pressure tests pass; broader adversarial coverage and interface review
+remain required before full gate sign-off. R2 and later are not implemented.
 
 ## 1. Milestones
 
