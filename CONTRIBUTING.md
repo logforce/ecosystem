@@ -2,9 +2,11 @@
 
 ## Current Stage
 
-This repository is a design baseline. Proposals should improve an explicit contract,
-resolve an open decision or provide reproducible evidence. Do not mark a capability
-implemented because its documentation exists.
+This repository contains an experimental mock runtime alongside the wider design.
+Start with the [development guide](docs/development.md) and
+[implementation limits](docs/implementation-r1.md). Changes should improve an
+explicit contract, resolve an open decision or provide reproducible evidence.
+Do not mark a capability implemented because its documentation exists.
 
 ## Documentation Changes
 

@@ -1,7 +1,7 @@
 # Specification Guide
 
-Status: proposed expanded design, 12 September 2026. No implementation conformance
-is asserted.
+Status: expanded design with an experimental mock implementation, 13 September
+2026. No full specification conformance or stable ABI is asserted.
 
 ## Authority and Scope
 
@@ -10,11 +10,11 @@ distributed here. The Markdown documents record the subsequent product
 direction: controlled multi-model capabilities, an installable sovereign OS,
 bounded adaptive optimization and defensive security assistance.
 
-For subsequent implementation, use the original scope for the first runtime
-milestones and the explicit clarifications below for ambiguous behavior. Resolve
-any further conflict in a recorded decision before freezing public interfaces.
-The DOCX's embedded coding prompt is historical; this documentation project has
-not executed its implementation phases.
+For implementation, use the public roadmap and explicit clarifications below.
+The removed planning attachment is not required to build or contribute. Resolve
+conflicts in a recorded decision before freezing interfaces. The
+[implementation report](docs/implementation-r1.md) and
+[wire contract](docs/protocol.md) identify the working subset.
 
 ## Requirement Language
 
@@ -24,7 +24,8 @@ not executed its implementation phases.
 - Research: an experiment, not a product or compatibility promise.
 - Commercial hypothesis: an assumption requiring customer evidence.
 
-All requirements describe intended behavior. They do not describe shipped code.
+Requirements in the design documents describe intended behavior unless explicitly
+identified as implemented in the implementation report.
 
 ## Contract Map
 
@@ -71,5 +72,5 @@ All requirements describe intended behavior. They do not describe shipped code.
 Exact function signatures, wire schema, extension identifiers, capability ontology,
 numeric ABI layouts, error enum values and language binding ergonomics
 are not final. Community licensing is recorded in [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
-The documents deliberately avoid presenting a compilable SDK that
-would conceal these unresolved choices.
+The compilable [C header](include/cogposix/cog.h) exposes the experimental subset;
+its numeric layouts are testable but remain subject to versioned revision.

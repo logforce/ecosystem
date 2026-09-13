@@ -4,6 +4,11 @@ This is a dependency plan, not a delivery-date promise. Every implementation gat
 starts unverified. Runtime, OS, commercial and learning work have different
 acceptance criteria. A milestone passes only with an attached reproducible report.
 
+As of 13 September 2026, an experimental R0/R1 subset is implemented and tested
+on macOS. See the [evidence report](implementation-r1.md). Linux validation,
+full cancellation stress testing and interface review remain required before
+declaring those gates complete. R2 and later are not implemented.
+
 ## 1. Milestones
 
 | ID | Deliverable | Acceptance evidence | Dependency |
@@ -100,11 +105,11 @@ Reviewer and date:
 
 ## 7. Open Implementation Decisions
 
-Choose protocol encoding, per-user/system service deployment, exact ABI layouts,
-dynamic output allocation, worker isolation granularity, model candidates and
-initial device. After prototypes, choose OS base version, installer, update trust
+The prototype selects a [binary protocol](protocol.md), per-user deployment,
+experimental C layouts and caller-sized fixed outputs. Before interface freeze,
+review these choices and resolve dynamic output allocation, worker isolation
+granularity, model candidates and initial device. After prototypes, choose OS base version, installer, update trust
 roots, desktop and storage layout. Before public distribution, decide naming,
 third-party asset rights, specification IP governance and support lifecycle.
 Community licenses are selected in [LICENSE-SCOPE.md](../LICENSE-SCOPE.md).
-These are concrete next decisions,
-not claims that the current repository contains an implementation.
+These remain future decisions, not capabilities established by the mock runtime.

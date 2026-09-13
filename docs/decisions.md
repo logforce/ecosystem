@@ -22,6 +22,9 @@ repository; it does not imply implemented or tested behavior.
 | ADR-015 | Experimental | C ABI and protocol until conformance freeze | Resolve lifecycle and extension rules before long-term compatibility promises |
 | ADR-016 | Selected | Complete community foundation; optional LOGFORCE | Open event schema/basic bridge; baseline security and execution require no proprietary service |
 | ADR-017 | Selected | Fresh allowlisted public export | Mixed working history cannot be published; private files excluded by default |
+| ADR-018 | Implemented experiment, 13 September 2026 | Bounded inline U8 buffers for R1 | Exercise ownership and cancellation before Linux shared memory; no zero-copy or real inference claim |
+| ADR-019 | Implemented experiment, 13 September 2026 | Explicit context on C resource operations | Make connection ownership unambiguous; experimental ABI 0.1, wire protocol 1.0; neither is frozen |
+| ADR-020 | Implemented experiment, 13 September 2026 | Per-user mock service with macOS development support | Linux remains the deployment target; same-UID socket access is not application sandboxing; in-process trusted mock only |
 
 See [license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
 

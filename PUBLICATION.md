@@ -10,7 +10,8 @@ An unlisted file is excluded even if it is tracked in Git or is not ignored.
 - General threat model and bounded optimization design without proprietary algorithms.
 - OS delivery design, public roadmap, contribution and license documents.
 - Explicitly listed publication tooling and its tests.
-- Future project-owned community code only after file-by-file manifest review.
+- Explicitly listed mock runtime, Rust/C clients, CLI, headers and tests.
+- Additional project-owned community code only after file-by-file manifest review.
 
 ## Excluded Content
 

@@ -10,9 +10,22 @@ time-series analysis and language models. An LLM is one possible provider.
 
 ## Status
 
-This repository currently contains design documentation and publication tooling. There is no
-runtime, SDK, model bundle, installer or bootable ecOS image yet. Examples are
-proposed contracts, not commands or APIs that can currently be executed.
+The first experimental runtime is implemented: a local daemon, Rust client, C ABI,
+CLI and deterministic mock backend. It exercises resource ownership, asynchronous
+jobs, cancellation and cleanup without downloading models or contacting a service.
+There is no real inference engine, model bundle, installer or bootable ecOS image
+yet. The ABI is experimental, not frozen; the wider design remains a roadmap.
+
+See [development instructions](docs/development.md), the
+[implemented protocol](docs/protocol.md) and [evidence and limitations](docs/implementation-r1.md).
+
+```sh
+cargo build --workspace --offline
+node scripts/smoke.mjs
+```
+
+The smoke test starts its own daemon, runs the CLI and compiled C clients, and
+stops the daemon. Rust, a C compiler and Node.js are required.
 
 The [specification guide](SPEC.md) introduces the public design baseline.
 Research proposals are separated from release requirements and demonstrated results.
@@ -56,6 +69,9 @@ flowchart TD
 
 | Document | Questions answered |
 | --- | --- |
+| [Development](docs/development.md) | How do I build, run and test the working prototype? |
+| [Implemented protocol](docs/protocol.md) | Which messages and lifecycle rules work now? |
+| [R1 evidence](docs/implementation-r1.md) | What has been tested, and what is still missing? |
 | [Vision and product](docs/vision.md) | What are we building, for whom, and what does sovereignty mean? |
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
 | [CogPOSIX contracts](docs/cogposix.md) | What does an application rely on? What is portable? |
@@ -73,10 +89,12 @@ flowchart TD
 
 ## Initial Technical Direction
 
-The runtime starts with Linux x86-64, Rust services, a draft C ABI, Unix-domain
-control messages, shared host memory, a deterministic mock backend and ONNX Runtime
-CPU. Hardware acceleration follows correctness and one representative customer
-benchmark. The initial runtime is also installable on an existing Linux system.
+Linux x86-64 remains the runtime target. The Rust mock prototype also runs on
+macOS for development; local verification currently covers macOS only. It uses
+Unix-domain sockets and bounded inline byte buffers. Shared host memory and an
+isolated ONNX Runtime CPU worker are the next milestones, not existing features.
+Hardware acceleration follows correctness and a representative customer benchmark.
+Runtime packaging for existing Linux systems precedes the full OS.
 
 The preferred OS prototype is a Fedora-based bootc image, subject to installer,
 hardware and recovery validation. Debian Live is the documented fallback. The

@@ -1,6 +1,6 @@
 # Community Distribution and Service Notice
 
-Version 1.0, 12 September 2026.
+Version 1.1, 13 September 2026. Deliverable status updated; license grants unchanged.
 
 ## 1. Community Use
 
@@ -16,10 +16,11 @@ or impose additional restrictions on their exercise.
 
 ## 2. Current Deliverables
 
-The repository currently provides design documentation and publication tooling.
-It does not supply a working inference runtime, model collection, bootable OS,
-hosted inference endpoint, managed security service or support SLA. Roadmaps and
-examples describe intended work rather than a contractual delivery commitment.
+The repository provides design documentation, publication tooling and an
+experimental local mock runtime with Rust and C clients. The mock performs a
+deterministic byte transformation, not model inference. There is no real inference
+engine, model collection, bootable OS, hosted inference endpoint, managed security
+service or support SLA. Roadmaps are not contractual delivery commitments.
 
 ## 3. Independent Local Operation
 
