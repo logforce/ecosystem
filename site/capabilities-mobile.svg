@@ -1,0 +1,18 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="300" viewBox="0 0 360 300" fill="none">
+  <title>Shared model interface</title>
+  <g font-family="Arial, sans-serif">
+    <text x="12" y="23" fill="#5a7078" font-size="14">Applications</text>
+    <path d="M62 34V49" stroke="#91aaa9" stroke-width="1.5"/>
+    <text x="12" y="74" fill="#173c3b" font-size="23" font-weight="bold">CogPOSIX</text>
+    <g stroke="#91aaa9" stroke-width="1.5"><path d="M62 87V268H153M62 108H153M62 148H153M62 188H153M62 228H153"/></g>
+    <g stroke="#217d68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M160 108Q172 94 184 108Q172 122 160 108Z"/><circle cx="172" cy="108" r="4"/>
+      <path d="M160 143V153M166 139V157M172 134V162M178 140V156M184 144V152"/>
+      <path d="M162 174H178L184 180V202H162ZM178 174V181H184M168 187H178M168 193H178"/>
+      <path d="M159 228H165L170 215L177 241L182 228H188"/>
+      <path d="M160 255H186V275H174L166 282V275H160ZM166 262H180M166 268H177"/>
+    </g>
+    <g fill="#263d43" font-size="17"><text x="204" y="114">Vision</text><text x="204" y="154">Audio</text><text x="204" y="194">Documents</text><text x="204" y="234">Signals</text><text x="204" y="274">Language</text></g>
+  </g>
+</svg>

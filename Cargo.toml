@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: Apache-2.0
+[workspace]
+resolver = "2"
+members = [
+    "crates/cog-backend-process",
+    "crates/cog-shm",
+    "crates/cog-core",
+    "crates/cog-protocol",
+    "crates/cog-backend-api",
+    "crates/cog-backend-mock",
+    "crates/ecos-daemon",
+    "crates/cog-client",
+    "crates/cog-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+publish = false
+
+[workspace.dependencies]
+cog-backend-process = { path = "crates/cog-backend-process" }
+cog-shm = { path = "crates/cog-shm" }
+cog-core = { path = "crates/cog-core" }
+cog-protocol = { path = "crates/cog-protocol" }
+cog-backend-api = { path = "crates/cog-backend-api" }
+cog-backend-mock = { path = "crates/cog-backend-mock" }
+cog-client = { path = "crates/cog-client" }
+ecos-daemon = { path = "crates/ecos-daemon" }
