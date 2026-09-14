@@ -10,8 +10,12 @@ on macOS and in a non-root, offline Linux x86-64 container. See the
 memory-pressure tests pass; broader adversarial coverage and interface review
 remain required before full gate sign-off. The experimental
 [R2 sealed-input/snapshot-output subset](shared-memory.md) also passes Linux
-validation with measured control/data separation. General mutable mappings and
-R3 onward are not implemented.
+validation with measured control/data separation. General mutable mappings remain
+unimplemented. As of 14 September 2026, the experimental
+[R3 ONNX CPU subset](onnx-worker.md) passes reference agreement, worker failure
+recovery and pinned-artifact rejection tests. Independent security review, model
+quality evaluation and distributable packaging remain open. R4 onward are not
+implemented.
 
 ## 1. Milestones
 

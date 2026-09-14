@@ -1,6 +1,6 @@
 # Experimental Runtime Protocol
 
-This document describes the implemented mock transport, not the complete
+This document describes the implemented runtime transport, not the complete
 [CogPOSIX design](cogposix.md). Wire version is 1.1; the C ABI is experimental 0.2.
 Both may change with an explicit version revision before interface freeze.
 R1 wire 1.0 peers are rejected; rebuild daemon and clients together. The new
@@ -45,7 +45,7 @@ descriptors on failure. Receipt uses close-on-exec. macOS has no descriptor path
 
 | Opcode | Request | Success response |
 | --- | --- | --- |
-| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline mock, 2 = sealed shared memory), max buffer u32, max rank u32 |
+| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline I/O, 2 = sealed shared memory), max buffer u32, max rank u32 |
 | 2 STATS | Empty | Object count u32, backing buffer bytes u64, retained jobs u32 |
 | 10 MODEL_OPEN | UTF-8 byte length u32, name bytes, at most 128 | h |
 | 11 MODEL_CLOSE | h | Empty |
@@ -62,15 +62,20 @@ descriptors on failure. Receipt uses close-on-exec. macOS has no descriptor path
 | 42 JOB_CANCEL | h | Empty |
 | 43 JOB_RELEASE | h | Empty; terminal jobs only |
 
-The only model is `mock.increment.v1`. It maps every input byte to that byte plus
-one modulo 256. Delay is a test facility, limited to 5,000 ms. There is no model
-file loading, network backend, capability discovery or model inference.
+The default backend exposes `mock.increment.v1`, mapping bytes to byte-plus-one
+modulo 256 with equal input/output shapes. Delay is a mock-only test facility,
+limited to 5,000 ms. A daemon configured with the Linux [ONNX worker](onnx-worker.md)
+instead exposes `vision.mnist.v1`: U8 `[28,28]` input, U8 `[1]` output, zero delay.
+Only one backend is configured per daemon. There is no capability discovery,
+client-selected model file loading or network backend. Feature bits describe
+transport support, not model availability; the historical `INLINE_MOCK` name is
+retained as an alias for inline I/O.
 
 ## Ownership and Execution
 
 Tensors are contiguous U8 views, rank 1 through 8, with nonzero dimensions and a
 checked product plus offset within the backing buffer. Submission requires one
-input and one output with equal shapes and distinct backing buffers. The caller
+input and one output with backend-validated shapes and distinct backing buffers. The caller
 allocates fixed output storage; dynamic-size outputs are not implemented.
 
 Handles are typed and connection-owned. Closing a handle removes the caller's
@@ -88,7 +93,8 @@ seal validation and the distinction between a snapshot and a live output view.
 
 States: Queued=1, Running=2, Completed=3, Failed=4, Cancelled=5. The last three are
 terminal. Queued cancellation removes work and releases pins. Running cancellation
-is cooperative: terminal cancellation is published only after backend access ends.
+signals the backend: the mock cooperates and the process backend kills/reaps its
+worker. Terminal cancellation is published only after backend access ends.
 Completion and cancellation are serialized, and cancelled output is not committed.
 Cancelling an already terminal job succeeds without changing its state. Job release
 before terminal status returns Busy. Disconnect cancels work and drops session

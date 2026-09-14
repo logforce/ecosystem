@@ -17,7 +17,8 @@ function run(command, args, options = {}) {
 let scratch;
 let container;
 try {
-  if (process.argv[2] === '--inside') {
+  if (process.argv[2] === '--inside' || process.argv[2] === '--inside-onnx') {
+    const onnx = process.argv[2] === '--inside-onnx';
     if (process.platform !== 'linux' || process.getuid() === 0) {
       throw new Error('Container validation requires non-root Linux');
     }
@@ -32,11 +33,13 @@ try {
     run('cargo', ['clippy', '--workspace', '--all-targets', '--offline', '--locked', '--', '-D', 'warnings']);
     run('cargo', ['test', '--workspace', '--offline', '--locked']);
     run('node', ['scripts/smoke.mjs']);
+    if (onnx) run('node', ['scripts/smoke-onnx.mjs']);
     run('node', ['--test', 'tests/publication.test.mjs']);
     run('node', ['scripts/publication.mjs', 'check']);
     console.log('Linux validation passed as non-root with networking disabled.');
   } else {
-    if (process.argv.length !== 2) throw new Error('Usage: node scripts/validate-linux.mjs');
+    const onnx = process.argv[2] === '--onnx';
+    if (process.argv.length !== (onnx ? 3 : 2)) throw new Error('Usage: node scripts/validate-linux.mjs [--onnx]');
     const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
     const snapshot = collectSnapshot(root);
     scratch = realpathSync(mkdtempSync(path.join(tmpdir(), 'cog-linux-')));
@@ -53,9 +56,14 @@ try {
     }
     for (const directory of directories) chmodSync(directory, 0o755);
     console.log(`Validating public snapshot ${snapshot.digest} (${snapshot.files.length} files)`);
-    const image = 'ecos-cogposix-validation:rust-1.90.0-node-22.19.0';
+    let image = 'ecos-cogposix-validation:rust-1.90.0-node-22.19.0';
     run('docker', ['build', '--platform', 'linux/amd64', '-t', image,
       '-f', path.join(source, 'containers/validation.Dockerfile'), source]);
+    if (onnx) {
+      image = 'ecos-cogposix-onnx-validation:ort-1.22.1';
+      run('docker', ['build', '--platform', 'linux/amd64', '-t', image,
+        '-f', path.join(source, 'containers/onnx-validation.Dockerfile'), source]);
+    }
     container = `cog-validation-${randomUUID()}`;
     run('docker', ['run', '--rm', '--name', container, '--platform', 'linux/amd64', '--network', 'none',
       '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
@@ -63,7 +71,7 @@ try {
       '--tmpfs', '/tmp:rw,exec,mode=1777,size=256m',
       '--tmpfs', '/work:rw,exec,mode=1777,size=1g',
       '--mount', `type=bind,source=${source},target=/source,readonly`,
-      image, 'node', '/source/scripts/validate-linux.mjs', '--inside']);
+      image, 'node', '/source/scripts/validate-linux.mjs', onnx ? '--inside-onnx' : '--inside']);
     container = undefined;
   }
 } catch (error) {

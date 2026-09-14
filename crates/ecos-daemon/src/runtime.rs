@@ -411,9 +411,8 @@ impl Runtime {
                 let Object::Tensor(output) = Self::object(&state, owner, output)? else {
                     return Err(Error::Invalid);
                 };
-                if input.desc.shape != output.desc.shape
-                    || Arc::ptr_eq(&input.buffer, &output.buffer)
-                {
+                backend.validate(&input.desc, &output.desc, delay_ms)?;
+                if Arc::ptr_eq(&input.buffer, &output.buffer) {
                     return Err(Error::Invalid);
                 }
                 let session = &state.sessions[&owner];

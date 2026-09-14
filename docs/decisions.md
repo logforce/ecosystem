@@ -28,7 +28,10 @@ repository; it does not imply implemented or tested behavior.
 | ADR-021 | Verified experiment, 13 September 2026 | Validate the public snapshot in non-root offline Linux containers | Digest-pinned tooling images and bounded disposable execution; private working tree never mounted; container evidence is not OS certification |
 | ADR-022 | Implemented experiment, 13 September 2026 | R2 imports fully sealed immutable inputs and exports sealed snapshots | Kernel seals prevent sender mutation/truncation; no live writable output maps or fully zero-copy claim; wire 1.1 and C ABI 0.2 require rebuilt endpoints |
 
-See [license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
+| ADR-023 | Verified experiment, 14 September 2026 | Supervised Linux Python/ONNX CPU worker for one pinned MNIST artifact | Reuse an existing engine; preserve U8 ABI with profile-specific shapes; bounded worker exchanges, cancellation by termination, no automatic job retry; syscall denylist is not a complete hostile-code sandbox |
+
+See the [R3 evidence and remaining gates](onnx-worker.md),
+[license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
 
 ## Reconsideration Criteria
 

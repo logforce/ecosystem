@@ -2,6 +2,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/cog-backend-process",
     "crates/cog-shm",
     "crates/cog-core",
     "crates/cog-protocol",
@@ -20,6 +21,7 @@ license = "Apache-2.0"
 publish = false
 
 [workspace.dependencies]
+cog-backend-process = { path = "crates/cog-backend-process" }
 cog-shm = { path = "crates/cog-shm" }
 cog-core = { path = "crates/cog-core" }
 cog-protocol = { path = "crates/cog-protocol" }

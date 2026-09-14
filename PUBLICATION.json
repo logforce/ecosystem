@@ -65,6 +65,17 @@
     { "path": "crates/cog-cli/src/bench.rs", "license": "Apache-2.0" },
     { "path": "tests/c-ancillary.c", "license": "Apache-2.0" },
     { "path": "docs/shared-memory.md", "license": "CC-BY-4.0" },
-    { "path": "docs/r2-review.md", "license": "CC-BY-4.0" }
+    { "path": "docs/r2-review.md", "license": "CC-BY-4.0" },
+    { "path": "crates/cog-backend-process/Cargo.toml", "license": "Apache-2.0" },
+    { "path": "crates/cog-backend-process/src/lib.rs", "license": "Apache-2.0" },
+    { "path": "crates/cog-backend-process/src/linux.rs", "license": "Apache-2.0" },
+    { "path": "workers/onnx_worker.py", "license": "Apache-2.0" },
+    { "path": "workers/requirements.txt", "license": "Apache-2.0" },
+    { "path": "scripts/fetch-mnist.mjs", "license": "Apache-2.0" },
+    { "path": "scripts/smoke-onnx.mjs", "license": "Apache-2.0" },
+    { "path": "tests/onnx-reference.py", "license": "Apache-2.0" },
+    { "path": "containers/onnx-validation.Dockerfile", "license": "Apache-2.0" },
+    { "path": "tests/c-onnx.c", "license": "Apache-2.0" },
+    { "path": "docs/onnx-worker.md", "license": "CC-BY-4.0" }
   ]
 }

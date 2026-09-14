@@ -1,6 +1,6 @@
 # Community Distribution and Service Notice
 
-Version 1.1, 13 September 2026. Deliverable status updated; license grants unchanged.
+Version 1.2, 14 September 2026. Deliverable status updated; license grants unchanged.
 
 ## 1. Community Use
 
@@ -17,10 +17,12 @@ or impose additional restrictions on their exercise.
 ## 2. Current Deliverables
 
 The repository provides design documentation, publication tooling and an
-experimental local mock runtime with Rust and C clients. The mock performs a
-deterministic byte transformation, not model inference. There is no real inference
-engine, model collection, bootable OS, hosted inference endpoint, managed security
-service or support SLA. Roadmaps are not contractual delivery commitments.
+experimental local runtime with Rust and C clients, a deterministic mock and an
+optional Linux ONNX CPU worker for one pinned digit model. Model weights are not
+included in the public source export; optional validation downloads them separately.
+There is no general model collection, bootable OS, hosted inference endpoint,
+managed security service or support SLA. Roadmaps are not contractual delivery
+commitments. See the [worker limitations](docs/onnx-worker.md).
 
 ## 3. Independent Local Operation
 

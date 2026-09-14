@@ -18,6 +18,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cog-backend-process"
+version = "0.1.0"
+dependencies = [
+ "cog-backend-api",
+ "cog-core",
+ "cog-shm",
+]
+
+[[package]]
 name = "cog-cli"
 version = "0.1.0"
 dependencies = [
@@ -58,6 +67,7 @@ version = "0.1.0"
 dependencies = [
  "cog-backend-api",
  "cog-backend-mock",
+ "cog-backend-process",
  "cog-client",
  "cog-core",
  "cog-protocol",

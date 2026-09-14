@@ -1,7 +1,8 @@
 # Runtime Development
 
-This is a local mock prototype, not an installable OS or real inference service.
-Read the [implementation limits](implementation-r1.md) before deployment.
+This is an experimental local runtime, not an installable OS. The default backend
+is a mock; the optional Linux [ONNX worker](onnx-worker.md) performs real inference.
+Read that report and the historical [R1 limits](implementation-r1.md) before deployment.
 
 ## Prerequisites
 
@@ -10,8 +11,9 @@ Read the [implementation limits](implementation-r1.md) before deployment.
 - Node.js 20 or newer for smoke tests and publication tooling.
 - macOS or Linux with Unix-domain sockets; Linux x86-64 is the intended target.
 
-There are no third-party Rust dependencies or model downloads. With the toolchain
-already installed, builds and tests run offline. No API key or account is required.
+There are no third-party Rust dependencies. Default builds/tests download no models
+and run offline with the toolchain installed. Optional ONNX validation downloads
+Python dependencies and one pinned model at image-build time. No API key is required.
 The Linux shared-memory crate compiles a small C shim against the system's socket
 and mapping headers. Cross-compiling that shim is not supported by the initial
 build script; use a native Linux host or the validation container.
@@ -49,6 +51,10 @@ With Docker running, execute from the repository root:
 ```sh
 node scripts/validate-linux.mjs
 ```
+
+Add `--onnx` to also build the optional dependency/model image and test real CPU
+inference, independent reference agreement and worker failure recovery. See the
+[worker setup and artifact boundaries](onnx-worker.md).
 
 The [runner](../scripts/validate-linux.mjs) exports only the publication allowlist
 to a disposable directory. It never mounts the working repository or its Git
@@ -102,11 +108,13 @@ is no longer running. The optional `--shutdown-on-stdin` mode stops on a line or
 | [runtime](../crates/ecos-daemon/src/runtime.rs) | Handles, quotas, retained resources and worker queue |
 | [backend interface](../crates/cog-backend-api/src/lib.rs) | Internal Rust trait, not a stable plugin ABI |
 | [mock backend](../crates/cog-backend-mock/src/lib.rs) | Deterministic cancellable byte transformation |
+| [process backend](../crates/cog-backend-process/src/linux.rs) | Linux worker supervision, deadlines and response validation |
+| [ONNX worker](../workers/onnx_worker.py) | Pinned CPU model, preprocessing and syscall restrictions |
 | [Rust client](../crates/cog-client/src/lib.rs) | Protocol client and bounded polling waits |
 | [C implementation](../crates/cog-client/src/ffi.rs) | Context registry and C ABI boundary |
 | [C header](../include/cogposix/cog.h) | Experimental callable API, layouts and ownership |
 | [C example](../examples/mock-client.c) | Complete model/buffer/tensor/job lifecycle |
-| [CLI](../crates/cog-cli/src/main.rs) | Demo and session stats |
+| [CLI](../crates/cog-cli/src/main.rs) | Mock demo, digit classification, transport benchmark and stats |
 
 Cargo produces `ecosd`, `cog` and `libcogposix` under `target/debug`. The library
 has Rust, static C and shared C artifacts (`.dylib` on macOS, `.so` on Linux).

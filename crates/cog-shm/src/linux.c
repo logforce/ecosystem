@@ -22,6 +22,10 @@ int cog_shm_validate(int fd) {
     return 0;
 }
 int cog_shm_duplicate(int fd) { return fcntl(fd, F_DUPFD_CLOEXEC, 0); }
+int cog_shm_nonblocking(int fd) {
+    int flags = fcntl(fd, F_GETFL);
+    return flags < 0 ? -1 : fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
 void *cog_shm_map(int fd, size_t len) {
     /* Old kernels reject MAP_SHARED on write-sealed O_RDWR memfds. A read-only
      * private mapping still reads the immutable file pages without a data copy. */

@@ -1,23 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 [package]
-name = "ecos-daemon"
+name = "cog-backend-process"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
 
-[[bin]]
-name = "ecosd"
-path = "src/main.rs"
-
 [dependencies]
-cog-backend-process.workspace = true
 cog-core.workspace = true
-cog-shm.workspace = true
-cog-protocol.workspace = true
 cog-backend-api.workspace = true
-cog-backend-mock.workspace = true
-
-[dev-dependencies]
-cog-client.workspace = true
+cog-shm.workspace = true

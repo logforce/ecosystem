@@ -16,6 +16,7 @@ unsafe extern "C" {
     fn cog_shm_seal(fd: i32) -> i32;
     fn cog_shm_validate(fd: i32) -> i32;
     fn cog_shm_duplicate(fd: i32) -> i32;
+    fn cog_shm_nonblocking(fd: i32) -> i32;
     fn cog_shm_map(fd: i32, len: usize) -> *mut c_void;
     fn cog_shm_unmap(p: *mut c_void, len: usize);
     fn cog_shm_send(socket: i32, byte: *const u8, fd: i32) -> isize;
@@ -28,6 +29,13 @@ pub fn duplicate_fd(fd: i32) -> Result<File> {
         return Err(Error::Invalid);
     }
     Ok(unsafe { File::from_raw_fd(fd) })
+}
+
+pub fn set_nonblocking(fd: &impl AsRawFd) -> io::Result<()> {
+    if unsafe { cog_shm_nonblocking(fd.as_raw_fd()) } != 0 {
+        return Err(io::Error::last_os_error());
+    }
+    Ok(())
 }
 
 pub struct SharedBuffer {

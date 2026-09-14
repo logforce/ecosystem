@@ -18,7 +18,8 @@ extern "C" {
  */
 #define COG_ABI_MAJOR 0
 #define COG_ABI_MINOR 2
-#define COG_FEATURE_INLINE_MOCK 1
+#define COG_FEATURE_INLINE_IO 1
+#define COG_FEATURE_INLINE_MOCK COG_FEATURE_INLINE_IO
 #define COG_FEATURE_SEALED_SHM 2
 #define COG_MAX_RANK 8
 #define COG_DTYPE_U8 1
@@ -60,7 +61,7 @@ cog_status_t cog_buffer_read(cog_context_t context, cog_handle_t buffer, uint8_t
 cog_status_t cog_buffer_free(cog_context_t context, cog_handle_t buffer);
 cog_status_t cog_tensor_create(cog_context_t context, cog_handle_t buffer, const cog_tensor_desc_t *desc, cog_handle_t *out);
 cog_status_t cog_tensor_release(cog_context_t context, cog_handle_t tensor);
-/* One input/output, equal shape, different buffers. Delay 0..5000ms is mock-only. */
+/* One input/output, model-specific shapes, different buffers. Delay is mock-only. */
 cog_status_t cog_infer_submit(cog_context_t context, cog_handle_t model, cog_handle_t input, cog_handle_t output, uint32_t delay_ms, cog_handle_t *out_job);
 cog_status_t cog_job_status(cog_context_t context, cog_handle_t job, uint32_t *state, int32_t *execution_error);
 /* Milliseconds, monotonic polling. Timeout does not cancel. Each IPC can take up
