@@ -12,7 +12,7 @@ third-party operating-system product that this project has adopted.
 The OS architecture and system contract are original project work. The current
 runtime uses Linux for development and validation; a kernel written from scratch
 and a complete OS installer have not been implemented. Existing kernel and image
-tools below are engineering candidates, not the identity of ecOS >_.
+tools below are engineering candidates, not the identity of ecOS >_ .
 
 ## Prototype Delivery Recommendation
 

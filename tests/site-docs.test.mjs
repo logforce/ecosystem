@@ -32,8 +32,10 @@ test('public page has exact title and no deployment or old status copy', () => {
   assert(!page.includes('class="capability-strip"'));
   assert(page.includes('id="distributed"'));
   assert(page.includes('Distributed execution and database integration are planned'));
-  assert(page.includes('A new operating system.'));
-  assert(page.includes('CogPOSIX is its own POSIX-inspired interface'));
+  assert(page.includes('The open OS bringing a new POSIX to machine intelligence.'));
+  assert(page.includes('ecOS is built around CogPOSIX, a system-level execution standard for running AI models as <strong>native</strong> computing resources, designed for performance and security.'));
+  assert(!page.includes('reader-permalink'));
+  assert(!/ecOS (?:&gt;|>)_[,.;:!?]/.test(page));
   assert(!/ecos\.sourceware|eCos RTOS|existing eCos project/.test(documentBundle(root)));
 });
 
@@ -41,7 +43,10 @@ test('community destinations link to the approved workspace and repository', () 
   const page = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const section = page.match(/<section[^>]+id="community"[\s\S]*?<\/section>/)?.[0];
   assert(section);
-  assert.equal((section.match(/<article>/g) || []).length, 3);
+  assert.equal((section.match(/<article>/g) || []).length, 4);
+  assert(section.includes('href="https://github.com/logforce/ecosystem"'));
+  assert(section.indexOf('<h3>Slack</h3>') < section.indexOf('<h3>GitHub Repository</h3>'));
+  assert(section.indexOf('<h3>GitHub Repository</h3>') < section.indexOf('<h3>GitHub Discussions</h3>'));
   assert(section.includes('href="https://logforceai.slack.com/" target="_blank" rel="noopener noreferrer"'));
   assert(section.includes('Workspace membership may be required'));
   assert(!section.includes('href="index.html"'));
