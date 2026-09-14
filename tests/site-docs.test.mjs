@@ -32,6 +32,9 @@ test('public page has exact title and no deployment or old status copy', () => {
   assert(!page.includes('class="capability-strip"'));
   assert(page.includes('id="distributed"'));
   assert(page.includes('Distributed execution and database integration are planned'));
+  assert(page.includes('A new operating system.'));
+  assert(page.includes('CogPOSIX is its own POSIX-inspired interface'));
+  assert(!/ecos\.sourceware|eCos RTOS|existing eCos project/.test(documentBundle(root)));
 });
 
 test('community destinations link to the approved workspace and repository', () => {

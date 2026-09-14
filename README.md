@@ -1,7 +1,11 @@
 # ecOS and CogPOSIX
 
-**A sovereign AI operating environment in which applications access controlled,
-specialized models through a common system interface.**
+**ecOS >_ is our new operating system, being designed and built for local
+intelligence. CogPOSIX is its own POSIX-inspired system interface for controlled AI.**
+
+This is an original operating-system project, not an integration or distribution
+of a third-party product named ecOS. The runtime prototype currently runs on Linux;
+the complete installable OS remains in development.
 
 ecOS treats inference as a shared system resource. CogPOSIX defines the interface
 applications use to acquire models, exchange typed data, submit computation and
@@ -133,9 +137,7 @@ replacement for POSIX, or proof of universal model portability. ecOS does not
 promise zero-cost computation, hard real-time inference, automatic prevention of
 all cyberattacks, or unrestricted autonomous kernel modification.
 
-Both names are provisional. The existing [eCos RTOS](https://ecos.sourceware.org/)
-creates a naming collision; naming clearance remains unresolved. Public project
-software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
+Public project software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
 [license scope](LICENSE-SCOPE.md). Third-party assets retain their own terms.
 
 ## Community and Optional Enterprise Services

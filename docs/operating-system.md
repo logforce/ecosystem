@@ -3,10 +3,21 @@
 Status: researched platform recommendation, not a tested image. Sources were
 checked on 12 September 2026. No OS image or installer has been built.
 
-## 1. Decision
+## 1. Original OS Architecture
 
-Build ecOS as a Linux distribution/product on an existing kernel, with CogPOSIX
-remaining usable as a runtime on other supported Linux installations. The preferred
+ecOS >_ is a new operating system designed and built by this project. CogPOSIX is
+its own POSIX-inspired interface for controlled AI computation. It is not a
+third-party operating-system product that this project has adopted.
+
+The OS architecture and system contract are original project work. The current
+runtime uses Linux for development and validation; a kernel written from scratch
+and a complete OS installer have not been implemented. Existing kernel and image
+tools below are engineering candidates, not the identity of ecOS >_.
+
+## Prototype Delivery Recommendation
+
+The earlier prototype recommendation uses a Linux-based image, with CogPOSIX
+remaining usable as a runtime on other supported Linux installations. The proposed
 prototype uses a Fedora-based bootc image; validate it against a Debian Live
 prototype before committing the release engineering investment. Do not maintain
 two production distributions at the outset.
