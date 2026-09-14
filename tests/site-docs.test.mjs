@@ -38,10 +38,11 @@ test('community destinations link to the approved workspace and repository', () 
   const page = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const section = page.match(/<section[^>]+id="community"[\s\S]*?<\/section>/)?.[0];
   assert(section);
-  assert.equal((section.match(/<article>/g) || []).length, 4);
+  assert.equal((section.match(/<article>/g) || []).length, 3);
   assert(section.includes('href="https://logforceai.slack.com/" target="_blank" rel="noopener noreferrer"'));
   assert(section.includes('Workspace membership may be required'));
-  assert(section.includes('href="index.html"'));
+  assert(!section.includes('href="index.html"'));
+  assert(!section.includes('Project website'));
   for (const destination of ['discussions', 'issues']) {
     assert(section.includes(`href="https://github.com/logforce/ecosystem/${destination}" target="_blank" rel="noopener noreferrer"`));
   }
