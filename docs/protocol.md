@@ -1,0 +1,143 @@
+# Experimental Runtime Protocol
+
+This document describes the implemented runtime transport, not the complete
+[CogPOSIX design](cogposix.md). Wire version is 1.1; the C ABI is experimental 0.2.
+Both may change with an explicit version revision before interface freeze.
+R1 wire 1.0 peers are rejected; rebuild daemon and clients together. The new
+[R2 shared-memory subset](shared-memory.md) supplements, not replaces, inline I/O.
+
+## Transport and Framing
+
+Each connection is one session on a Unix-domain stream socket. The daemon accepts
+only peers with its effective user ID. The socket is mode 0600 in an owner-only
+directory. The service is per-user: separate connections have isolated handles,
+but hostile applications sharing that user ID are outside the isolation claim.
+
+All integers are little-endian; the header is exactly 28 bytes, encoded field by
+field rather than copied from a native struct.
+
+| Offset | Type | Meaning |
+| --- | --- | --- |
+| 0 | 4 bytes | ASCII `COGP` |
+| 4 | u16 | Major version, 1 |
+| 6 | u16 | Minor version, 1 |
+| 8 | u64 | Positive, strictly increasing request ID |
+| 16 | u16 | Opcode |
+| 18 | u16 | Flags: 0 request, 1 response; other bits invalid |
+| 20 | u32 | Payload length, at most 1 MiB + 128 bytes |
+| 24 | i32 | Status: 0 success/request; error value on response |
+
+Responses echo opcode and request ID. Errors have empty payloads. Bad framing,
+unsupported versions, invalid session handshake or repeated/out-of-order IDs
+close the connection and release session resources. A well-framed request with
+an unsupported opcode receives an error. Payloads must be consumed exactly;
+trailing bytes and malformed fields are rejected. No pipelined client API is
+provided; each context serializes request/response exchanges.
+
+## Messages
+
+`h` is a session-owned u64 handle. `bytes` means the remaining exact payload.
+On Linux, import requests and successful export replies carry one `SCM_RIGHTS`
+descriptor attached to the first frame byte. No other message carries descriptors.
+The receiver reads the first byte separately, checks every subsequent read for
+misplaced rights, rejects extra/truncated ancillary data and closes received
+descriptors on failure. Receipt uses close-on-exec. macOS has no descriptor path.
+
+| Opcode | Request | Success response |
+| --- | --- | --- |
+| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline I/O, 2 = sealed shared memory), max buffer u32, max rank u32 |
+| 2 STATS | Empty | Object count u32, backing buffer bytes u64, retained jobs u32 |
+| 10 MODEL_OPEN | UTF-8 byte length u32, name bytes, at most 128 | h |
+| 11 MODEL_CLOSE | h | Empty |
+| 20 BUFFER_ALLOC | Size u32, nonzero | h; initially zeroed |
+| 21 BUFFER_WRITE | h, byte length u32, bytes | Empty; must fill the entire buffer |
+| 22 BUFFER_READ | h | Entire buffer bytes |
+| 23 BUFFER_FREE | h | Empty |
+| 24 BUFFER_IMPORT | Exact size u32 and one sealed file descriptor | h; immutable input-only buffer |
+| 25 BUFFER_EXPORT | h | Size u32 and one descriptor for an immutable snapshot |
+| 30 TENSOR_CREATE | Buffer h, offset u64, rank u32, dimensions u64[rank] | Tensor h |
+| 31 TENSOR_RELEASE | h | Empty |
+| 40 SUBMIT | Model h, input tensor h, output tensor h, delay milliseconds u32 | Job h |
+| 41 JOB_STATUS | h | State u32, terminal error u32 (0 if none) |
+| 42 JOB_CANCEL | h | Empty |
+| 43 JOB_RELEASE | h | Empty; terminal jobs only |
+
+The default backend exposes `mock.increment.v1`, mapping bytes to byte-plus-one
+modulo 256 with equal input/output shapes. Delay is a mock-only test facility,
+limited to 5,000 ms. A daemon configured with the Linux [ONNX worker](onnx-worker.md)
+instead exposes `vision.mnist.v1`: U8 `[28,28]` input, U8 `[1]` output, zero delay.
+Only one backend is configured per daemon. There is no capability discovery,
+client-selected model file loading or network backend. Feature bits describe
+transport support, not model availability; the historical `INLINE_MOCK` name is
+retained as an alias for inline I/O.
+
+## Ownership and Execution
+
+Tensors are contiguous U8 views, rank 1 through 8, with nonzero dimensions and a
+checked product plus offset within the backing buffer. Submission requires one
+input and one output with backend-validated shapes and distinct backing buffers. The caller
+allocates fixed output storage; dynamic-size outputs are not implemented.
+
+Handles are typed and connection-owned. Closing a handle removes the caller's
+reference; tensors retain their buffer, and accepted jobs retain tensors, model
+and buffers until backend access ends. Thus early handle closure cannot cause
+use-after-free or release memory quota prematurely. IDs are not recycled during
+a daemon's lifetime. Stale or foreign handles are invalid, not transferable tokens.
+
+Accepted jobs pin both buffers exclusively. Buffer reads and writes return Busy
+until pinning ends; a second job using either buffer is also Busy. One trusted
+worker processes a bounded FIFO queue. No priorities or fairness guarantee exist.
+Imported shared buffers reject writes and use as output with Permission. Export
+returns Busy while the source buffer is pinned. See the shared-memory contract for
+seal validation and the distinction between a snapshot and a live output view.
+
+States: Queued=1, Running=2, Completed=3, Failed=4, Cancelled=5. The last three are
+terminal. Queued cancellation removes work and releases pins. Running cancellation
+signals the backend: the mock cooperates and the process backend kills/reaps its
+worker. Terminal cancellation is published only after backend access ends.
+Completion and cancellation are serialized, and cancelled output is not committed.
+Cancelling an already terminal job succeeds without changing its state. Job release
+before terminal status returns Busy. Disconnect cancels work and drops session
+handles; in-flight worker references persist until the backend stops.
+
+## Limits and Timing
+
+| Limit | R1 value |
+| --- | --- |
+| Sessions | 32 |
+| Objects per session | 128, across all handle types |
+| Jobs per session | 16, including retained terminal jobs |
+| Buffer size | 1 MiB |
+| Backing bytes per session | 8 MiB |
+| Backing bytes across daemon | 64 MiB |
+
+Memory quotas count retained backing buffers, not total process RSS. Transport
+frames, buffer copies, worker snapshots and bookkeeping consume additional bounded
+memory. Release terminal jobs promptly to restore admission capacity.
+
+Waiting is a client-side monotonic poll, normally every 2 ms; it is not a separate
+wire request. Timeout zero polls once. A wait timeout does not cancel a job.
+The client's 5-second socket timeout can outlast a shorter requested wait, so this
+is not a hard deadline API. The daemon has a 120-second read timeout and a 5-second
+write timeout; these are per-I/O safeguards, not a total frame deadline or a
+complete denial-of-service defense. An idle connection can therefore expire.
+
+The client poisons a disconnected or protocol-invalid transport and does not retry
+or reconnect automatically. Applications must create a new context; old handles
+do not survive. The Rust client rejects reuse after fork. C applications must exec
+in a forked child before using the library because inherited process locks are not
+fork-safe. Destroy a C context only after its concurrent calls have finished.
+
+## Errors and ABI
+
+Error numbers: Invalid=1, NoMemory=2, NoModel=3, Busy=4, Timeout=5, Cancelled=6,
+Permission=7, Backend=8, Io=9, Unsupported=10, Disconnected=11. The
+[core definitions](../crates/cog-core/src/lib.rs) and
+[C header](../include/cogposix/cog.h) share these values.
+
+Every C resource call takes an explicit context. The tensor descriptor is 88 bytes:
+four u32 fields (`struct_size`, `dtype`, `rank`, `flags`), offset u64, then eight u64
+dimensions. Dtype 1 means U8, flags must be zero, and unused dimensions must be zero.
+The [C integration test](../tests/c-abi.c) checks layout and lifecycle behavior.
+This is not a stable backend plugin ABI: backends currently implement an internal
+[Rust trait](../crates/cog-backend-api/src/lib.rs).

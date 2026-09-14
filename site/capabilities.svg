@@ -1,0 +1,21 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="230" viewBox="0 0 1000 230" fill="none">
+  <title>Shared model interface</title>
+  <desc>Applications connect through CogPOSIX to vision, audio, document, signal and language models. Target architecture.</desc>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="500" y="22" fill="#5a7078" font-size="14">Applications</text>
+    <path d="M500 34V51" stroke="#91aaa9" stroke-width="1.5"/>
+    <text x="500" y="80" fill="#173c3b" font-size="24" font-weight="bold">CogPOSIX</text>
+    <g stroke="#91aaa9" stroke-width="1.5">
+      <path d="M500 93V113M100 142V113H900V142M300 113V142M500 113V142M700 113V142"/>
+    </g>
+    <g stroke="#217d68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M83 164Q100 143 117 164Q100 185 83 164Z"/><circle cx="100" cy="164" r="5"/>
+      <path d="M285 158V170M291 151V177M297 155V173M303 146V182M309 155V173M315 160V168"/>
+      <path d="M488 146H506L514 154V182H488ZM506 146V155H514M494 163H508M494 169H508M494 175H503"/>
+      <path d="M682 164H690L696 151L704 177L710 164H718"/>
+      <path d="M885 149H915V174H901L892 182V174H885ZM892 158H908M892 165H903"/>
+    </g>
+    <g fill="#263d43" font-size="16"><text x="100" y="211">Vision</text><text x="300" y="211">Audio</text><text x="500" y="211">Documents</text><text x="700" y="211">Signals</text><text x="900" y="211">Language</text></g>
+  </g>
+</svg>

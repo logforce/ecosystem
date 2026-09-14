@@ -12,7 +12,7 @@ time-series analysis and language models. An LLM is one possible provider.
 
 | Place | Purpose |
 | --- | --- |
-| [Project website](https://logforce.github.io/) | Explore ecOS and CogPOSIX, the roadmap, licenses and documentation. |
+| [Project website](https://logforce.github.io/ecosystem/) | Explore ecOS and CogPOSIX, the roadmap, licenses and documentation. |
 | [Slack](https://logforceai.slack.com/) | Introductions, help, demos and everyday collaboration. Workspace membership may be required; this link opens Slack sign-in. |
 | [GitHub Discussions](https://github.com/logforce/ecosystem/discussions) | Public proposals, reusable answers and technical decisions. |
 | [GitHub Issues](https://github.com/logforce/ecosystem/issues) | Reproducible bug reports and agreed development tasks. Do not include secrets or private data. |

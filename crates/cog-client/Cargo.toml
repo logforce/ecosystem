@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "cog-client"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+name = "cogposix"
+crate-type = ["rlib", "cdylib", "staticlib"]
+
+[dependencies]
+cog-core.workspace = true
+cog-shm.workspace = true
+cog-protocol.workspace = true

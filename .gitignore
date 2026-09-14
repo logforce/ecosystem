@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+.DS_Store
+~$*.docx
+/target/
+/dist/
+/build/
+/artifacts/
+/model-cache/
+.env
+.env.*
+!.env.example
+
+# Staging guard only. PUBLICATION.json controls public export, not this file.
+/internal/
+/*.docx
+/draft_*
+/docs/business-impact.md
+/public-export/
