@@ -17,6 +17,35 @@ recovery and pinned-artifact rejection tests. Independent security review, model
 quality evaluation and distributable packaging remain open. R4 onward are not
 implemented.
 
+## Next Delivery: Graphical Live Preview
+
+Decision recorded 18 September 2026. The next customer-facing artifact is an
+ecOS >_ Live ISO with XFCE, built with Debian Live/live-build and bootable in
+QEMU. Start with one x86-64 VM profile and CPU inference, without GPU passthrough.
+QEMU is the virtual machine, not the graphical environment. This is planned work;
+no ISO, installer or validated VM configuration exists yet.
+
+1. Select one useful demo workflow and its acceptance dataset. The existing digit
+   classifier validates execution plumbing, not a complete document workflow.
+2. Build the Live ISO with project branding, automatic runtime startup in the
+   logged-in user's context, one graphical application calling CogPOSIX and a
+   local model approved for redistribution.
+3. Verify cold boot, desktop login, real inference and understandable errors with
+   networking disabled. Record image checksum, package/model inventory and the
+   exact QEMU/host configuration, including acceleration or emulation mode.
+4. Only then add installation to a disposable VM disk. Remove the ISO and verify
+   installed-system boot, persistent data and recovery before calling it an
+   installable preview.
+5. Validate a named physical machine before claiming bare-metal support. Keep
+   VM performance measurements separate from native hardware measurements.
+
+The first live session is nonpersistent unless a separately tested persistence
+mode is supplied. It must not silently write to host disks. One genuine local
+workflow is sufficient; the broader multi-application milestone remains separate.
+Docker remains build/test infrastructure, not the customer-facing OS artifact.
+Distributed execution, automatic learning, kernel tuning and mobile support do
+not block this preview. No delivery date is committed.
+
 ## 1. Milestones
 
 | ID | Deliverable | Acceptance evidence | Dependency |
@@ -35,8 +64,8 @@ implemented.
 | F3 | Optional distributed improvement research | Eligible data, held-out benefit, poisoning/privacy checks and independent promotion/rollback | F2 and separate learning approval |
 | C1 | Controlled capability catalogue | Semantic profiles, pinned artifacts, quality reports and substitution tests | R5 |
 | A1 | Independent applications | Three integrations spanning at least three model classes | R6, C1 |
-| O1 | Base OS prototype selection | Fedora/bootc versus Debian installation/update/recovery report | R3 |
-| O2 | Installable developer preview | Bootable artifact, offline model pack, working applications and recovery | O1, A1 |
+| O1 | Graphical Live ISO preview | Debian Live + XFCE boots in QEMU; automatic runtime startup, one GUI workflow through CogPOSIX, bundled approved model and offline execution report | R3, selected workflow and redistribution review |
+| O2 | Disk-installable developer preview | Install to disposable VM disk; boot without ISO, offline demo, persistent data and recovery evidence | O1 |
 | O3 | Supported OS pilot | Bare-metal hardware matrix, signed updates, isolation and support procedures | O2, R7 if accelerator advertised |
 | L1 | Optimization observation | Scoped telemetry, static/heuristic baseline and no control mutation | R4 |
 | L2 | Bounded automatic tuning | Held-out benefit, policy enforcement, watchdog and rollback tests | L1, O3 |
@@ -83,8 +112,10 @@ customer acceptance thresholds before claiming savings.
 
 ## 4. OS Release Checklist
 
-Publish verified image identifiers and instructions only after installation to a
-disposable VM disk succeeds. Before bare-metal support, test boot verification,
+For O1, publish live-boot instructions after the ISO passes its QEMU tests; state
+that live boot is not disk installation and does not promise persistence. Publish
+O2 installation instructions only after installation to a disposable VM disk
+succeeds. Before bare-metal support, test boot verification,
 encryption/recovery, graphics, networking, audio, sleep/resume, selected accelerator,
 model activation and user-data preservation through update/rollback.
 

@@ -66,15 +66,61 @@ services. They do **not** replace hardware drivers. Quality and semantic
 compatibility must be validated when substituting models.
 
 ```mermaid
-flowchart TD
-    A[Independent applications and desktop services] --> B[CogPOSIX execution and capability contracts]
-    B --> C[ecOS runtime: policy, models, memory, jobs]
-    C --> D[Isolated inference workers]
-    D --> E[Existing inference engines]
-    E --> F[Linux kernel and hardware drivers]
-    F --> G[CPU / GPU / NPU]
-    H[Controlled model catalogue] --> C
+flowchart TB
+    subgraph App["Application process"]
+        Task["Application task and result handling"]
+        API["CogPOSIX client interface"]
+        Task --> API
+    end
+    subgraph Daemon["ecOS runtime process"]
+        Core["Sessions, handles, buffers and bounded jobs"]
+        Backend["Process backend and worker supervision"]
+        Core --> Backend
+    end
+    subgraph Worker["Supervised worker"]
+        Adapter["Capability adapter: input and output conversion"]
+        Engine["Inference engine with loaded model"]
+        Adapter -->|"calls within the same process"| Engine
+        Engine -->|"prediction"| Adapter
+    end
+    API -->|"local IPC: submit and wait"| Core
+    Core -->|"status and output"| API
+    Backend -->|"bounded worker protocol"| Adapter
+    Adapter -->|"result or failure"| Backend
+    Model["Approved local model artifact"] -.->|"validated and loaded inside worker"| Engine
+    Engine -->|"computation uses OS facilities"| Kernel["Kernel scheduling, memory and device drivers"]
+    Kernel --> CPU["CPU in the current prototype"]
 ```
+
+This shows the optional **implemented Linux CPU worker path**, not a completed
+installable OS. The engine runs **inside** the supervised worker: these are not
+two successive inference services. The default deterministic mock runs inside
+the daemon and does not use this worker path. The kernel serves all processes;
+its placement in the drawing highlights execution, not exclusive worker access.
+
+Process separation and current worker restrictions are not a proven hostile-code
+sandbox. GPU/NPU support, capability discovery and distributed execution remain
+planned. See [architecture](docs/architecture.md) for boundaries and
+[deployment examples](docs/deployment-examples.md) for OT, IoT, vision inspection,
+desktop document processing and explicitly enabled multi-node execution.
+
+## Where It Fits
+
+These are target deployments, not integrations already shipped. ecOS >_ is
+installed on the supported computing host; CogPOSIX is its application interface,
+not firmware automatically added to every connected sensor or PLC.
+
+| Use case | Where ecOS runs | What the application requests | Why use the system contract? |
+| --- | --- | --- | --- |
+| OT condition monitoring | Industrial edge PC beside the machine | Analysis of bounded vibration or temperature windows | Local execution and explicit failure handling, separate from machine control |
+| IoT telemetry | Gateway serving constrained sensor nodes | Batch classification of validated sensor readings | Keep inference on a capable local host without modifying every sensor |
+| Visual inspection | Inspection workstation connected to a camera | Defect detection on captured frames | Common job lifecycle, model identity and bounded resource use |
+| Document processing | User workstation | Separate layout, OCR and extraction jobs | Local data handling and explicit application review of uncertain results |
+| Optional shared AI node | Approved compute node in a policy domain | Explicit remote placement when authorized | Reuse compute while preserving the off-device trust boundary |
+
+The [detailed examples](docs/deployment-examples.md) explain input ownership,
+execution location, result consumers, failure behavior and evidence required for
+each deployment. They do not grant model outputs authority over physical devices.
 
 ## Product Principles
 
@@ -101,6 +147,7 @@ licenses, with an integrated documentation reader.
 | [ONNX worker](docs/onnx-worker.md) | Which real model works, how is it restricted, and what was verified? |
 | [Vision and product](docs/vision.md) | What are we building, for whom, and what does sovereignty mean? |
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
+| [Deployment examples](docs/deployment-examples.md) | Where would ecOS run in OT/IoT, what crosses CogPOSIX, and who acts on results? |
 | [Distributed intelligence](docs/distributed-intelligence.md) | How could explicitly enabled trusted nodes share compute and governed knowledge? |
 | [CogPOSIX contracts](docs/cogposix.md) | What does an application rely on? What is portable? |
 | [Models and capabilities](docs/models-and-capabilities.md) | How are multiple model classes packaged, evaluated and replaced? |
@@ -125,10 +172,12 @@ verified in that Linux container; it is not a production security boundary.
 Hardware acceleration follows correctness and a representative customer benchmark.
 Runtime packaging for existing Linux systems precedes the full OS.
 
-The preferred OS prototype is a Fedora-based bootc image, subject to installer,
-hardware and recovery validation. Debian Live is the documented fallback. The
-project does not yet commit to a particular distribution release or claim a
-supported device list. See the [platform decision](docs/operating-system.md).
+The next OS artifact is a graphical Live ISO for QEMU: Debian Live/live-build,
+XFCE, CPU inference and one demonstration application using CogPOSIX. Disk
+installation follows live-boot validation; Docker remains build/test infrastructure.
+This is planned, not an available image. No distribution version or hardware
+support is promised yet. See the [platform decision](docs/operating-system.md)
+and [acceptance roadmap](docs/roadmap.md).
 
 ## What Is Not Claimed
 

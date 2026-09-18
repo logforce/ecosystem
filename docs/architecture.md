@@ -30,6 +30,19 @@ FFI, dependencies, authorization or device code inherently safe.
 
 ## 2. Execution Sequence
 
+The numbered sequence below is the target contract, including services not yet
+implemented. The current optional CPU path is narrower: a client submits through
+CogPOSIX to the daemon, whose process backend communicates with a supervised
+worker. The worker loads the approved model and runs its inference engine inside
+that same process. The adapter and engine are not separate IPC services.
+
+In the implemented worker, local model validation and session initialization
+precede readiness; per-job conversion, inference and output validation follow.
+The daemon transports input bytes through bounded pipes to this worker, even when
+the application imported sealed shared memory. This is not end-to-end zero-copy.
+The default mock runs inside the daemon instead. See the
+[ONNX worker report](onnx-worker.md) and [deployment examples](deployment-examples.md).
+
 1. The client negotiates a protocol and authenticates through the local transport.
 2. The daemon establishes identity, quotas and an isolated handle namespace.
 3. The client opens a specific approved artifact; later profiles allow capability resolution.
@@ -38,7 +51,9 @@ FFI, dependencies, authorization or device code inherently safe.
 6. The daemon validates bounds, identities, dependencies and mandatory constraints.
 7. Admission checks reserve resources or reject bounded queue overflow.
 8. Accepted jobs retain model and buffer references; the scheduler chooses dispatch order.
-9. An isolated worker executes the job using an existing inference engine.
+9. A supervised worker executes the job by calling the inference engine inside
+   its process. Production isolation is a requirement, not a guarantee established
+   by process separation or the current syscall restrictions alone.
 10. Completion publishes output shape/validity and releases internal references.
 11. The client reads results and releases its handles; disconnected clients are reclaimed.
 
