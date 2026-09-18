@@ -62,8 +62,10 @@ test('community destinations link to the approved workspace and repository', () 
 test('project introduction uses unified identity and states delivery status', () => {
   const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   assert(readme.startsWith('# ecOS >_CogPOSIX\n'));
-  assert(readme.includes('local, sovereign and offline AI'));
-  assert(readme.includes('Distributed by explicit policy'));
+  assert(readme.includes('local-first, not local-only'));
+  assert(readme.includes('Authorized service'));
+  assert(readme.includes('consumer laptop is a primary deployment target'));
+  assert(!readme.includes('[Website](https://logforce.github.io/) ·'));
   assert(readme.includes('A bootable OS image is not available yet'));
   for (const name of ['README.md', 'docs/vision.md', 'docs/operating-system.md',
     'docs/deployment-examples.md', 'TRADEMARKS.md']) {
@@ -76,8 +78,10 @@ test('project introduction uses unified identity and states delivery status', ()
 test('architecture examples distinguish process containment, implementation and OT authority', () => {
   const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   const examples = fs.readFileSync(new URL('../docs/deployment-examples.md', import.meta.url), 'utf8');
-  assert(readme.includes('subgraph Worker["Supervised worker"]'));
-  assert(readme.includes('Engine["Inference engine with loaded model"]'));
+  assert(readme.includes('Policy --> Local["This device<br/>works offline"]'));
+  assert(readme.includes('Policy --> Domain["Approved node<br/>private or edge infrastructure"]'));
+  assert(readme.includes('Runtime --> Worker["Supervised model worker"]'));
+  assert(readme.includes('Worker --> Engine["Model execution on CPU"]'));
   assert(!readme.includes('Existing inference engines'));
   assert(!readme.includes('Isolated inference workers'));
   assert(readerPaths.includes('docs/deployment-examples.md'));
