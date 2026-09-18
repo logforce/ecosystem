@@ -15,5 +15,5 @@ The publication manifest uses `LicenseRef-Brand-Reserved` to identify this bound
 The logos include LOGFORCE branding. Their display identifies the supplied project
 identity; it does not make LOGFORCE a required runtime dependency or license its
 proprietary technology. See [license scope](../LICENSE-SCOPE.md) and the
-[brand policy](../TRADEMARKS.md). Names remain provisional; rights-holder and naming
-clearance remain release-review responsibilities. Other artwork stays excluded.
+[brand policy](../TRADEMARKS.md). ecOS >_ and CogPOSIX identify this project's OS
+and system interface. Other artwork stays excluded.

@@ -17,7 +17,7 @@ repository; it does not imply implemented or tested behavior.
 | ADR-010 | Research only | Kernel scheduling extensions after measured user-space value | CPU scheduling research is distinct from accelerator coordination |
 | ADR-011 | Research only | Security learning starts advisory | False positives, poisoning and recovery require evidence |
 | ADR-012 | Deferred | Android/AOSP device-specific mobile port | Need hardware, service permissions and maintained boot/update integration |
-| ADR-013 | Open | Public project/product names | Existing eCos collision and standardization implications require review |
+| ADR-013 | Clarified, 14 September 2026 | ecOS >_ is our new OS; CogPOSIX is its own system interface | Identify the original project clearly, without references suggesting a third-party OS dependency or affiliation |
 | ADR-014 | Selected | Apache-2.0 software; CC BY 4.0 public prose | Explicit file scope; third-party/model terms preserved; optional proprietary modules separate |
 | ADR-015 | Experimental | C ABI and protocol until conformance freeze | Resolve lifecycle and extension rules before long-term compatibility promises |
 | ADR-016 | Selected | Complete community foundation; optional LOGFORCE | Open event schema/basic bridge; baseline security and execution require no proprietary service |

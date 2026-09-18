@@ -50,9 +50,8 @@ wiki; a production base and desktop image have not been verified.
 | [Linux seccomp](https://docs.kernel.org/userspace-api/seccomp_filter.html) | Syscall filtering and its limitations |
 | [NIST adversarial-ML taxonomy, 2025 announcement](https://www.nist.gov/news-events/news/2025/03/nist-trustworthy-and-responsible-ai-report-adversarial-machine-learning) | Poisoning, evasion and privacy threats to learned systems |
 
-## Licensing and Naming
+## Licensing
 
-- [eCos project](https://ecos.sourceware.org/): established RTOS naming overlap.
 - [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0): software license.
 - [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.en): documentation license.
 - [DCO](https://developercertificate.org/): contribution origin certification.

@@ -69,7 +69,6 @@ function showDocument(name, hash = '', remember = true) {
   document.getElementById('reader-title').textContent = doc.title;
   select.value = name;
   document.getElementById('reader-source').href = new URL(name, siteRoot).href;
-  document.getElementById('reader-permalink').href = documentURL(name, hash).href;
   toc.replaceChildren();
   if (name.endsWith('.md')) {
     content.innerHTML = DOMPurify.sanitize(marked.parse(doc.content, { gfm: true }), {
@@ -132,7 +131,7 @@ function showDocument(name, hash = '', remember = true) {
 
 document.addEventListener('click', event => {
   const link = event.target.closest('a[href]');
-  if (!link || ['reader-source', 'reader-permalink'].includes(link.id) || link.closest('#reader-toc') ||
+  if (!link || link.id === 'reader-source' || link.closest('#reader-toc') ||
       event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const url = new URL(link.href);
   const target = localPath(url);

@@ -1,8 +1,9 @@
 # Names, Attribution and Compatibility Claims
 
-ecOS and CogPOSIX are working names. This policy asserts no registered trademark
-status and no association with IEEE, The Open Group or the existing eCos project.
-Naming clearance remains a release-management item.
+ecOS >_ identifies this project's new operating system. CogPOSIX identifies its
+own POSIX-inspired AI system interface. These names identify our work, not a
+third-party operating system or product. This policy does not assert registered
+trademark status, POSIX certification or endorsement by a standards organization.
 
 Accurate textual references to the project, attribution, discussion, and truthful
 statements about an independent implementation are welcome. Clearly identify
