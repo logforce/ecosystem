@@ -59,6 +59,20 @@ test('community destinations link to the approved workspace and repository', () 
   assert(!/discord/i.test(section));
 });
 
+test('project introduction uses unified identity and states delivery status', () => {
+  const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert(readme.startsWith('# ecOS >_CogPOSIX\n'));
+  assert(readme.includes('local, sovereign and offline AI'));
+  assert(readme.includes('Distributed by explicit policy'));
+  assert(readme.includes('A bootable OS image is not available yet'));
+  for (const name of ['README.md', 'docs/vision.md', 'docs/operating-system.md',
+    'docs/deployment-examples.md', 'TRADEMARKS.md']) {
+    const text = fs.readFileSync(path.join(root, name), 'utf8');
+    assert(text.includes('ecOS >_CogPOSIX'), name);
+    assert(!/our (?:new operating system|OS project)|third-party (?:OS that|operating.system (?:product|or product))/.test(text), name);
+  }
+});
+
 test('architecture examples distinguish process containment, implementation and OT authority', () => {
   const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   const examples = fs.readFileSync(new URL('../docs/deployment-examples.md', import.meta.url), 'utf8');

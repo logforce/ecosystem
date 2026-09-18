@@ -45,7 +45,7 @@ are granted by a contribution here.
 
 Third-party software, model weights, datasets, firmware and adapters retain their
 own terms. Inventory redistribution and modification rights for every shipped
-artifact. ecOS >_ is this project's OS; CogPOSIX is its own AI system interface.
+artifact.
 
 ## Contribution Certification
 

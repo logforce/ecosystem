@@ -1,69 +1,104 @@
-# ecOS and CogPOSIX
+# ecOS >_CogPOSIX
 
-**ecOS >_ is our new operating system, being designed and built for local
-intelligence. CogPOSIX is its own POSIX-inspired system interface for controlled AI.**
+**An open, next-generation operating system for local, sovereign and offline AI.**
 
-This is an original operating-system project, not an integration or distribution
-of a third-party product named ecOS. The runtime prototype currently runs on Linux;
-the complete installable OS remains in development.
+ecOS >_CogPOSIX brings machine intelligence into the operating-system contract.
+Models become managed computing resources: applications submit typed workloads
+through a common interface, while the system coordinates execution, memory,
+resource ownership and model lifecycles.
 
-ecOS treats inference as a shared system resource. CogPOSIX defines the interface
-applications use to acquire models, exchange typed data, submit computation and
-observe its execution. Models include vision, audio, OCR, embeddings, translation,
-time-series analysis and language models. An LLM is one possible provider.
+The project combines an OS architecture, its execution runtime and a POSIX-inspired
+AI interface in one platform. Its scope spans vision, audio, documents, signals,
+embeddings and language. An LLM is one class of model, not the system abstraction.
 
-## Community Links
+**Offline by design. Local by default. Distributed by explicit policy.**
+
+The goal is to make AI execution more secure, efficient and predictable without
+depending on a central inference service. Local deployments retain control of
+data and models; the planned decentralized fabric extends execution across
+authorized nodes without hiding the network and trust boundaries between them.
+Security and performance improvements must be demonstrated against measured
+baselines, not inferred from the architecture alone.
+
+[Website](https://logforce.github.io/) · [Documentation](SPEC.md) ·
+[Roadmap](docs/roadmap.md) · [Contribute](CONTRIBUTING.md)
+
+## Design Principles
+
+- **Offline operation:** provision approved models locally, then execute supported
+  tasks without hosted inference, cloud accounts or remote token consumption.
+- **Sovereign execution:** retain control over model selection, data access,
+  execution location and update policy.
+- **A common system interface:** typed buffers, model handles and asynchronous
+  jobs provide a consistent execution contract across model classes.
+- **Explicit authority:** permission to execute a model does not confer permission
+  to control devices, access unrelated data or modify system policy.
+- **Resource-aware performance:** bound work and memory, measure data movement and
+  pursue reuse without implicitly sharing private application state.
+- **Controlled decentralization:** enable execution across approved nodes only by
+  explicit policy. The distributed fabric remains roadmap work.
+
+## Community
 
 | Place | Purpose |
 | --- | --- |
-| [Project website](https://logforce.github.io/) | Explore ecOS and CogPOSIX, the roadmap, licenses and documentation. |
+| [Project website](https://logforce.github.io/) | Explore ecOS >_CogPOSIX, the roadmap, licenses and documentation. |
 | [Slack](https://logforceai.slack.com/) | Introductions, help, demos and everyday collaboration. Workspace membership may be required; this link opens Slack sign-in. |
 | [GitHub Discussions](https://github.com/logforce/ecosystem/discussions) | Public proposals, reusable answers and technical decisions. |
 | [GitHub Issues](https://github.com/logforce/ecosystem/issues) | Reproducible bug reports and agreed development tasks. Do not include secrets or private data. |
 
-Community membership does not grant repository write access. Contributor roles
-and changes to the official project require maintainer approval. See the
-[contribution guide](CONTRIBUTING.md). Keep lasting answers and decisions in public
-discussions or documentation so participation does not depend on Slack.
+Contribute code, review execution contracts, reproduce benchmarks or help build
+the OS preview. Start a discussion for architectural changes; submit focused pull
+requests with tests and DCO sign-off. See the [contribution guide](CONTRIBUTING.md).
+Maintainers review changes and grant repository roles explicitly. Keep technical
+decisions and reusable answers in public discussions or documentation.
 
-## Status
+## Build and Run
 
-The first experimental runtime is implemented: a local daemon, Rust client, C ABI,
-CLI and deterministic mock backend. It exercises resource ownership, asynchronous
-jobs, cancellation and cleanup without downloading models or contacting a service.
-Linux also supports descriptor-passed, sealed shared inputs and immutable output
-snapshots. See the [shared-memory contract](docs/shared-memory.md).
-An optional Linux ONNX Runtime CPU worker now executes one pinned handwritten-digit
-model through the same Rust and C interface. See the [R3 worker report](docs/onnx-worker.md).
-There is no installer or bootable ecOS image yet. The ABI is experimental, not
-frozen; the wider design remains a roadmap.
-
-See [development instructions](docs/development.md), the
-[implemented protocol](docs/protocol.md) and [evidence and limitations](docs/implementation-r1.md).
+The available developer prototype is a local Rust runtime with a C ABI and CLI.
+Start with the deterministic mock: no model download, API key or external inference
+service is required. Prerequisites: Rust, a C compiler and Node.js. Linux x86-64 is
+the runtime target; mock development is also tested on macOS.
 
 ```sh
 cargo build --workspace --offline
 node scripts/smoke.mjs
 ```
 
-The smoke test starts its own daemon, runs the CLI and compiled C clients, and
-stops the daemon. Rust, a C compiler and Node.js are required.
+The smoke test starts a daemon, exercises Rust and compiled C clients, and cleans
+up afterward. For real CPU inference, follow the [ONNX worker guide](docs/onnx-worker.md).
+That optional path uses a pinned digit-classification model; obtain its approved
+dependencies and model before offline execution. The [development guide](docs/development.md)
+covers setup, testing and troubleshooting.
 
-The [specification guide](SPEC.md) introduces the public design baseline.
-Research proposals are separated from release requirements and demonstrated results.
-The original planning attachment is not part of the public distribution.
+## Development Status
 
-## Two Names, Two Responsibilities
+| Available and tested | In development or planned |
+| --- | --- |
+| Local daemon, Rust client, C ABI and CLI | Graphical Live ISO, then disk installation |
+| Typed objects, bounded jobs, cancellation and cleanup | Broader capability profiles and model packages |
+| Sealed shared inputs and immutable output snapshots on Linux | Resource scheduling and accelerator backends |
+| Supervised CPU worker with one approved digit model | Multi-node execution and governed knowledge services |
 
-| Name | Responsibility | Intended deliverable |
+The ABI remains experimental. A bootable OS image is not available yet, and the
+runtime is not a production security boundary. Evidence reports document the
+[runtime](docs/implementation-r1.md), [shared memory](docs/shared-memory.md) and
+[CPU worker](docs/onnx-worker.md), including their current limits.
+
+## System Architecture
+
+**One project, three architectural layers:** the execution contract, the runtime
+that implements it and the OS environment that delivers it.
+
+| Layer | Responsibility | Deliverable |
 | --- | --- | --- |
 | CogPOSIX | Versioned execution and capability contracts | Specification, C ABI, bindings and conformance suite |
 | ecOS Runtime | Shared resource management and policy | Linux services, backend adapters and administration tools |
-| ecOS OS | Complete sovereign computing environment | Installable Linux system with supported hardware, applications and model packs |
+| OS environment | Boot, desktop, services, deployment and recovery | Installable system integrating the runtime, applications and approved model packs |
 
-Models act as capability providers, analogous to the way drivers expose hardware
-services. They do **not** replace hardware drivers. Quality and semantic
-compatibility must be validated when substituting models.
+The diagram shows the implemented CPU path. The inference engine and loaded model
+reside inside the supervised worker. The runtime manages the job; the application
+retains responsibility for interpreting its result.
 
 ```mermaid
 flowchart TB
@@ -104,13 +139,18 @@ planned. See [architecture](docs/architecture.md) for boundaries and
 [deployment examples](docs/deployment-examples.md) for OT, IoT, vision inspection,
 desktop document processing and explicitly enabled multi-node execution.
 
-## Where It Fits
+## Deployment Scenarios
 
-These are target deployments, not integrations already shipped. ecOS >_ is
-installed on the supported computing host; CogPOSIX is its application interface,
-not firmware automatically added to every connected sensor or PLC.
+ecOS >_CogPOSIX targets a general-purpose OS architecture for AI. OT and IoT are
+deployment domains alongside desktop, workstation and edge computing, not the
+identity or limit of the project. Across these environments, the objective is
+locally governed execution that remains useful offline, with optional compute
+sharing across approved infrastructure.
 
-| Use case | Where ecOS runs | What the application requests | Why use the system contract? |
+The examples below describe target integrations. Models, adapters and hardware
+support must be implemented and validated for each workload.
+
+| Use case | Computing host | Application request | System-level benefit to validate |
 | --- | --- | --- | --- |
 | OT condition monitoring | Industrial edge PC beside the machine | Analysis of bounded vibration or temperature windows | Local execution and explicit failure handling, separate from machine control |
 | IoT telemetry | Gateway serving constrained sensor nodes | Batch classification of validated sensor readings | Keep inference on a capable local host without modifying every sensor |
@@ -122,18 +162,7 @@ The [detailed examples](docs/deployment-examples.md) explain input ownership,
 execution location, result consumers, failure behavior and evidence required for
 each deployment. They do not grant model outputs authority over physical devices.
 
-## Product Principles
-
-- Run ordinary algorithms when they adequately solve the task.
-- Use approved local models when they meet quality and resource requirements.
-- Keep model identity, execution location, permissions and resource use visible.
-- Make off-device execution an explicit policy decision, never a silent fallback.
-- Reuse model resources across participating applications without sharing private state.
-- Preserve a small execution interface and version capability semantics separately.
-- Keep security enforcement independent of learned predictions.
-- Deliver a usable installable OS on an existing kernel and driver ecosystem.
-
-## Start Reading
+## Documentation
 
 The [project website](index.html) introduces the runtime, roadmap and component
 licenses, with an integrated documentation reader.
@@ -145,9 +174,9 @@ licenses, with an integrated documentation reader.
 | [R1 evidence](docs/implementation-r1.md) | What has been tested, and what is still missing? |
 | [Shared memory](docs/shared-memory.md) | How does R2 exchange immutable tensor data outside the socket? |
 | [ONNX worker](docs/onnx-worker.md) | Which real model works, how is it restricted, and what was verified? |
-| [Vision and product](docs/vision.md) | What are we building, for whom, and what does sovereignty mean? |
+| [Vision and product](docs/vision.md) | What is the platform designed to deliver, and what does sovereignty mean? |
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
-| [Deployment examples](docs/deployment-examples.md) | Where would ecOS run in OT/IoT, what crosses CogPOSIX, and who acts on results? |
+| [Deployment examples](docs/deployment-examples.md) | How would desktop, edge and OT/IoT applications use the system, and who acts on results? |
 | [Distributed intelligence](docs/distributed-intelligence.md) | How could explicitly enabled trusted nodes share compute and governed knowledge? |
 | [CogPOSIX contracts](docs/cogposix.md) | What does an application rely on? What is portable? |
 | [Models and capabilities](docs/models-and-capabilities.md) | How are multiple model classes packaged, evaluated and replaced? |
@@ -162,7 +191,7 @@ licenses, with an integrated documentation reader.
 | [Community terms](TERMS.md) | How does community use differ from optional paid services? |
 | [Release information](PUBLICATION.md) | What is included, and where is the verification evidence? |
 
-## Initial Technical Direction
+## Path to the OS Preview
 
 Linux x86-64 remains the runtime target. The Rust mock prototype is verified on
 macOS and in a non-root, offline Linux x86-64 validation container. It uses
@@ -179,12 +208,11 @@ This is planned, not an available image. No distribution version or hardware
 support is promised yet. See the [platform decision](docs/operating-system.md)
 and [acceptance roadmap](docs/roadmap.md).
 
-## What Is Not Claimed
+## Licensing and Governance
 
-CogPOSIX is POSIX-inspired; it is not POSIX certification, an IEEE standard, a
-replacement for POSIX, or proof of universal model portability. ecOS does not
-promise zero-cost computation, hard real-time inference, automatic prevention of
-all cyberattacks, or unrestricted autonomous kernel modification.
+CogPOSIX is the project's POSIX-inspired AI execution interface. Its specification
+evolves through implementation, review and conformance evidence; it does not claim
+POSIX certification or adoption as an external standard.
 
 Public project software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
 [license scope](LICENSE-SCOPE.md). Third-party assets retain their own terms.
