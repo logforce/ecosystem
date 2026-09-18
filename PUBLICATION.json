@@ -23,6 +23,7 @@
     { "path": ".github/workflows/ci.yml", "license": "Apache-2.0" },
     { "path": "docs/vision.md", "license": "CC-BY-4.0" },
     { "path": "docs/architecture.md", "license": "CC-BY-4.0" },
+    { "path": "docs/deployment-examples.md", "license": "CC-BY-4.0" },
     { "path": "docs/distributed-intelligence.md", "license": "CC-BY-4.0" },
     { "path": "docs/cogposix.md", "license": "CC-BY-4.0" },
     { "path": "docs/models-and-capabilities.md", "license": "CC-BY-4.0" },

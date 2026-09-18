@@ -33,6 +33,7 @@ identified as implemented in the implementation report.
 | --- | --- |
 | Product boundary and sovereignty | [Vision](docs/vision.md) |
 | Runtime components and resource ownership | [Architecture](docs/architecture.md) |
+| Concrete OT/IoT and application deployments | [Deployment examples](docs/deployment-examples.md) |
 | ABI, IPC, object lifecycle and compatibility | [CogPOSIX](docs/cogposix.md) |
 | Capability semantics and model lifecycle | [Models](docs/models-and-capabilities.md) |
 | Deployment, installer and recovery | [OS](docs/operating-system.md) |

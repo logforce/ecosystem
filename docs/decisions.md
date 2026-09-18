@@ -8,7 +8,7 @@ repository; it does not imply implemented or tested behavior.
 | ADR-001 | Selected direction | CogPOSIX is central; models span multiple classes | The project is shared AI infrastructure with semantic contracts, beyond an LLM shell |
 | ADR-002 | Selected direction | Separate interface, runtime and installable OS | Permit incremental adoption while retaining a complete OS deliverable |
 | ADR-003 | Selected direction | Linux user-space implementation first | Preserve existing drivers and system services; avoid a new kernel dependency |
-| ADR-004 | Provisional platform | Fedora/bootc prototype; Debian fallback | Validate image/update approach and installer before production commitment |
+| ADR-004 | Superseded for first preview by ADR-024 | Earlier Fedora/bootc prototype; Debian fallback | Retained as historical research; production lifecycle remains unselected |
 | ADR-005 | Selected direction | Controlled capability catalogue after explicit-model MVP | Semantic interchangeability requires evaluation, not only tensors |
 | ADR-006 | Selected direction | Local-only default | Off-device execution requires a separate policy and transport design |
 | ADR-007 | Selected direction | Existing inference engines under internal adapters | Do not implement operator kernels or a custom compiler IR for MVP |
@@ -33,9 +33,21 @@ repository; it does not imply implemented or tested behavior.
 See the [R3 evidence and remaining gates](onnx-worker.md),
 [license scope](../LICENSE-SCOPE.md) and [publication rules](../PUBLICATION.md).
 
+## Preview Delivery Decision
+
+ADR-024, selected 18 September 2026; not implemented: deliver a graphical Live ISO
+before adding disk installation. Use Debian Live/live-build + XFCE, one CPU-only
+x86-64 QEMU profile, automatic runtime startup in the user context, one GUI
+workflow through CogPOSIX and a redistribution-approved offline model. Docker is
+build/test infrastructure, not the customer demo. GPU passthrough, distributed
+inference and learning are not prerequisites. O2 adds installation, persistence
+and recovery on disposable VM disks; bare-metal support follows separate tests.
+See the [roadmap](roadmap.md) for acceptance evidence. This supersedes ADR-004 for
+the initial preview only; it does not freeze production update architecture.
+
 ## Reconsideration Criteria
 
-Revisit ADR-004 if the preferred image cannot support required drivers, desktop
+Revisit ADR-024 if the selected image cannot support required drivers, desktop
 updates or recovery with acceptable maintenance effort. Revisit product sequencing
 if a paying customer needs a controlled appliance before a desktop. Revisit the
 runtime approach if an existing server meets the same contracts and buyer outcomes

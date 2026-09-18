@@ -1,7 +1,8 @@
 # Installable ecOS: Platform and Delivery
 
-Status: researched platform recommendation, not a tested image. Sources were
-checked on 12 September 2026. No OS image or installer has been built.
+Status: first-preview direction selected on 18 September 2026, not a tested image.
+Earlier platform research dates from 12 September 2026. No OS image or installer
+has been built.
 
 ## 1. Original OS Architecture
 
@@ -16,11 +17,17 @@ tools below are engineering candidates, not the identity of ecOS >_ .
 
 ## Prototype Delivery Recommendation
 
-The earlier prototype recommendation uses a Linux-based image, with CogPOSIX
-remaining usable as a runtime on other supported Linux installations. The proposed
-prototype uses a Fedora-based bootc image; validate it against a Debian Live
-prototype before committing the release engineering investment. Do not maintain
-two production distributions at the outset.
+The first preview will be a graphical Debian Live ISO built with live-build and
+XFCE, bootable in QEMU with CPU inference and one x86-64 VM profile. Include the
+runtime, CogPOSIX, one graphical application using the actual interface and an
+offline model whose redistribution terms have been reviewed. QEMU provides the
+virtual machine; XFCE provides the desktop.
+
+First prove live boot and the local workflow, then add installation to a disposable
+VM disk. The live session is not persistent by default. Docker remains build/test
+infrastructure, not the delivered OS demonstration. Follow the [roadmap](roadmap.md)
+acceptance sequence. This supersedes the Fedora/bootc-first recommendation for the
+initial preview, not the need to validate production updates and recovery.
 
 The reason is product control over system services, model policy, updates and
 recovery while retaining a mature application and driver ecosystem. A custom
@@ -40,8 +47,8 @@ support must be rechecked against the actual target machines.
 
 | Base | Why consider it | Project tradeoff | Decision |
 | --- | --- | --- | --- |
-| Fedora + bootc | Image-based deployment; existing Fedora packaging | Need to prove desktop composition, firmware and release maintenance | Preferred prototype |
-| Debian + live-build | Established customizable live/install media | Transactional updates and recovery need a separate product design | Fallback; useful installer benchmark |
+| Fedora + bootc | Image-based deployment; existing Fedora packaging | Need to prove desktop composition, firmware and release maintenance | Alternative for later lifecycle evaluation |
+| Debian + live-build | Established customizable live/install media | Transactional updates and recovery need a separate product design | Selected for first graphical Live ISO |
 | NixOS | Declarative configuration and generations | Team expertise, packaging and vendor-runtime integration need assessment | Strong engineering alternative |
 | Yocto/OpenEmbedded | Custom embedded Linux images and board integration | Greater distribution/build ownership than a first workstation needs | Later OEM-specific edition |
 | FreeBSD | Coherent Unix platform and jails | Current design depends on Linux memory/IPC facilities; accelerator compatibility unvalidated | No initial target |
@@ -61,7 +68,9 @@ FreeBSD provides jails but would require portability work here.
 
 ## 3. Initial Hardware Profile
 
-Target one x86-64 UEFI reference PC, then a second machine from a different vendor.
+First validate one x86-64 QEMU configuration without GPU passthrough. Record guest
+firmware, vCPU count, RAM, storage, display device and host acceleration/emulation.
+Then target one x86-64 UEFI reference PC and a second machine from another vendor.
 A planning configuration is 16-32 GiB RAM and SSD storage, with a CPU-only fallback.
 These are procurement hypotheses, not verified minimum requirements. Measure model
 working sets before specifying disk or memory minima. Include one selected GPU or
@@ -76,10 +85,10 @@ CPU behavior; it cannot replace bare-metal tests of accelerators, suspend or ene
 | Area | Initial responsibility |
 | --- | --- |
 | Base OS | Selected upstream kernel, system services, networking and hardware packages |
-| Desktop | One existing desktop environment; GNOME/Wayland is the initial candidate |
+| Desktop | XFCE for the first Live ISO, with ecOS project identity |
 | Runtime | ecosd, workers, client library, CLI and service policies |
 | Capabilities | Small offline-ready model pack with locked compatibility record |
-| Applications | At least three integrations spanning more than language models |
+| Applications | One GUI workflow through CogPOSIX for O1; three independent integrations remain a later milestone |
 | Security | Confinement, per-user data boundaries, signed release verification |
 | Administration | Model catalogue, resource view, execution-location policy and updates |
 | Recovery | Previous approved deployment and independent rescue environment |
@@ -92,8 +101,8 @@ base image. Confidential local indexes belong to user-scoped storage.
 ## 5. Installation Experience
 
 The final product must offer an installable USB/ISO or equivalent supported disk
-image with verification information. Development artifacts should start as a VM
-disk image to contain destructive installer testing.
+image with verification information. Start with a Live ISO booted in QEMU without
+installation. Installer testing follows on designated disposable VM disks.
 
 Required installer flow:
 
@@ -157,8 +166,8 @@ storage pressure and sustained battery impact.
 
 ## 8. Platform Selection Gate
 
-Build equivalent minimal Fedora/bootc and Debian installer prototypes only after
-the runtime can execute a real model. Compare install success, signed update,
-rollback after interrupted update, driver support, offline model activation and
-maintenance effort. Choose one based on measured results. Public release names,
-version pins and device support stay provisional until this gate passes.
+Validate Debian Live + XFCE against O1, then disk installation against O2. A
+Fedora/bootc comparison does not block the first preview. Before choosing a
+production lifecycle, evaluate signed updates, rollback after interrupted updates,
+driver support, offline model activation and maintenance effort. Version pins and
+device support are not established until their respective tests pass.

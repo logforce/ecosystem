@@ -59,6 +59,20 @@ test('community destinations link to the approved workspace and repository', () 
   assert(!/discord/i.test(section));
 });
 
+test('architecture examples distinguish process containment, implementation and OT authority', () => {
+  const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  const examples = fs.readFileSync(new URL('../docs/deployment-examples.md', import.meta.url), 'utf8');
+  assert(readme.includes('subgraph Worker["Supervised worker"]'));
+  assert(readme.includes('Engine["Inference engine with loaded model"]'));
+  assert(!readme.includes('Existing inference engines'));
+  assert(!readme.includes('Isolated inference workers'));
+  assert(readerPaths.includes('docs/deployment-examples.md'));
+  for (const text of ['not delivered OT/IoT products', 'no inference-to-actuator arrow',
+    'IoT: A Gateway', 'Vision: Inspecting', 'Desktop: Local', 'Optional Distribution:']) {
+    assert(examples.includes(text), text);
+  }
+});
+
 test('Pages preparation exports complete static files without deployment notes or Git history', t => {
   const parent = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'ecos-pages-test-')));
   t.after(() => fs.rmSync(parent, {recursive:true, force:true}));

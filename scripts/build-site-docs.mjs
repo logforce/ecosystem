@@ -7,7 +7,7 @@ import { collectSnapshot } from './publication.mjs';
 // Deliberately narrower than the source export: no release operations or decision history.
 export const readerPaths = [
   'SPEC.md', 'docs/vision.md', 'docs/cogposix.md', 'docs/architecture.md',
-  'docs/distributed-intelligence.md',
+  'docs/distributed-intelligence.md', 'docs/deployment-examples.md',
   'docs/models-and-capabilities.md', 'docs/operating-system.md', 'docs/security.md',
   'docs/adaptive-optimization.md', 'docs/roadmap.md', 'docs/development.md',
   'docs/protocol.md', 'docs/onnx-worker.md', 'docs/shared-memory.md',
