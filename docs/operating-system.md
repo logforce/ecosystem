@@ -6,14 +6,15 @@ has been built.
 
 ## 1. Original OS Architecture
 
-ecOS >_ is a new operating system designed and built by this project. CogPOSIX is
-its own POSIX-inspired interface for controlled AI computation. It is not a
-third-party operating-system product that this project has adopted.
+ecOS >_CogPOSIX combines a new OS architecture and a POSIX-inspired AI execution
+contract in one project. The target is an installable environment for local,
+sovereign and offline model execution, with explicit resource management and
+security boundaries.
 
-The OS architecture and system contract are original project work. The current
-runtime uses Linux for development and validation; a kernel written from scratch
-and a complete OS installer have not been implemented. Existing kernel and image
-tools below are engineering candidates, not the identity of ecOS >_ .
+The current runtime uses Linux for development and validation. The first OS
+preview will integrate that runtime into a graphical Linux-based environment;
+a complete OS installer has not yet been implemented. This document defines the
+delivery path, platform choices and validation requirements.
 
 ## Prototype Delivery Recommendation
 

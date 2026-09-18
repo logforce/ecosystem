@@ -8,10 +8,18 @@ accelerator support and distributed fabric remain planned. See the
 
 ## 1. Read the Architecture Correctly
 
-ecOS >_ is our OS project. CogPOSIX is its application-facing AI execution
-contract. In the current implementation the runtime runs on Linux; the full OS
-installation experience is still being built. Installing the runtime on a gateway
-does not install ecOS on every device connected to that gateway.
+ecOS >_CogPOSIX is a next-generation OS project for local, sovereign and offline
+AI, with policy-controlled decentralized execution on the roadmap. Its system
+interface makes model execution a managed computing capability across desktops,
+workstations and edge systems. OT and IoT are two deployment domains within that
+broader architecture.
+
+The objective is more secure and efficient AI execution: explicit access to data,
+bounded resources and predictable failure handling. Each deployment must validate
+those properties against its workload and threat model. In the current
+implementation the runtime runs on Linux; the full OS installation experience
+remains planned. Installing the runtime on a gateway does not install the OS on
+every device connected to that gateway.
 
 | Component | Where it runs | What it does | What it does not do |
 | --- | --- | --- | --- |

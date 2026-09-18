@@ -2,10 +2,11 @@
 
 ## 1. Thesis
 
-ecOS >_ is our new operating system, conceived and developed as an original
-project. CogPOSIX is its own POSIX-inspired AI system interface. Neither denotes
-a third-party OS that we are adopting. The working Linux runtime is an incremental
-implementation milestone, not the complete OS.
+ecOS >_CogPOSIX is an open, next-generation operating-system project for local,
+sovereign and offline AI. It combines an OS architecture with a POSIX-inspired
+execution contract so that models can be managed as native computing resources.
+The Linux runtime is the current implementation milestone; an installable OS
+environment and policy-controlled decentralized execution remain roadmap work.
 
 AI computation should be available as a managed system capability. Applications
 should be able to use supported inference without each owning model distribution,

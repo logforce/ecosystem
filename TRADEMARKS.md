@@ -1,8 +1,8 @@
 # Names, Attribution and Compatibility Claims
 
-ecOS >_ identifies this project's new operating system. CogPOSIX identifies its
-own POSIX-inspired AI system interface. These names identify our work, not a
-third-party operating system or product. This policy does not assert registered
+ecOS >_CogPOSIX identifies the project, encompassing its operating-system
+architecture, execution runtime and CogPOSIX system interface.
+This policy does not assert registered
 trademark status, POSIX certification or endorsement by a standards organization.
 
 Accurate textual references to the project, attribution, discussion, and truthful
