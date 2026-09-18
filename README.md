@@ -1,42 +1,45 @@
 # ecOS >_CogPOSIX
 
-**An open, next-generation operating system for local, sovereign and offline AI.**
+**The open operating system bringing a new POSIX to machine intelligence.**
 
 ecOS >_CogPOSIX brings machine intelligence into the operating-system contract.
 Models become managed computing resources: applications submit typed workloads
 through a common interface, while the system coordinates execution, memory,
 resource ownership and model lifecycles.
 
-The project combines an OS architecture, its execution runtime and a POSIX-inspired
-AI interface in one platform. Its scope spans vision, audio, documents, signals,
-embeddings and language. An LLM is one class of model, not the system abstraction.
+The project combines an OS architecture, an execution runtime and CogPOSIX, its
+POSIX-inspired interface for AI computation. Its scope spans vision, audio,
+documents, signals, embeddings and language. An LLM is one class of model, not
+the system abstraction.
 
-**Offline by design. Local by default. Distributed by explicit policy.**
+ecOS >_CogPOSIX is **local-first, not local-only**. The system is designed to run
+a workload in the place that policy permits and the workload requires: on the
+user's device, on an approved node in a private infrastructure, or through an
+explicitly authorized external service. It can keep supported tasks operational
+without a network, but offline operation is a capability rather than a limitation.
 
-The goal is to make AI execution more secure, efficient and predictable without
-depending on a central inference service. Local deployments retain control of
-data and models; the planned decentralized fabric extends execution across
-authorized nodes without hiding the network and trust boundaries between them.
-Security and performance improvements must be demonstrated against measured
-baselines, not inferred from the architecture alone.
-
-[Website](https://logforce.github.io/) · [Documentation](SPEC.md) ·
-[Roadmap](docs/roadmap.md) · [Contribute](CONTRIBUTING.md)
+The same system contract remains visible across those execution locations. The OS
+retains responsibility for model identity, data access, resource limits, execution
+placement and failure handling. Moving a workload off-device never becomes an
+invisible fallback and never erases the new trust boundary.
 
 ## Design Principles
 
-- **Offline operation:** provision approved models locally, then execute supported
-  tasks without hosted inference, cloud accounts or remote token consumption.
-- **Sovereign execution:** retain control over model selection, data access,
-  execution location and update policy.
+- **Policy-controlled placement:** select endpoint, trusted-node or authorized
+  service execution according to data, capability and resource policy.
+- **Operational sovereignty:** retain control over model selection, data access,
+  execution location and update policy without requiring permanent connectivity.
+- **Offline capability:** keep supported tasks available on provisioned devices
+  when a network or external service is unavailable, undesirable or prohibited.
 - **A common system interface:** typed buffers, model handles and asynchronous
   jobs provide a consistent execution contract across model classes.
 - **Explicit authority:** permission to execute a model does not confer permission
   to control devices, access unrelated data or modify system policy.
 - **Resource-aware performance:** bound work and memory, measure data movement and
   pursue reuse without implicitly sharing private application state.
-- **Controlled decentralization:** enable execution across approved nodes only by
-  explicit policy. The distributed fabric remains roadmap work.
+- **Controlled decentralization:** share compute across approved nodes without
+  pretending that remote execution has the same boundary as endpoint execution.
+  The distributed fabric remains roadmap work.
 
 ## Community
 
@@ -96,66 +99,74 @@ that implements it and the OS environment that delivers it.
 | ecOS Runtime | Shared resource management and policy | Linux services, backend adapters and administration tools |
 | OS environment | Boot, desktop, services, deployment and recovery | Installable system integrating the runtime, applications and approved model packs |
 
-The diagram shows the implemented CPU path. The inference engine and loaded model
-reside inside the supervised worker. The runtime manages the job; the application
-retains responsibility for interpreting its result.
+At the product level, applications ask for a capability instead of hard-coding
+one model provider or execution location. Policy determines where an eligible
+implementation may run.
 
 ```mermaid
-flowchart TB
-    subgraph App["Application process"]
-        Task["Application task and result handling"]
-        API["CogPOSIX client interface"]
-        Task --> API
-    end
-    subgraph Daemon["ecOS runtime process"]
-        Core["Sessions, handles, buffers and bounded jobs"]
-        Backend["Process backend and worker supervision"]
-        Core --> Backend
-    end
-    subgraph Worker["Supervised worker"]
-        Adapter["Capability adapter: input and output conversion"]
-        Engine["Inference engine with loaded model"]
-        Adapter -->|"calls within the same process"| Engine
-        Engine -->|"prediction"| Adapter
-    end
-    API -->|"local IPC: submit and wait"| Core
-    Core -->|"status and output"| API
-    Backend -->|"bounded worker protocol"| Adapter
-    Adapter -->|"result or failure"| Backend
-    Model["Approved local model artifact"] -.->|"validated and loaded inside worker"| Engine
-    Engine -->|"computation uses OS facilities"| Kernel["Kernel scheduling, memory and device drivers"]
-    Kernel --> CPU["CPU in the current prototype"]
+flowchart LR
+    Person["Person or application"] --> Request["CogPOSIX capability request"]
+    Request --> Policy["ecOS policy and resource manager"]
+    Policy --> Local["This device<br/>works offline"]
+    Policy --> Domain["Approved node<br/>private or edge infrastructure"]
+    Policy --> Service["Authorized service<br/>explicit external boundary"]
+    Local --> Result["Typed result"]
+    Domain --> Result
+    Service --> Result
+    Result --> Person
 ```
 
-This shows the optional **implemented Linux CPU worker path**, not a completed
-installable OS. The engine runs **inside** the supervised worker: these are not
-two successive inference services. The default deterministic mock runs inside
-the daemon and does not use this worker path. The kernel serves all processes;
-its placement in the drawing highlights execution, not exclusive worker access.
+The execution choices are not equivalent. Endpoint execution can keep data and
+compute on the user's machine. A trusted node crosses a machine boundary but can
+remain inside an organization-controlled domain. An external service crosses an
+additional administrative boundary and must be named and authorized by policy.
+
+The developer prototype currently implements the local path:
+
+```mermaid
+flowchart LR
+    App["Application"] -->|"submit task"| API["CogPOSIX interface"]
+    API --> Runtime["ecOS runtime"]
+    Runtime --> Worker["Supervised model worker"]
+    Worker --> Engine["Model execution on CPU"]
+    Engine -->|"validated result"| Runtime
+    Runtime --> App
+```
+
+The model engine runs inside the supervised worker; it is not a second service
+after it. The runtime owns the job lifecycle and the application decides how to
+use the result. The default deterministic mock runs inside the daemon, while the
+optional CPU path uses a separate worker process.
 
 Process separation and current worker restrictions are not a proven hostile-code
-sandbox. GPU/NPU support, capability discovery and distributed execution remain
-planned. See [architecture](docs/architecture.md) for boundaries and
+sandbox. GPU/NPU support, capability discovery, trusted-node execution and
+authorized external-service routing remain planned. See
+[architecture](docs/architecture.md) for boundaries and
 [deployment examples](docs/deployment-examples.md) for OT, IoT, vision inspection,
 desktop document processing and explicitly enabled multi-node execution.
 
 ## Deployment Scenarios
 
-ecOS >_CogPOSIX targets a general-purpose OS architecture for AI. OT and IoT are
-deployment domains alongside desktop, workstation and edge computing, not the
-identity or limit of the project. Across these environments, the objective is
-locally governed execution that remains useful offline, with optional compute
-sharing across approved infrastructure.
+ecOS >_CogPOSIX targets everyday personal computing as well as professional,
+edge, OT and IoT environments. A consumer laptop is a primary deployment target,
+not an incidental example. Across every form factor, the objective is governed
+execution with a consistent application contract and an explicit choice of where
+each workload runs.
 
 The examples below describe target integrations. Models, adapters and hardware
 support must be implemented and validated for each workload.
 
 | Use case | Computing host | Application request | System-level benefit to validate |
 | --- | --- | --- | --- |
+| Personal assistant | Consumer laptop | Summarize selected files, draft text or answer questions with approved models | Keep permissions and execution location visible instead of granting blanket access |
+| Search and document work | Consumer laptop or desktop | OCR, semantic search, extraction and summarization | Reuse managed capabilities across applications and keep private documents on-device when policy requires it |
+| Meetings and accessibility | Laptop, desktop or tablet | Denoising, transcription, translation and speech synthesis | Coordinate several model classes without sending every recording to a hosted service |
+| Creative applications | Consumer or professional workstation | Image generation, enhancement, tagging and media search | Schedule CPU, GPU and NPU resources under one system policy |
+| Software development | Developer workstation | Code assistance, repository search and task-specific agents | Combine local models with explicitly authorized remote capabilities without hiding data boundaries |
+| Gaming and interactive media | Consumer PC or handheld | Speech, animation, adaptive characters and content moderation | Provide bounded low-latency capabilities that can continue without a network |
 | OT condition monitoring | Industrial edge PC beside the machine | Analysis of bounded vibration or temperature windows | Local execution and explicit failure handling, separate from machine control |
 | IoT telemetry | Gateway serving constrained sensor nodes | Batch classification of validated sensor readings | Keep inference on a capable local host without modifying every sensor |
 | Visual inspection | Inspection workstation connected to a camera | Defect detection on captured frames | Common job lifecycle, model identity and bounded resource use |
-| Document processing | User workstation | Separate layout, OCR and extraction jobs | Local data handling and explicit application review of uncertain results |
 | Optional shared AI node | Approved compute node in a policy domain | Explicit remote placement when authorized | Reuse compute while preserving the off-device trust boundary |
 
 The [detailed examples](docs/deployment-examples.md) explain input ownership,
