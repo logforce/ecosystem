@@ -61,7 +61,11 @@ body.reader-open{overflow:hidden}#reader{padding:0;width:min(1160px,94%);height:
 .traditional-stack ul,.ecos-benefits{list-style:none;margin:0;padding:10px;background:#f8fafb;border:1px solid #e0e7e9;border-radius:5px}
 .traditional-stack li{padding:8px 10px;background:#fff;border-bottom:1px solid #e5ecee;font-size:12px}
 .traditional-stack li:last-child{border-bottom:0}
-.architecture-cost{margin:12px 0 0;padding:13px 11px;background:#f1f5f5;border:1px solid #d7e1e3;border-radius:5px;color:#53646a;font-size:12px;line-height:1.65}
+.architecture-cost{margin:12px 0 0;padding:14px 11px;background:#f1f5f5;border:1px solid #d7e1e3;border-radius:5px;color:#53646a}
+.architecture-cost h4{margin:0 0 11px;font-size:11px;line-height:1.4;color:var(--ink);text-align:left}
+.architecture-cost ol{list-style:none;counter-reset:tradeoff;margin:0;padding:0}
+.architecture-cost li{counter-increment:tradeoff;position:relative;padding:8px 0 8px 30px;border-top:1px solid #d7e1e3;font-size:10px;line-height:1.4}
+.architecture-cost li::before{content:counter(tradeoff,decimal-leading-zero);position:absolute;left:0;top:8px;color:#267964;font:9px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
 .architecture-flow{min-width:0}
 .architecture-node,.ecos-heading,.execution-route,.ecos-capabilities button,.ecos-app-flow button{width:100%;border:1px solid #a9c6cc;border-radius:5px;color:var(--ink);text-align:center;transition:border-color .16s,transform .16s,box-shadow .16s,background .16s}
 .architecture-node:hover,.ecos-heading:hover,.execution-route:hover,.ecos-capabilities button:hover,.ecos-app-flow button:hover{transform:translateY(-1px);border-color:#147960}

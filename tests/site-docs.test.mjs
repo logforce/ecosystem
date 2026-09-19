@@ -54,6 +54,8 @@ test('architecture explorer reproduces the system map as accessible interactive 
   assert(section.includes('Traditional AI application'));
   assert(section.includes('ecOS application'));
   assert(section.includes('Centralized model management'));
+  assert(section.includes('Without a shared system layer'));
+  assert(section.includes('Execution boundaries are harder to inspect'));
   assert(page.includes('<a href="#architecture-map">Architecture</a>'));
   assert(page.includes('href="#architecture-map">Explore the architecture'));
   assert(!page.includes('ecos-cogposix_simplified-schema.png'));
