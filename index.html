@@ -50,7 +50,16 @@
           <ul>
             <li>Model management</li><li>Cloud API</li><li>GPU runtime</li><li>Memory policy</li><li>Security policy</li><li>Model selection</li><li>Telemetry</li>
           </ul>
-          <p class="architecture-cost">Duplicated infrastructure<br>Fragmented security policy<br>Higher resource consumption<br>Network dependencies<br>Execution boundary often invisible</p>
+          <div class="architecture-cost">
+            <h4>Without a shared system layer</h4>
+            <ol>
+              <li>Infrastructure is duplicated across applications</li>
+              <li>Security policy becomes fragmented</li>
+              <li>Models compete for resources independently</li>
+              <li>Hosted services become hidden dependencies</li>
+              <li>Execution boundaries are harder to inspect</li>
+            </ol>
+          </div>
         </aside>
 
         <div class="architecture-flow" aria-label="Interactive ecOS and CogPOSIX architecture">
