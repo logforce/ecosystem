@@ -19,7 +19,7 @@
   <header class="header">
     <a class="wordmark" href="#" aria-label="ecOS and CogPOSIX home">ecOS <span>&gt;_</span> CogPOSIX</a>
     <nav aria-label="Main navigation">
-      <a href="#foundation">Platform</a><a href="#progress">Roadmap</a><a href="#licenses">Licenses</a><a href="SPEC.md">Docs</a><a class="nav-cta" href="#start">Start building <span aria-hidden="true">↗</span></a>
+      <a href="#architecture-map">Architecture</a><a href="#progress">Roadmap</a><a href="#licenses">Licenses</a><a href="SPEC.md">Docs</a><a class="nav-cta" href="#start">Start building <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
   <main id="main">
@@ -28,13 +28,98 @@
         <h1 id="title">ecOS <span>&gt;_</span> CogPOSIX</h1>
         <p class="hero-line">The open OS bringing a new POSIX to machine intelligence.</p>
         <p class="hero-copy">ecOS is built around CogPOSIX, a system-level execution standard for running AI models as <strong>native</strong> computing resources, designed for performance and security.</p>
-        <div class="actions"><a class="button primary" href="#start">Start building <span aria-hidden="true">↗</span></a><a class="button secondary" href="docs/vision.md">Explore the vision <span aria-hidden="true">→</span></a></div>
+        <div class="actions"><a class="button primary" href="#start">Start building <span aria-hidden="true">↗</span></a><a class="button secondary" href="#architecture-map">Explore the architecture <span aria-hidden="true">↓</span></a></div>
       </div>
     </section>
     <figure class="capability-graphic">
       <figcaption>One interface. Many kinds of intelligence.<span>Target architecture</span></figcaption>
       <picture><source media="(max-width: 520px)" srcset="site/capabilities-mobile.svg"><img src="site/capabilities.svg" width="1000" height="230" alt="Applications connect to CogPOSIX, which branches to five model classes: vision, audio, documents, signals and language."></picture>
     </figure>
+
+    <section class="architecture-explorer" id="architecture-map" aria-labelledby="architecture-map-title">
+      <div class="architecture-intro">
+        <p class="eyebrow">System architecture</p>
+        <h2 id="architecture-map-title">Follow intelligence<br>through the system.</h2>
+        <p>Applications request capabilities. CogPOSIX provides the contract. ecOS resolves policy, resources and execution locality before any approved implementation runs.</p>
+      </div>
+
+      <div class="architecture-workbench">
+        <aside class="architecture-before" aria-labelledby="before-title">
+          <p class="architecture-label">Without a system contract</p>
+          <h3 id="before-title">Every application rebuilds the stack.</h3>
+          <ul>
+            <li>Model management</li>
+            <li>Cloud integration</li>
+            <li>GPU runtime</li>
+            <li>Memory policy</li>
+            <li>Security policy</li>
+            <li>Model selection</li>
+            <li>Telemetry</li>
+          </ul>
+          <p class="architecture-cost">Duplicated infrastructure, fragmented policy and execution boundaries users cannot inspect.</p>
+        </aside>
+
+        <div class="architecture-flow" aria-label="Interactive ecOS and CogPOSIX architecture">
+          <button class="architecture-node node-app is-active" type="button" data-architecture-topic="applications" aria-pressed="true">
+            <span>01 · Request</span><strong>Applications</strong><small>Productivity · Development · Analytics · Creative</small>
+          </button>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <button class="architecture-node node-contract" type="button" data-architecture-topic="cogposix" aria-pressed="false">
+            <span>02 · Contract</span><strong>CogPOSIX</strong><small>Capability-based · Standardized · Implementation-agnostic</small>
+          </button>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+
+          <div class="ecos-control-plane">
+            <button class="ecos-heading" type="button" data-architecture-topic="ecos" aria-pressed="false">
+              <span>03 · Govern</span><strong>ecOS</strong><small>Operating-system control plane</small>
+            </button>
+            <div class="ecos-capabilities" aria-label="ecOS control-plane responsibilities">
+              <button type="button" data-architecture-topic="resolution" aria-pressed="false">Capability resolution</button>
+              <button type="button" data-architecture-topic="models" aria-pressed="false">Model management</button>
+              <button type="button" data-architecture-topic="security" aria-pressed="false">Security &amp; policy</button>
+              <button type="button" data-architecture-topic="data" aria-pressed="false">Data governance</button>
+              <button type="button" data-architecture-topic="scheduling" aria-pressed="false">Resource scheduling</button>
+              <button type="button" data-architecture-topic="locality" aria-pressed="false">Execution locality</button>
+              <button type="button" data-architecture-topic="hardware" aria-pressed="false">Hardware arbitration</button>
+              <button type="button" data-architecture-topic="observability" aria-pressed="false">Observability</button>
+              <button type="button" data-architecture-topic="nodes" aria-pressed="false">Node coordination</button>
+              <button type="button" data-architecture-topic="lifecycle" aria-pressed="false">Lifecycle management</button>
+            </div>
+          </div>
+
+          <div class="route-split" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="execution-routes" aria-label="Execution locations">
+            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false">
+              <span>Default</span><strong>Local compute</strong><small>On this machine</small>
+            </button>
+            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false">
+              <span>Opt-in</span><strong>Trusted nodes</strong><small>Managed infrastructure</small>
+            </button>
+            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false">
+              <span>Explicit only</span><strong>External compute</strong><small>Policy-authorized boundary</small>
+            </button>
+          </div>
+        </div>
+
+        <aside class="architecture-detail" aria-live="polite" aria-atomic="true">
+          <p class="architecture-label" id="architecture-detail-label">Request</p>
+          <h3 id="architecture-detail-title">Applications ask for capabilities.</h3>
+          <p id="architecture-detail-copy">A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.</p>
+          <dl>
+            <div><dt>System role</dt><dd id="architecture-detail-role">Declare intent and consume a typed result</dd></div>
+            <div><dt>Boundary</dt><dd id="architecture-detail-boundary">Application permissions remain in force</dd></div>
+            <div><dt>Status</dt><dd id="architecture-detail-status">Contract path implemented in the developer runtime</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="architecture-principles" aria-label="Core architecture principles">
+        <p><strong>Close to the data</strong><span>Execute where policy and workload requirements are best satisfied.</span></p>
+        <p><strong>Cloud is not the default</strong><span>External compute is available only through an explicit decision.</span></p>
+        <p><strong>Trust boundaries stay visible</strong><span>Every transition changes the security context.</span></p>
+        <p><strong>Distribution is controlled</strong><span>Node participation never grants automatic data or training access.</span></p>
+      </div>
+    </section>
 
     <section class="section foundation" id="foundation" aria-labelledby="foundation-title">
       <div class="section-heading"><p class="eyebrow">Our OS. Our system contract.</p><h2 id="foundation-title">Many models.<br>One system interface.</h2><p>ecOS &gt;_ and CogPOSIX are being developed together: a new operating system and its AI execution contract. Applications use CogPOSIX to access controlled intelligence as a system resource, across model classes.</p></div>

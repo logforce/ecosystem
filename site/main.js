@@ -10,6 +10,143 @@ copy.addEventListener('click', async () => {
   }
 });
 
+const architectureTopics = {
+  applications: {
+    label: 'Request', title: 'Applications ask for capabilities.',
+    copy: 'A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.',
+    role: 'Declare intent and consume a typed result',
+    boundary: 'Application permissions remain in force',
+    status: 'Contract path implemented in the developer runtime',
+  },
+  cogposix: {
+    label: 'Contract', title: 'CogPOSIX separates intent from implementation.',
+    copy: 'The application uses typed buffers, model handles and asynchronous jobs through one capability-oriented interface. Providers and execution locations can evolve behind that contract.',
+    role: 'Standardize requests, results and lifecycle semantics',
+    boundary: 'An interface is not permission to access data or devices',
+    status: 'Experimental Rust and C interfaces are implemented',
+  },
+  ecos: {
+    label: 'Governance', title: 'ecOS makes the execution decision.',
+    copy: 'The operating-system control plane intersects capability requirements with security policy, data rules, available hardware and resource limits before admitting work.',
+    role: 'Resolve, admit, place, supervise and observe work',
+    boundary: 'Policy remains independent of model output',
+    status: 'Local runtime foundation implemented; full OS in development',
+  },
+  resolution: {
+    label: 'Control plane', title: 'Resolve a capability, not a brand name.',
+    copy: 'Eligible implementations must satisfy the requested contract, authorization, quality profile and hardware constraints before cost or speed can influence selection.',
+    role: 'Match requests to approved implementations', boundary: 'Ineligible providers are excluded before optimization',
+    status: 'Basic backend path exists; general discovery is planned',
+  },
+  models: {
+    label: 'Control plane', title: 'Manage models as system resources.',
+    copy: 'Packages need identity, versioning, integrity checks, resource declarations and revocation. Applications should not each invent a separate model supply chain.',
+    role: 'Load, reuse, update and retire approved model packages', boundary: 'A loaded model receives no ambient authority',
+    status: 'One pinned CPU model is validated; package lifecycle is planned',
+  },
+  security: {
+    label: 'Control plane', title: 'Policy is enforced outside the model.',
+    copy: 'Model output cannot grant itself file access, network access or device control. Those decisions belong to explicit system and application policy.',
+    role: 'Authorize capabilities, data and execution boundaries', boundary: 'Learned predictions are never the security authority',
+    status: 'Validation and process controls exist; production isolation is planned',
+  },
+  data: {
+    label: 'Control plane', title: 'Data rules travel with the workload.',
+    copy: 'The system tracks which application owns an input, which implementation may read it, where it may execute and how derived data must be handled.',
+    role: 'Preserve ownership, locality and retention constraints', boundary: 'Data access does not imply permission to train on data',
+    status: 'Typed and sealed inputs exist; broader governance is planned',
+  },
+  scheduling: {
+    label: 'Control plane', title: 'AI competes for finite system resources.',
+    copy: 'Inference, foreground applications and ordinary services need bounded memory, compute budgets, priorities and cancellation rather than unrestricted accelerator access.',
+    role: 'Admit and prioritize bounded workloads', boundary: 'Resource availability never overrides authorization',
+    status: 'Bounded jobs exist; multi-resource scheduling is planned',
+  },
+  locality: {
+    label: 'Control plane', title: 'Locality is a policy decision.',
+    copy: 'A workload can remain on the endpoint, move to a managed node or use an authorized external service. Each transition is visible and policy-controlled.',
+    role: 'Select an eligible execution location', boundary: 'Off-device execution always creates a new trust boundary',
+    status: 'Endpoint-local path exists; off-device placement is planned',
+  },
+  hardware: {
+    label: 'Control plane', title: 'Use the right compute for the task.',
+    copy: 'The system can match workload requirements to CPU, GPU or NPU capacity while applications continue to use the same capability contract.',
+    role: 'Coordinate compute devices and backend availability', boundary: 'Hardware access stays mediated by the OS and drivers',
+    status: 'CPU path validated; GPU and NPU backends are planned',
+  },
+  observability: {
+    label: 'Control plane', title: 'Execution should be inspectable.',
+    copy: 'Operators and users need model identity, actual execution location, resource use, failures and policy decisions without exposing private application data.',
+    role: 'Report lifecycle, placement and resource evidence', boundary: 'Telemetry follows minimization and access policy',
+    status: 'Job state and errors exist; full audit surfaces are planned',
+  },
+  nodes: {
+    label: 'Control plane', title: 'Distribution starts with trusted membership.',
+    copy: 'A participating node needs authenticated identity, declared capabilities, health state and explicit enrollment in an ecOS policy domain.',
+    role: 'Coordinate approved compute across machines', boundary: 'Network discovery is never authorization',
+    status: 'Planned architecture; no distributed fabric is implemented',
+  },
+  lifecycle: {
+    label: 'Control plane', title: 'Resources have an owned lifecycle.',
+    copy: 'Sessions, handles, buffers, jobs, workers and model packages need predictable creation, cancellation, cleanup, update and recovery behavior.',
+    role: 'Keep resources attributable and recoverable', boundary: 'Failure does not silently replay or expand a request',
+    status: 'Core job cleanup exists; complete package lifecycle is planned',
+  },
+  local: {
+    label: 'Execution · Default', title: 'Run on this machine.',
+    copy: 'Endpoint execution can minimize data movement, latency and external dependency. Provisioned capabilities may continue to operate without a network.',
+    role: 'Use endpoint CPU, GPU or NPU resources', boundary: 'Application, runtime and worker isolation still matter',
+    status: 'CPU execution is implemented in the developer prototype',
+  },
+  trusted: {
+    label: 'Execution · Opt-in', title: 'Use an approved managed node.',
+    copy: 'A workstation may delegate eligible work to an enrolled office GPU, private server or edge node while preserving the common capability contract.',
+    role: 'Share controlled infrastructure across authorized applications', boundary: 'Another machine is always another execution boundary',
+    status: 'Planned; authentication, transport and broker are not implemented',
+  },
+  external: {
+    label: 'Execution · Explicit only', title: 'Cross the boundary by policy.',
+    copy: 'An administrator may permit a named external service for a specific capability and data class. It is never an undisclosed fallback when local execution is unavailable.',
+    role: 'Reach a deliberately authorized external capability', boundary: 'Disclosure, consent and service terms apply',
+    status: 'Future profile; no external-service router is implemented',
+  },
+};
+
+const architectureControls = [...document.querySelectorAll('[data-architecture-topic]')];
+const architectureDetail = {
+  label: document.getElementById('architecture-detail-label'),
+  title: document.getElementById('architecture-detail-title'),
+  copy: document.getElementById('architecture-detail-copy'),
+  role: document.getElementById('architecture-detail-role'),
+  boundary: document.getElementById('architecture-detail-boundary'),
+  status: document.getElementById('architecture-detail-status'),
+};
+
+function showArchitectureTopic(control) {
+  const topic = architectureTopics[control.dataset.architectureTopic];
+  if (!topic || !architectureDetail.title) return;
+  for (const candidate of architectureControls) {
+    const selected = candidate === control;
+    candidate.classList.toggle('is-active', selected);
+    candidate.setAttribute('aria-pressed', String(selected));
+  }
+  for (const key of ['label', 'title', 'copy', 'role', 'boundary', 'status']) {
+    architectureDetail[key].textContent = topic[key];
+  }
+}
+
+for (const control of architectureControls) {
+  control.addEventListener('click', () => showArchitectureTopic(control));
+  control.addEventListener('keydown', event => {
+    if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) return;
+    event.preventDefault();
+    const direction = ['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1;
+    const next = architectureControls[(architectureControls.indexOf(control) + direction + architectureControls.length) % architectureControls.length];
+    next.focus();
+    showArchitectureTopic(next);
+  });
+}
+
 const reader = document.getElementById('reader');
 const content = document.getElementById('reader-content');
 const select = document.getElementById('reader-select');

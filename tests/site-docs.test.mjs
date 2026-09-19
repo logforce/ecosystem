@@ -39,6 +39,25 @@ test('public page has exact title and no deployment or old status copy', () => {
   assert(!/ecos\.sourceware|eCos RTOS|existing eCos project/.test(documentBundle(root)));
 });
 
+test('architecture explorer reproduces the system map as accessible interactive HTML', () => {
+  const page = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const script = fs.readFileSync(new URL('../site/main.js', import.meta.url), 'utf8');
+  const section = page.match(/<section class="architecture-explorer"[\s\S]*?<\/section>/)?.[0];
+  assert(section);
+  assert.equal((section.match(/data-architecture-topic=/g) || []).length, 16);
+  for (const text of ['Applications', 'CogPOSIX', 'ecOS', 'Local compute', 'Trusted nodes',
+    'External compute', 'Capability resolution']) {
+    assert(page.includes(text), text);
+  }
+  assert(section.includes('aria-live="polite"'));
+  assert(section.includes('aria-pressed="true"'));
+  assert(page.includes('<a href="#architecture-map">Architecture</a>'));
+  assert(page.includes('href="#architecture-map">Explore the architecture'));
+  assert(!page.includes('ecos-cogposix_simplified-schema.png'));
+  assert(script.includes("const architectureTopics = {"));
+  assert(script.includes("'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'"));
+});
+
 test('community destinations link to the approved workspace and repository', () => {
   const page = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const section = page.match(/<section[^>]+id="community"[\s\S]*?<\/section>/)?.[0];
