@@ -39,39 +39,32 @@
     <section class="architecture-explorer" id="architecture-map" aria-labelledby="architecture-map-title">
       <div class="architecture-intro">
         <p class="eyebrow">System architecture</p>
-        <h2 id="architecture-map-title">Follow intelligence<br>through the system.</h2>
-        <p>Applications request capabilities. CogPOSIX provides the contract. ecOS resolves policy, resources and execution locality before any approved implementation runs.</p>
+        <h2 id="architecture-map-title">One contract.<br>System-level control.</h2>
+        <p>Intelligence should execute as close to the data as possible, under operating-system control. ecOS chooses among eligible implementations and locations; applications keep one capability contract.</p>
       </div>
 
-      <div class="architecture-workbench">
-        <aside class="architecture-before" aria-labelledby="before-title">
-          <p class="architecture-label">Without a system contract</p>
-          <h3 id="before-title">Every application rebuilds the stack.</h3>
+      <div class="architecture-schema">
+        <aside class="traditional-stack" aria-labelledby="traditional-title">
+          <div class="schema-heading"><h3 id="traditional-title">Traditional AI application</h3><p>Each application manages AI independently</p></div>
+          <div class="traditional-app">Application</div>
           <ul>
-            <li>Model management</li>
-            <li>Cloud integration</li>
-            <li>GPU runtime</li>
-            <li>Memory policy</li>
-            <li>Security policy</li>
-            <li>Model selection</li>
-            <li>Telemetry</li>
+            <li>Model management</li><li>Cloud API</li><li>GPU runtime</li><li>Memory policy</li><li>Security policy</li><li>Model selection</li><li>Telemetry</li>
           </ul>
-          <p class="architecture-cost">Duplicated infrastructure, fragmented policy and execution boundaries users cannot inspect.</p>
+          <p class="architecture-cost">Duplicated infrastructure<br>Fragmented security policy<br>Higher resource consumption<br>Network dependencies<br>Execution boundary often invisible</p>
         </aside>
 
         <div class="architecture-flow" aria-label="Interactive ecOS and CogPOSIX architecture">
           <button class="architecture-node node-app is-active" type="button" data-architecture-topic="applications" aria-pressed="true">
-            <span>01 · Request</span><strong>Applications</strong><small>Productivity · Development · Analytics · Creative</small>
+            <strong>Applications</strong><span>Request AI capabilities, not implementations</span><small>Productivity · Development · Analytics · Creative · More</small>
           </button>
           <div class="flow-arrow" aria-hidden="true">↓</div>
           <button class="architecture-node node-contract" type="button" data-architecture-topic="cogposix" aria-pressed="false">
-            <span>02 · Contract</span><strong>CogPOSIX</strong><small>Capability-based · Standardized · Implementation-agnostic</small>
+            <strong>CogPOSIX</strong><span>A system contract for AI computation</span><small>Standardized · Capability-based · Implementation-agnostic</small>
           </button>
           <div class="flow-arrow" aria-hidden="true">↓</div>
-
           <div class="ecos-control-plane">
             <button class="ecos-heading" type="button" data-architecture-topic="ecos" aria-pressed="false">
-              <span>03 · Govern</span><strong>ecOS</strong><small>Operating-system control plane</small>
+              <strong>ecOS</strong><span>The OS selects the implementation, execution location, resources and permitted data.</span>
             </button>
             <div class="ecos-capabilities" aria-label="ecOS control-plane responsibilities">
               <button type="button" data-architecture-topic="resolution" aria-pressed="false">Capability resolution</button>
@@ -86,32 +79,31 @@
               <button type="button" data-architecture-topic="lifecycle" aria-pressed="false">Lifecycle management</button>
             </div>
           </div>
-
           <div class="route-split" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="execution-routes" aria-label="Execution locations">
-            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false">
-              <span>Default</span><strong>Local compute</strong><small>On this machine</small>
-            </button>
-            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false">
-              <span>Opt-in</span><strong>Trusted nodes</strong><small>Managed infrastructure</small>
-            </button>
-            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false">
-              <span>Explicit only</span><strong>External compute</strong><small>Policy-authorized boundary</small>
-            </button>
+            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false"><span>Default</span><strong>Local compute</strong><small>Execute on this machine</small></button>
+            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false"><span>Opt-in</span><strong>Trusted nodes</strong><small>Execute on managed nodes</small></button>
+            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false"><span>Explicit only</span><strong>External compute</strong><small>Cross the boundary by policy</small></button>
           </div>
         </div>
 
-        <aside class="architecture-detail" aria-live="polite" aria-atomic="true">
-          <p class="architecture-label" id="architecture-detail-label">Request</p>
-          <h3 id="architecture-detail-title">Applications ask for capabilities.</h3>
-          <p id="architecture-detail-copy">A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.</p>
-          <dl>
-            <div><dt>System role</dt><dd id="architecture-detail-role">Declare intent and consume a typed result</dd></div>
-            <div><dt>Boundary</dt><dd id="architecture-detail-boundary">Application permissions remain in force</dd></div>
-            <div><dt>Status</dt><dd id="architecture-detail-status">Contract path implemented in the developer runtime</dd></div>
-          </dl>
+        <aside class="ecos-application" aria-labelledby="ecos-app-title">
+          <div class="schema-heading"><h3 id="ecos-app-title">ecOS application</h3><p>Simple, standardized access to AI</p></div>
+          <div class="ecos-app-flow" aria-label="Application integration through CogPOSIX and ecOS">
+            <button type="button" data-architecture-topic="applications" aria-pressed="false">Application</button><span aria-hidden="true">↓</span>
+            <button type="button" data-architecture-topic="cogposix" aria-pressed="false">CogPOSIX <small>capability</small></button><span aria-hidden="true">↓</span>
+            <button type="button" data-architecture-topic="ecos" aria-pressed="false">ecOS <small>operating system</small></button>
+          </div>
+          <ul class="ecos-benefits"><li>Centralized model management</li><li>Unified security &amp; policy</li><li>Controlled execution locality</li><li>Efficient resource scheduling</li><li>Auditable and observable</li><li>Explicit trust boundaries</li></ul>
         </aside>
       </div>
+
+      <aside class="architecture-detail" aria-live="polite" aria-atomic="true">
+        <p class="architecture-label" id="architecture-detail-label">Request</p>
+        <h3 id="architecture-detail-title">Applications ask for capabilities.</h3>
+        <p id="architecture-detail-copy">A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.</p>
+        <dl><div><dt>System role</dt><dd id="architecture-detail-role">Declare intent and consume a typed result</dd></div><div><dt>Boundary</dt><dd id="architecture-detail-boundary">Application permissions remain in force</dd></div><div><dt>Status</dt><dd id="architecture-detail-status">Contract path implemented in the developer runtime</dd></div></dl>
+      </aside>
 
       <div class="architecture-principles" aria-label="Core architecture principles">
         <p><strong>Close to the data</strong><span>Execute where policy and workload requirements are best satisfied.</span></p>
