@@ -1,8 +1,8 @@
-# ecOS >_CogPOSIX
+# ecOS >_ CogPOSIX
 
 **The open OS bringing a new POSIX-inspired interface to machine intelligence.**
 
-ecOS >_CogPOSIX brings machine intelligence into the operating-system contract.
+ecOS >_ CogPOSIX brings machine intelligence into the operating-system contract.
 Models become managed computing resources: applications submit typed workloads
 through a common interface, while the system coordinates execution, memory,
 resource ownership and model lifecycles.
@@ -12,7 +12,7 @@ POSIX-inspired interface for AI computation. Its scope spans vision, audio,
 documents, signals, embeddings and language. An LLM is one class of model, not
 the system abstraction.
 
-ecOS >_CogPOSIX is **local-first, not local-only**. The system is designed to run
+ecOS >_ CogPOSIX is **local-first, not local-only**. The system is designed to run
 a workload in the place that policy permits and the workload requires: on the
 user's device, on an approved node in a private infrastructure, or through an
 explicitly authorized external service. It can keep supported tasks operational
@@ -45,7 +45,7 @@ invisible fallback and never erases the new trust boundary.
 
 | Place | Purpose |
 | --- | --- |
-| [Project website](https://logforce.github.io/) | Explore ecOS >_CogPOSIX, the roadmap, licenses and documentation. |
+| [Project website](https://logforce.github.io/) | Explore ecOS >_ CogPOSIX, the roadmap, licenses and documentation. |
 | [Slack](https://logforceai.slack.com/) | Introductions, help, demos and everyday collaboration. Workspace membership may be required; this link opens Slack sign-in. |
 | [GitHub Discussions](https://github.com/logforce/ecosystem/discussions) | Public proposals, reusable answers and technical decisions. |
 | [GitHub Issues](https://github.com/logforce/ecosystem/issues) | Reproducible bug reports and agreed development tasks. Do not include secrets or private data. |
@@ -147,7 +147,7 @@ desktop document processing and explicitly enabled multi-node execution.
 
 ## Deployment Scenarios
 
-ecOS >_CogPOSIX targets everyday personal computing as well as professional,
+ecOS >_ CogPOSIX targets everyday personal computing as well as professional,
 edge, OT and IoT environments. A consumer laptop is a primary deployment target,
 not an incidental example. Across every form factor, the objective is governed
 execution with a consistent application contract and an explicit choice of where
@@ -225,7 +225,7 @@ CogPOSIX is the project's POSIX-inspired AI execution interface. Its specificati
 evolves through implementation, review and conformance evidence; it does not claim
 POSIX certification or adoption as an external standard.
 
-ecOS >_CogPOSIX is an independent project and is not affiliated with, endorsed by,
+ecOS >_ CogPOSIX is an independent project and is not affiliated with, endorsed by,
 or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
 POSIX is a trademark of IEEE. See [trademark notices](TRADEMARKS.md).
 

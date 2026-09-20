@@ -1,11 +1,11 @@
 # Names, Attribution and Compatibility Claims
 
-ecOS >_CogPOSIX identifies the project, encompassing its operating-system
+ecOS >_ CogPOSIX identifies the project, encompassing its operating-system
 architecture, execution runtime and CogPOSIX system interface.
 This policy does not assert registered
 trademark status, POSIX certification or endorsement by a standards organization.
 
-ecOS >_CogPOSIX is an independent project and is not affiliated with, endorsed by,
+ecOS >_ CogPOSIX is an independent project and is not affiliated with, endorsed by,
 or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
 POSIX is a trademark of IEEE. References to POSIX describe the inspiration for
 the interface, not an official revision or extension of the POSIX standard.

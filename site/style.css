@@ -304,7 +304,16 @@ body.reader-open{overflow:hidden}#reader{padding:0;width:min(1160px,94%);height:
 
 /* One synchronized invitation for the interactive controls. */
 .architecture-explorer{border-top:0}
-footer .trademark-notice{grid-column:1/-1;text-align:left;border-top:1px solid var(--line);padding-top:20px}
+.site-footer{padding:52px max(6%,calc((100% - 1120px)/2));grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;border-top:1px solid var(--line);align-items:stretch}
+.site-footer .footer-identity,.site-footer .footer-resources{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.site-footer .wordmark{font-size:24px;line-height:32px}
+.site-footer .wordmark span{padding:0}
+.site-footer p,.site-footer p:last-child{text-align:left;font-size:12px;line-height:1.75}
+.site-footer .footer-copyright{margin-top:auto;padding-top:24px}
+.site-footer nav{justify-content:flex-start;flex-wrap:wrap;gap:12px 20px;min-height:32px;font-size:13px}
+.site-footer nav a{white-space:nowrap;font-weight:700}
+.site-footer .trademark-notice{margin-top:22px;max-width:520px}
+@media(max-width:760px){.site-footer{grid-template-columns:1fr;gap:30px;padding:36px 6%}.site-footer .footer-resources{border-top:1px solid var(--line);padding-top:24px}.site-footer .footer-copyright{padding-top:16px}.site-footer .trademark-notice{margin-top:18px}.site-footer nav{gap:12px 22px}}
 .closing.ot-closing{position:relative;min-height:520px;background:#fff url('../assets/ot-system-hero.png') center right/cover no-repeat;color:var(--ink);overflow:hidden}
 .ot-closing>.eyebrow,.ot-closing>h2,.ot-closing>p,.ot-closing>.actions{position:relative;z-index:1;max-width:510px}
 .ot-closing>h2{font-size:58px}

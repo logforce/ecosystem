@@ -6,7 +6,7 @@ has been built.
 
 ## 1. Original OS Architecture
 
-ecOS >_CogPOSIX combines a new OS architecture and a POSIX-inspired AI execution
+ecOS >_ CogPOSIX combines a new OS architecture and a POSIX-inspired AI execution
 contract in one project. The target is an installable environment for local,
 sovereign and offline model execution, with explicit resource management and
 security boundaries.
