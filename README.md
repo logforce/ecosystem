@@ -1,6 +1,6 @@
 # ecOS >_CogPOSIX
 
-**The open operating system bringing a new POSIX to machine intelligence.**
+**The open OS bringing a new POSIX-inspired interface to machine intelligence.**
 
 ecOS >_CogPOSIX brings machine intelligence into the operating-system contract.
 Models become managed computing resources: applications submit typed workloads
@@ -224,6 +224,10 @@ and [acceptance roadmap](docs/roadmap.md).
 CogPOSIX is the project's POSIX-inspired AI execution interface. Its specification
 evolves through implementation, review and conformance evidence; it does not claim
 POSIX certification or adoption as an external standard.
+
+ecOS >_CogPOSIX is an independent project and is not affiliated with, endorsed by,
+or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
+POSIX is a trademark of IEEE. See [trademark notices](TRADEMARKS.md).
 
 Public project software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
 [license scope](LICENSE-SCOPE.md). Third-party assets retain their own terms.

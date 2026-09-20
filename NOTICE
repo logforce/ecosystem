@@ -4,5 +4,9 @@ This distribution contains material developed for the ecOS and CogPOSIX project.
 See LICENSE-SCOPE.md for the software, documentation and third-party boundaries.
 The names are working names; no standards-body endorsement is asserted.
 
+ecOS >_CogPOSIX is an independent project and is not affiliated with, endorsed by,
+or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
+POSIX is a trademark of IEEE. See TRADEMARKS.md.
+
 This notice supplies attribution information only. It does not modify the
 Apache License, Version 2.0, or the Creative Commons Attribution 4.0 license.

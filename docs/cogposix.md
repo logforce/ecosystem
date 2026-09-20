@@ -7,6 +7,9 @@ the discipline of explicit resources, ownership, errors and lifecycle. It does n
 claim POSIX equivalence, certification or endorsement, and its handles are not
 ordinary file descriptors.
 
+POSIX is a trademark of IEEE. The project is independent of IEEE and The Open
+Group; see the [trademark and affiliation notices](../TRADEMARKS.md).
+
 The interface is intended to support independent clients and eventually independent
 implementations. A portable source interface, a binary ABI, a wire protocol and
 semantic model compatibility are different promises and must be tested separately.
