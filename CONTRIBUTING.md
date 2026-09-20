@@ -2,7 +2,8 @@
 
 ## Current Stage
 
-This repository contains an experimental mock runtime alongside the wider design.
+This repository contains an experimental local runtime with a deterministic mock
+and an optional Linux ONNX worker alongside the wider design.
 Start with the [development guide](docs/development.md) and
 [implementation limits](docs/implementation-r1.md). Changes should improve an
 explicit contract, resolve an open decision or provide reproducible evidence.
@@ -44,7 +45,7 @@ are granted by a contribution here.
 
 Third-party software, model weights, datasets, firmware and adapters retain their
 own terms. Inventory redistribution and modification rights for every shipped
-artifact. Both ecOS and CogPOSIX remain working names.
+artifact.
 
 ## Contribution Certification
 
@@ -63,7 +64,15 @@ examples or customer data. New public files need an explicit
 
 ## Security Reporting
 
-There is no public vulnerability-reporting channel or support SLA yet. Establish a
-private reporting contact, response ownership and release-signing process before
-external deployment. Do not put credentials, private datasets or sensitive exploit
-reports into a public issue tracker.
+Use [private vulnerability reporting](https://github.com/logforce/ecosystem/security/advisories/new)
+and follow the [security policy](SECURITY.md). There is no support SLA.
+Do not put credentials, private datasets or sensitive exploit reports into public
+Issues, Discussions or Slack.
+
+## Review and Merge
+
+Submit changes through pull requests. All files request review from `@logforce`.
+Contributor roles and write access require explicit maintainer approval.
+The sole administrator currently has a pull-request-only review bypass for their
+own work; automation must not impersonate an independent human approval.
+Revisit this exception before expanding the maintainer team.

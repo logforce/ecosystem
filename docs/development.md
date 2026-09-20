@@ -131,10 +131,9 @@ It reports application-frame byte counts and P50/P95 timings for 16 measured
 are included; inference is not. Read the [copy accounting](shared-memory.md)
 before using these numbers in a performance claim.
 
-## Publication
+## Source and Licenses
 
-New public files require an explicit [manifest](../PUBLICATION.json) entry.
-Follow [publication instructions](../PUBLICATION.md): export a fresh allowlisted
-tree and review it before creating public history. Do not push this mixed working
-repository directly. Internal documents, unreviewed artwork and build outputs
-remain excluded.
+The [manifest](../PUBLICATION.json) records the distributed files and their license
+classifications. See [license scope](../LICENSE-SCOPE.md) for community software,
+documentation and third-party terms. Contributions follow the
+[contribution guide](../CONTRIBUTING.md).

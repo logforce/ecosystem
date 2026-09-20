@@ -2,6 +2,12 @@
 
 ## 1. Thesis
 
+ecOS >_CogPOSIX is an open, next-generation operating-system project for local,
+sovereign and offline AI. It combines an OS architecture with a POSIX-inspired
+execution contract so that models can be managed as native computing resources.
+The Linux runtime is the current implementation milestone; an installable OS
+environment and policy-controlled decentralized execution remain roadmap work.
+
 AI computation should be available as a managed system capability. Applications
 should be able to use supported inference without each owning model distribution,
 accelerator placement, memory policy and diagnostics. The platform must remain
@@ -84,11 +90,17 @@ If no candidate meets required constraints, return a structured unsupported or
 unavailable result. Do not let a model's self-reported confidence authorize cloud
 execution or claim that a quality threshold has been satisfied.
 
-Strict sovereignty disables off-device inference. An optional managed profile may
+The strict endpoint-local profile disables off-device inference. An optional managed profile may
 permit a named organizational service. A future cloud profile needs explicit
 administrator policy and applicable user consent, including disclosure of the
 data to transmit. Every stage of a pipeline inherits the strictest applicable
 data-location restriction.
+
+Local-first does not mean isolated. The planned
+[distributed intelligence](distributed-intelligence.md) feature permits explicit
+whole-job placement within an approved ecOS policy domain. Organizational control
+across several nodes is distinct from endpoint-local execution. Data access and
+model improvement require separate grants; no network fabric is implemented yet.
 
 ## 6. Distinction From Drivers and Assistants
 

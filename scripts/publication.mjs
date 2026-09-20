@@ -4,10 +4,28 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
-const licenses = new Set(['Apache-2.0', 'CC-BY-4.0', 'License-Text']);
+const licenses = new Set(['Apache-2.0', 'CC-BY-4.0', 'MIT', 'License-Text', 'LicenseRef-Brand-Reserved']);
+const reviewedArt = new Map([
+  ['assets/ecOS-ystem_logo.png', '72e319fd8ddb42c9d2f304af0ad82e819996a0920b1fd1b2452ebf4e51c75a4f'],
+  ['assets/ecOS-ystem_square_logo.png', '597e4bd6be111b53726f8f1dbd4babe1830daed8f67edf52586d8a2f7f6dee0c'],
+  ['assets/local-compute-hero.png', '461de48cb22a84074f29333978b9ade88597020af7c4c6d8477f8f203817e3e6'],
+]);
 const excludedParts = new Set(['internal', 'private', 'enterprise', 'logforce']);
-const excludedNames = new Set(['docs/business-impact.md']);
+const excludedNames = new Set(['docs/business-impact.md', 'docs/website.md']);
 const attachment = /\.(?:docx?|pdf|jpe?g|png|zip|onnx|gguf|safetensors|pem|key)$/i;
+const reviewedHiddenPaths = new Set(['.gitignore', '.nojekyll', '.github/workflows/ci.yml']);
+const restrictedMarkerHashes = new Set([
+  '54b01587ffef5a6128e05f9b5e36cfcbf1393728209449e802873be3264482e7',
+  '813aa1640511f5d82ee24dfde5aa5a4a42cb18128d6b910e01378f5575017774',
+  '89124ed7233c1322d2f9d69b72c7bad022ea6c74c980c96c4c707a149b3d7a9b',
+  'a66b125a4c17a6a8446784b8c98238da30e70a6b98651fead1b44dbfbce1d113',
+]);
+
+// Fingerprints avoid naming internal terms in public tooling; they are not encryption.
+export function hasRestrictedMarker(text) {
+  return (text.toLowerCase().match(/[a-z0-9_-]+/g) ?? []).some(word =>
+    restrictedMarkerHashes.has(crypto.createHash('sha256').update(word).digest('hex')));
+}
 
 function regularFile(root, relative) {
   let current = root;
@@ -34,11 +52,11 @@ function validatePath(relative) {
   if (parts.some(part => !part || part === '.' || part === '..')) {
     throw new Error(`Unsafe path: ${relative}`);
   }
-  if (parts.some(part => part.startsWith('.') && relative !== '.gitignore')) {
+  if (parts.some(part => part.startsWith('.') && !reviewedHiddenPaths.has(relative))) {
     throw new Error(`Hidden path excluded: ${relative}`);
   }
   if (parts.some(part => excludedParts.has(part.toLowerCase())) ||
-      excludedNames.has(relative.toLowerCase()) || attachment.test(relative)) {
+      excludedNames.has(relative.toLowerCase()) || (attachment.test(relative) && !reviewedArt.has(relative))) {
     throw new Error(`Private or unreviewed path excluded: ${relative}`);
   }
 }
@@ -47,7 +65,7 @@ function validateDocument(relative, text, allowed) {
   if (/^Classification:\s*INTERNAL\b/im.test(text)) {
     throw new Error(`Internal classification in public file: ${relative}`);
   }
-  if (/(?:LFS-01|SynA|Pre-IoC|quantum-assisted)/.test(text)) {
+  if (hasRestrictedMarker(text)) {
     throw new Error(`Private strategy marker in public file: ${relative}`);
   }
   if (/\/Users\/|\/home\/[^\s/]+\/|app:\/\//.test(text)) {
@@ -76,11 +94,27 @@ export function collectSnapshot(source) {
       !Array.isArray(manifest.files) || manifest.files.length === 0) {
     throw new Error('Invalid publication manifest; default must be exclude');
   }
+  const denied = manifest.do_not_publish === undefined ? [] : manifest.do_not_publish;
+  if (!Array.isArray(denied) || denied.some(name => typeof name !== 'string' ||
+      !/^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*\/?$/.test(name) ||
+      name.split('/').some(part => part === '.' || part === '..'))) {
+    throw new Error('Invalid do_not_publish list; use literal files or directories ending in /');
+  }
   const allowed = new Set();
   const folded = new Set();
   for (const entry of manifest.files) {
+    if (typeof entry.path === 'string' && denied.some(name => name.endsWith('/')
+      ? entry.path.toLowerCase().startsWith(name.toLowerCase())
+      : entry.path.toLowerCase() === name.toLowerCase())) {
+      throw new Error(`Explicitly denied by do_not_publish: ${entry.path}`);
+    }
     validatePath(entry.path);
     if (!licenses.has(entry.license)) throw new Error(`Unknown license: ${entry.path}`);
+    const artworkLicense = entry.path === 'assets/local-compute-hero.png' ? 'CC-BY-4.0' : 'LicenseRef-Brand-Reserved';
+    if ((reviewedArt.has(entry.path) && entry.license !== artworkLicense) ||
+        (!reviewedArt.has(entry.path) && entry.license === 'LicenseRef-Brand-Reserved')) {
+      throw new Error(`Artwork license mismatch: ${entry.path}`);
+    }
     if (folded.has(entry.path.toLowerCase())) throw new Error(`Duplicate path: ${entry.path}`);
     allowed.add(entry.path);
     folded.add(entry.path.toLowerCase());
@@ -88,8 +122,12 @@ export function collectSnapshot(source) {
   if (!allowed.has('PUBLICATION.json')) throw new Error('Manifest must include itself');
   const files = manifest.files.map(entry => {
     const data = fs.readFileSync(regularFile(root, entry.path));
-    if (entry.path.endsWith('.md')) validateDocument(entry.path, data.toString('utf8'), allowed);
-    return { ...entry, data, sha256: crypto.createHash('sha256').update(data).digest('hex') };
+    if (/\.(md|html)$/.test(entry.path)) validateDocument(entry.path, data.toString('utf8'), allowed);
+    const sha256 = crypto.createHash('sha256').update(data).digest('hex');
+    if (reviewedArt.has(entry.path) && reviewedArt.get(entry.path) !== sha256) {
+      throw new Error(`Artwork changed; explicit review required: ${entry.path}`);
+    }
+    return { ...entry, data, sha256 };
   });
   files.sort((a, b) => a.path.localeCompare(b.path, 'en'));
   const inventory = files.map(({ path: name, license, sha256 }) => ({ path: name, license, sha256 }));

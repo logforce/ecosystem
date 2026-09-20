@@ -36,7 +36,8 @@ test('export copies only allowlisted bytes and never source Git history or priva
 });
 
 for (const name of ['../outside.md', '/absolute.md', '.git/config', 'internal/terms.md',
-  'docs/business-impact.md', 'draft.jpeg', 'docs/*', 'docs//file.md']) {
+  'docs/business-impact.md', 'docs/website.md', 'draft.jpeg', 'docs/*', 'docs//file.md', '.env', 'site/.nojekyll',
+  '.github/workflows/unreviewed.yml', '.github/secrets']) {
   test(`rejects unsafe or private manifest path: ${name}`, t => {
     const { root } = fixture(t, [{ path: name, license: 'Apache-2.0' }]);
     assert.throws(() => collectSnapshot(root));
@@ -86,4 +87,56 @@ test('rejects unknown licenses and permissive default publication', t => {
   parsed.default = 'include';
   fs.writeFileSync(manifest, JSON.stringify(parsed));
   assert.throws(() => collectSnapshot(second.root), /Invalid publication manifest/);
+});
+
+test('only exact reviewed artwork with reserved rights can be exported', t => {
+  const name = 'assets/ecOS-ystem_square_logo.png';
+  const { root, base } = fixture(t, [{ path: name, license: 'LicenseRef-Brand-Reserved' }]);
+  fs.mkdirSync(path.join(root, 'assets'));
+  fs.copyFileSync(new URL(`../${name}`, import.meta.url), path.join(root, name));
+  const snapshot = collectSnapshot(root);
+  exportSnapshot(snapshot, path.join(base, 'with-art'));
+  assert.equal(snapshot.files.find(file => file.path === name).license, 'LicenseRef-Brand-Reserved');
+  fs.appendFileSync(path.join(root, name), 'changed');
+  assert.throws(() => collectSnapshot(root), /Artwork changed/);
+  const wrong = fixture(t, [{ path: name, license: 'Apache-2.0' }]);
+  assert.throws(() => collectSnapshot(wrong.root), /Artwork license mismatch/);
+  const extra = fixture(t, [{ path: 'assets/other.png', license: 'LicenseRef-Brand-Reserved' }]);
+  assert.throws(() => collectSnapshot(extra.root), /unreviewed path/);
+});
+
+test('rejects private content in website HTML', t => {
+  const { root } = fixture(t, [{ path: 'index.html', license: 'Apache-2.0' }]);
+  fs.writeFileSync(path.join(root, 'index.html'), 'Classification: INTERNAL - DO NOT PUBLISH.');
+  assert.throws(() => collectSnapshot(root), /Internal classification/);
+});
+
+test('allows only the root static-site marker without opening other hidden paths', t => {
+  const { root } = fixture(t, [{ path: '.nojekyll', license: 'Apache-2.0' }]);
+  fs.writeFileSync(path.join(root, '.nojekyll'), '');
+  assert(collectSnapshot(root).files.some(file => file.path === '.nojekyll'));
+});
+
+test('explicit deny rules override allowlisted files and directory members case-insensitively', t => {
+  for (const denied of [['README.md'], ['readme.MD'], ['docs/']]) {
+    const {root} = fixture(t, [{path:'docs/page.md', license:'CC-BY-4.0'}]);
+    fs.mkdirSync(path.join(root, 'docs'));
+    fs.writeFileSync(path.join(root, 'docs/page.md'), '# Public');
+    const manifestFile = path.join(root, 'PUBLICATION.json');
+    const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+    manifest.do_not_publish = denied;
+    fs.writeFileSync(manifestFile, JSON.stringify(manifest));
+    assert.throws(() => collectSnapshot(root), /Explicitly denied/);
+  }
+});
+
+test('malformed explicit deny lists fail closed', t => {
+  for (const denied of [null, 'docs/', ['../private'], ['docs/*'], ['']]) {
+    const {root} = fixture(t);
+    const manifestFile = path.join(root, 'PUBLICATION.json');
+    const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+    manifest.do_not_publish = denied;
+    fs.writeFileSync(manifestFile, JSON.stringify(manifest));
+    assert.throws(() => collectSnapshot(root), /Invalid do_not_publish/);
+  }
 });

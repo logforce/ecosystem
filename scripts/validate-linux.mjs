@@ -34,7 +34,7 @@ try {
     run('cargo', ['test', '--workspace', '--offline', '--locked']);
     run('node', ['scripts/smoke.mjs']);
     if (onnx) run('node', ['scripts/smoke-onnx.mjs']);
-    run('node', ['--test', 'tests/publication.test.mjs']);
+    run('node', ['--test', 'tests/publication.test.mjs', 'tests/site-docs.test.mjs']);
     run('node', ['scripts/publication.mjs', 'check']);
     console.log('Linux validation passed as non-root with networking disabled.');
   } else {

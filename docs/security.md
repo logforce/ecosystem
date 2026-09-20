@@ -71,6 +71,12 @@ service that knows the destination and authorized data scope. Logs record the
 decision without retaining the transmitted payload by default. Strict local-only
 mode cannot be relaxed by an application hint or model-generated instruction.
 
+The planned [distributed policy domain](distributed-intelligence.md) does not
+erase machine boundaries. Node authentication, capability approval and data-use
+authorization are separate checks. Apply locality rules to retrieval, replication,
+embeddings and training artifacts as well as inference inputs. Permission to run
+a job is not permission to read shared datasets or train on that job's content.
+
 Network isolation of ecOS does not automatically constrain every ordinary desktop
 application. Product claims must specify whether they cover managed capability
 execution or the entire device's network policy.

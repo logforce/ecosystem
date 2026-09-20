@@ -31,6 +31,17 @@ testing. The community runtime and intended community OS remain independently us
 
 ## Exclusions
 
+Website markup, CSS and JavaScript are Apache-2.0; editorial prose within
+`index.html` is additionally identified here as CC BY 4.0, not solely by the HTML
+file's software classification. Images are separate assets, not embedded prose.
+The two explicitly listed logos use `LicenseRef-Brand-Reserved`: publication does
+not grant an open artwork license. See the [artwork notice](assets/BRAND-NOTICE.md).
+The generated computing illustration is CC BY 4.0 to the extent copyright applies.
+The reader's generated document bundle preserves the licenses of its constituent
+documents and license texts; the bundle's prose classification does not relicense
+embedded third-party notices. Marked retains MIT; DOMPurify is distributed under
+its Apache-2.0 option. See the [website notices](site/THIRD-PARTY.md).
+
 No public license is granted here for files omitted from the publication manifest,
 including internal strategy or contract drafts, original planning documents,
 unreleased art, proprietary extensions, private data or material in other

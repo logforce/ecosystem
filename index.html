@@ -1,0 +1,197 @@
+<!doctype html>
+<!-- Markup: Apache-2.0. Editorial text: CC-BY-4.0. Artwork: see assets/BRAND-NOTICE.md. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ecOS >_ is a new operating system being designed and built by this project for local intelligence. CogPOSIX is its own POSIX-inspired system interface for controlled AI models.">
+  <meta name="theme-color" content="#f3f8fa">
+  <title>ecOS &gt;_ CogPOSIX</title>
+  <link rel="icon" type="image/png" href="assets/ecOS-ystem_square_logo.png">
+  <link rel="stylesheet" href="site/style.css">
+  <script src="site/vendor/marked.js" defer></script>
+  <script src="site/vendor/purify.js" defer></script>
+  <script src="site/documents.js" defer></script>
+  <script src="site/main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="header">
+    <a class="wordmark" href="#" aria-label="ecOS and CogPOSIX home">ecOS <span>&gt;_</span> CogPOSIX</a>
+    <nav aria-label="Main navigation">
+      <a href="#architecture-map">Architecture</a><a href="#progress">Roadmap</a><a href="#licenses">Licenses</a><a href="SPEC.md">Docs</a><a class="nav-cta" href="#start">Start building <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="title">
+      <div class="hero-inner">
+        <h1 id="title">ecOS <span>&gt;_</span> CogPOSIX</h1>
+        <p class="hero-line">The open OS bringing a new POSIX to machine intelligence.</p>
+        <p class="hero-copy">ecOS is built around CogPOSIX, a system-level execution standard for running AI models as <strong>native</strong> computing resources, designed for performance and security.</p>
+        <div class="actions"><a class="button primary" href="#start">Start building <span aria-hidden="true">↗</span></a><a class="button secondary" href="#architecture-map">Explore the architecture <span aria-hidden="true">↓</span></a></div>
+      </div>
+    </section>
+    <section class="architecture-explorer" id="architecture-map" aria-labelledby="architecture-map-title">
+      <h2 id="architecture-map-title" class="sr-only">Traditional AI application compared with an ecOS application</h2>
+      <div class="architecture-schema">
+        <aside class="traditional-stack" aria-labelledby="traditional-title">
+          <div class="schema-heading"><h3 id="traditional-title">Traditional AI Application</h3><p>Each application manages AI independently</p></div>
+          <div class="traditional-app">Application</div>
+          <ul class="traditional-responsibilities">
+            <li><img src="site/icons/box.svg" alt="">Model management</li><li><img src="site/icons/cloud.svg" alt="">Cloud API</li><li><img src="site/icons/cpu.svg" alt="">GPU runtime</li><li><img src="site/icons/database.svg" alt="">Memory policy</li><li><img src="site/icons/shield.svg" alt="">Security policy</li><li><img src="site/icons/settings.svg" alt="">Model selection</li><li><img src="site/icons/chart-no-axes-column.svg" alt="">Telemetry</li>
+          </ul>
+          <div class="architecture-cost" aria-label="Traditional application trade-offs">
+            <p>Duplicated infrastructure</p><p>Fragmented security policy</p><p>Higher resource consumption</p><p>Network dependencies</p><p>Execution boundary often invisible to the user</p>
+          </div>
+        </aside>
+
+        <div class="architecture-flow" aria-label="ecOS and CogPOSIX execution architecture">
+          <div class="architecture-node node-app">
+            <strong>Applications</strong><span>Request AI capabilities, not implementations</span>
+            <div class="application-types"><span><img src="site/icons/file-text.svg" alt="">Productivity</span><span><img src="site/icons/code.svg" alt="">Development</span><span><img src="site/icons/chart-no-axes-column.svg" alt="">Analytics</span><span><img src="site/icons/image.svg" alt="">Creative</span><span><img src="site/icons/ellipsis.svg" alt="">and more</span></div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <div class="architecture-node node-contract">
+            <div class="contract-copy"><strong>CogPOSIX</strong><span>A system contract for AI computation<br>(inspired by POSIX)</span></div>
+            <div class="contract-traits"><img src="site/icons/file-text.svg" alt=""><ul><li>Standardized interface</li><li>Capability-based</li><li>Implementation-agnostic</li></ul></div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <div class="ecos-control-plane">
+            <div class="ecos-heading"><strong>ecOS</strong><span>The operating system determines which implementation may satisfy the request, where it executes, which resources it may use, which data it may access, and whether it may leave the machine at all.</span></div>
+            <div class="ecos-capabilities" aria-label="Selectable ecOS control-plane responsibilities">
+              <button type="button" data-architecture-topic="resolution" aria-pressed="false"><img src="site/icons/shield.svg" alt="">Capability<br>Resolution</button>
+              <button type="button" data-architecture-topic="models" aria-pressed="false"><img src="site/icons/database.svg" alt="">Model<br>Management</button>
+              <button type="button" data-architecture-topic="security" aria-pressed="false"><img src="site/icons/shield.svg" alt="">Security &amp; Policy</button>
+              <button type="button" data-architecture-topic="data" aria-pressed="false"><img src="site/icons/database.svg" alt="">Data<br>Governance</button>
+              <button type="button" data-architecture-topic="scheduling" aria-pressed="false"><img src="site/icons/server.svg" alt="">Resource<br>Scheduling</button>
+              <button type="button" data-architecture-topic="locality" aria-pressed="false"><img src="site/icons/locate-fixed.svg" alt="">Execution<br>Locality</button>
+              <button type="button" data-architecture-topic="hardware" aria-pressed="false"><img src="site/icons/cpu.svg" alt="">Hardware<br>Arbitration</button>
+              <button type="button" data-architecture-topic="observability" aria-pressed="false"><img src="site/icons/search.svg" alt="">Observability</button>
+              <button type="button" data-architecture-topic="nodes" aria-pressed="false"><img src="site/icons/network.svg" alt="">Node<br>Coordination</button>
+              <button type="button" data-architecture-topic="lifecycle" aria-pressed="false"><img src="site/icons/route.svg" alt="">Lifecycle<br>Management</button>
+            </div>
+          </div>
+          <div class="route-split" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="execution-routes" aria-label="Selectable execution locations">
+            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false"><img src="site/icons/laptop.svg" alt=""><strong>Local Compute</strong><span>DEFAULT</span><small>Execute on this machine</small></button>
+            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false"><img src="site/icons/server.svg" alt=""><strong>Trusted Nodes</strong><span>OPT-IN</span><small>Execute on trusted, managed nodes</small></button>
+            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false"><img src="site/icons/cloud.svg" alt=""><strong>External Compute</strong><span>EXPLICIT ONLY</span><small>Execute outside the machine only by policy decision</small></button>
+          </div>
+        </div>
+
+        <aside class="ecos-application" aria-labelledby="ecos-app-title">
+          <div class="schema-heading"><h3 id="ecos-app-title">ecOS Application</h3><p>Simple, standardized access to AI</p></div>
+          <div class="ecos-app-flow" aria-label="Application integration through CogPOSIX and ecOS">
+            <div>Application</div><span aria-hidden="true">↓</span>
+            <div class="right-contract"><img src="site/icons/file-text.svg" alt=""><strong>CogPOSIX</strong><small>capability</small></div><span aria-hidden="true">↓</span>
+            <div class="right-ecos"><img src="site/icons/settings.svg" alt=""><strong>ecOS</strong><small>(Operating System)</small></div>
+          </div>
+          <ul class="ecos-benefits"><li>Centralized model management</li><li>Unified security &amp; policy</li><li>Controlled execution locality</li><li>Efficient resource scheduling</li><li>Auditable and observable</li><li>Explicit trust boundaries</li></ul>
+        </aside>
+      </div>
+
+      <aside class="architecture-detail" aria-live="polite" aria-atomic="true" hidden>
+        <p class="architecture-label" id="architecture-detail-label">Request</p>
+        <h3 id="architecture-detail-title">Applications ask for capabilities.</h3>
+        <p id="architecture-detail-copy">A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.</p>
+        <dl><div><dt>System role</dt><dd id="architecture-detail-role">Declare intent and consume a typed result</dd></div><div><dt>Boundary</dt><dd id="architecture-detail-boundary">Application permissions remain in force</dd></div><div><dt>Status</dt><dd id="architecture-detail-status">Contract path implemented in the developer runtime</dd></div></dl>
+      </aside>
+
+      <div class="architecture-principles" aria-label="Core architecture principles">
+        <div class="principles-title"><h3>Core Principles</h3></div>
+        <div class="principle-item"><img src="site/icons/database.svg" alt=""><p>Intelligence should execute<br>as close to the data as possible</p></div>
+        <div class="principle-item"><img src="site/icons/cloud-off.svg" alt=""><p>Cloud computation<br>is not the default</p></div>
+        <div class="principle-item"><img src="site/icons/shield-check.svg" alt=""><p>Every transition across<br>a trust boundary is a policy decision</p></div>
+        <div class="principle-item"><img src="site/icons/network.svg" alt=""><p>Distribution<br>is not automatic</p></div>
+      </div>
+    </section>
+
+    <section class="section foundation" id="foundation" aria-labelledby="foundation-title">
+      <div class="section-heading"><p class="eyebrow">Our OS. Our system contract.</p><h2 id="foundation-title">Many models.<br>One system interface.</h2><p>ecOS &gt;_ and CogPOSIX are being developed together: a new operating system and its AI execution contract. Applications use CogPOSIX to access controlled intelligence as a system resource, across model classes.</p></div>
+      <div class="columns">
+        <article><span class="index">&gt;_</span><h3>Build against a contract.</h3><p class="role">CogPOSIX</p><p>Open a model. Share typed data. Submit a job. Manage its lifecycle. A POSIX-inspired execution interface makes controlled models part of the application stack, beyond a single provider or model class.</p><a href="docs/cogposix.md">Meet CogPOSIX <span aria-hidden="true">→</span></a><small>Code: Apache-2.0 · Specification: CC BY 4.0</small></article>
+        <article><span class="index">[ ]</span><h3>Make local the default.</h3><p class="role">ecOS runtime</p><p>A task solved on your machine needs no remote inference tokens. The runtime coordinates model execution, data ownership and jobs, starting with a working Linux CPU backend.</p><a href="docs/onnx-worker.md">Inside the runtime <span aria-hidden="true">→</span></a><small>Community runtime: Apache-2.0</small></article>
+        <article><span class="index">/ /</span><h3>Build a new operating system.</h3><p class="role">ecOS &gt;_</p><p>We are building our own OS architecture around local intelligence, with applications, controlled models and recovery designed together. The current runtime prototype runs on Linux; the complete installable OS is in development.</p><a href="docs/operating-system.md">The path to our OS <span aria-hidden="true">→</span></a><small>OS in development · Planned recipes: Apache-2.0</small></article>
+      </div>
+      <div class="principle"><strong>Your compute.<br>Your control.</strong><p>The right tool may be a vision model, a signal processor, a language model or a conventional algorithm. The design puts task suitability and local control first. It does not make every problem an LLM request.</p></div>
+    </section>
+
+    <section class="section distributed" id="distributed" aria-labelledby="distributed-title">
+      <div class="section-heading"><p class="eyebrow">Planned capability</p><h2 id="distributed-title">Distributed intelligence,<br>when you want it.</h2><p>Local-first does not mean isolated. ecOS is designed to let approved workstations, AI nodes and edge devices share execution within a controlled policy domain, only when distribution has been explicitly enabled.</p></div>
+      <figure class="fabric-diagram" aria-label="An ecOS policy domain connects a workstation, an AI node and an edge node through the proposed CogPOSIX fabric.">
+        <div class="fabric-policy">ecOS policy domain</div>
+        <div class="fabric-nodes"><div><h3>Workstation</h3><p>GPU / NPU</p></div><div><h3>AI node</h3><p>GPU / NPU</p></div><div><h3>Edge node</h3><p>Accelerator</p></div></div>
+        <figcaption>CogPOSIX fabric</figcaption>
+      </figure>
+      <div class="distributed-details"><div><h3>Shared compute.<br>Explicit boundaries.</h3><p>Applications keep a common capability contract. Policy controls node participation, authentication, model availability, data classes and execution locality. Another machine is always another execution boundary, even on your own network.</p></div><div><h3>Shared knowledge.<br>Separate permission.</h3><p>Candidate services such as DuckDB and Qdrant could support analytics, retrieval and evaluation across approved datasets. Access to data does not authorize training on it. Model improvement requires its own governed, evaluated workflow.</p></div></div>
+      <p class="distributed-note">Distributed execution and database integration are planned, not available in the current runtime. The standalone local experience remains independent of this feature.</p>
+      <a class="text-link" href="docs/distributed-intelligence.md">Explore distributed intelligence <span aria-hidden="true">→</span></a>
+    </section>
+
+    <section class="section progress" id="progress" aria-labelledby="progress-title">
+      <div class="section-heading"><p class="eyebrow">From interface to operating system</p><h2 id="progress-title">The foundation is running.<br>Now build on it.</h2><p>The developer prototype connects Rust and C applications to local inference. Today it runs one pinned digit-classification model. Scheduling, model packages and the installable OS are the next chapters.</p></div>
+      <div class="milestones">
+        <article><span class="status working">Working / R1</span><h3>Execution contracts</h3><p>Rust and C clients, typed handles, asynchronous jobs, cancellation and resource cleanup.</p><a href="docs/implementation-r1.md">R1 evidence <span aria-hidden="true">↗</span></a></article>
+        <article><span class="status working">Working / R2</span><h3>Linux shared memory</h3><p>Sealed inputs and immutable output snapshots passed by file descriptor. Not end-to-end zero-copy.</p><a href="docs/shared-memory.md">Memory contract <span aria-hidden="true">↗</span></a></article>
+        <article><span class="status working">Experimental / R3</span><h3>Real local inference</h3><p>A pinned ONNX CPU model, bounded worker exchanges, artifact checks and crash recovery.</p><a href="docs/onnx-worker.md">R3 evidence <span aria-hidden="true">↗</span></a></article>
+        <article><span class="status planned">Next / R4 + R5</span><h3>Scheduling &amp; packages</h3><p>Resource accounting, scheduling policy and reviewed model packages. Applications and OS installation follow.</p><a href="docs/roadmap.md">Full roadmap <span aria-hidden="true">↗</span></a></article>
+      </div>
+      <div class="evidence"><div><strong>30</strong><span>Linux Rust tests passed</span></div><div><strong>Rust + C</strong><span>Working application interfaces</span></div><div><strong>Local CPU</strong><span>Verified ONNX inference</span></div><a href="docs/onnx-worker.md">Read the validation report <span aria-hidden="true">↗</span></a></div>
+    </section>
+
+    <section class="section start" id="start" aria-labelledby="start-title">
+      <div class="section-heading"><p class="eyebrow">For builders</p><h2 id="start-title">Less speculation.<br>More execution.</h2><p>Explore the contract with the deterministic mock, then run the real ONNX worker. No API key, account or hosted inference service required.</p><a class="text-link" href="docs/development.md">Open the developer guide <span aria-hidden="true">→</span></a></div>
+      <div class="terminal" aria-label="Prototype build commands"><div class="terminal-heading"><span>Local mock / no API key</span><button type="button" id="copy" aria-label="Copy build commands" title="Copy build commands">Copy commands</button></div><pre><code id="commands">cargo build --workspace --offline
+node scripts/smoke.mjs</code></pre><p id="copy-status" role="status" aria-live="polite"></p></div>
+      <div class="next-command"><strong>Run the ONNX validation</strong><code>node scripts/validate-linux.mjs --onnx</code><p>Build from a source checkout with Rust, a C compiler and Node.js. ONNX validation also requires Docker; its initial image build downloads dependencies and a pinned model, then tests run offline. The runtime is a developer prototype; the OS installer is still on the roadmap.</p></div>
+    </section>
+
+    <section class="section integration" aria-labelledby="integration-title">
+      <p class="eyebrow">An open ecosystem</p>
+      <div class="integration-heading"><h2 id="integration-title">Independent at the core.<br>Connected by choice.</h2><img class="ecosystem-logo" src="assets/ecOS-ystem_square_logo.png" width="140" height="140" alt="LOGFORCE ecosystem logo" loading="lazy"></div>
+      <p class="integration-copy">Sovereignty includes the freedom to choose your security providers. LOGFORCE is the planned optional connection for proprietary analytics and enterprise security, through an open integration contract.</p>
+      <div class="integration-details"><p><strong>Open integration. Real choice.</strong>The planned event schema and basic bridge will use Apache-2.0 when released. The community runtime remains independently usable, and other analyzers can implement the same contract.</p><p><strong>LOGFORCE stays separately licensed.</strong>Its intelligence, models, enterprise sensors and commercial modules remain proprietary under their own agreements. No LOGFORCE engine or integration is included in the current runtime.</p></div>
+      <a class="text-link" href="TERMS.md">Community and service boundaries <span aria-hidden="true">→</span></a>
+    </section>
+
+    <section class="section licenses" id="licenses" aria-labelledby="license-title">
+      <div class="section-heading"><p class="eyebrow">Built to be built on</p><h2 id="license-title">Open code.<br>Clear commitments.</h2><p>Apache-2.0 for the community software. CC BY 4.0 for the specification and documentation. Commercial use is welcome under those terms; LOGFORCE and third-party assets keep their separate licenses.</p></div>
+      <details class="license-details"><summary>Licenses by component <span aria-hidden="true">+</span></summary><div class="license-table-wrap"><table><caption class="sr-only">Component licensing and availability</caption><thead><tr><th scope="col">Component</th><th scope="col">License / terms</th><th scope="col">Scope &amp; availability</th></tr></thead><tbody>
+        <tr><th scope="row">CogPOSIX headers, SDK &amp; reference code</th><td><a href="LICENSE">Apache-2.0</a></td><td>Listed software, schemas, examples and tests. Experimental ABI.</td></tr>
+        <tr><th scope="row">ecOS community runtime</th><td><a href="LICENSE">Apache-2.0</a></td><td>Listed project-owned runtime and backend code. Broader policy and diagnostics remain roadmap work.</td></tr>
+        <tr><th scope="row">Specification &amp; public documentation</th><td><a href="LICENSES/CC-BY-4.0.txt">CC BY 4.0</a></td><td>Attribution to ecOS and CogPOSIX contributors. Original embedded code and schemas also offered under Apache-2.0.</td></tr>
+        <tr><th scope="row">Community OS recipes &amp; integration</th><td>Apache-2.0 <span class="table-note">Planned</span></td><td>Project-owned code when explicitly released. No installable ecOS image today.</td></tr>
+        <tr><th scope="row">Community distributed fabric &amp; basic data adapters</th><td>Apache-2.0 <span class="table-note">Planned</span></td><td>Project-owned distributed execution and baseline policy when explicitly released. Independent of LOGFORCE.</td></tr>
+        <tr><th scope="row">DuckDB</th><td><a href="https://github.com/duckdb/duckdb/blob/main/LICENSE">MIT</a> <span class="table-note">Candidate integration</span></td><td>Structured analytics and evaluation. No DuckDB binaries or datasets included.</td></tr>
+        <tr><th scope="row">Qdrant open-source engine</th><td><a href="https://github.com/qdrant/qdrant/blob/master/LICENSE">Apache-2.0</a> <span class="table-note">Candidate integration</span></td><td>Vector retrieval and governed collections. No Qdrant binaries included; cloud offerings have separate terms.</td></tr>
+        <tr><th scope="row">Public event schema &amp; basic LOGFORCE bridge</th><td>Apache-2.0 <span class="table-note">Planned</span></td><td>Open contract and basic adapter only; not the proprietary engine.</td></tr>
+        <tr><th scope="row">LOGFORCE intelligence, models &amp; enterprise sensors</th><td>Proprietary / separate agreement</td><td>Not included. No rights granted by this repository's open licenses.</td></tr>
+        <tr><th scope="row">Enterprise modules &amp; premium feeds</th><td>Separate commercial agreements</td><td>Optional proprietary distribution; data and service rights defined separately. No current support SLA.</td></tr>
+        <tr><th scope="row">Linux, dependencies, firmware &amp; datasets</th><td>Original component licenses</td><td>No umbrella relicensing. OS distribution requires an inventory and applicable notices/source delivery.</td></tr>
+        <tr><th scope="row">Third-party model weights</th><td>Original artifact terms</td><td>Not in the source export. The optional MNIST download has an upstream MIT model notice and Apache-2.0 repository license; <a href="docs/onnx-worker.md">asset review remains required</a>.</td></tr>
+        <tr><th scope="row">Website &amp; document reader</th><td>Apache-2.0 / CC BY 4.0 / MIT</td><td>Project code: Apache-2.0. Prose and generated concept illustration: CC BY 4.0 where copyright applies. Marked: MIT. DOMPurify: Apache-2.0 option. <a href="site/THIRD-PARTY.md">Third-party notices</a>.</td></tr>
+        <tr><th scope="row">Logos &amp; brand artwork</th><td><a href="assets/BRAND-NOTICE.md">Reserved artwork rights</a></td><td>Shown to identify the project. No open artwork or trademark license; separate permission may be needed for reuse.</td></tr>
+      </tbody></table></div></details>
+      <p class="license-foot">Commercial use of the Apache-2.0 and CC BY 4.0 material is permitted under those licenses. Community use creates no paid-service contract. <a href="LICENSE-SCOPE.md">Full license scope</a> · <a href="TERMS.md">Community terms</a> · <a href="TRADEMARKS.md">Brand policy</a></p>
+    </section>
+
+    <section class="section community" id="community" aria-labelledby="community-title">
+      <div class="section-heading"><p class="eyebrow">Build together</p><h2 id="community-title">Your next idea<br>belongs here.</h2><p>Meet the community, challenge a design or bring a working example. Choose the right place to start.</p></div>
+      <div class="community-places">
+        <article><h3>Slack</h3><p>Introduce yourself, ask for help, share demos and collaborate with other builders. Bring lasting answers and decisions back to the public project discussions.</p><a class="text-link" href="https://logforceai.slack.com/" target="_blank" rel="noopener noreferrer">Open Slack <span aria-hidden="true">↗</span></a><small>Workspace membership may be required. This link opens Slack sign-in.</small></article>
+        <article><h3>GitHub Repository</h3><p>Explore the source code, run the prototype and contribute changes through pull requests reviewed by the maintainer.</p><a class="text-link" href="https://github.com/logforce/ecosystem" target="_blank" rel="noopener noreferrer">Explore the repository <span aria-hidden="true">↗</span></a></article>
+        <article><h3>GitHub Discussions</h3><p>Propose ideas, ask questions others can learn from and discuss architecture before turning a proposal into development work.</p><a class="text-link" href="https://github.com/logforce/ecosystem/discussions" target="_blank" rel="noopener noreferrer">Join the discussion <span aria-hidden="true">↗</span></a></article>
+        <article><h3>GitHub Issues</h3><p>Report reproducible bugs with expected behavior, actual results and environment details. Track agreed development tasks here; never include secrets or private data.</p><a class="text-link" href="https://github.com/logforce/ecosystem/issues" target="_blank" rel="noopener noreferrer">Report an issue <span aria-hidden="true">↗</span></a></article>
+      </div>
+      <p class="community-policy">Community membership does not grant repository write access. Contributor roles and changes to the official project require maintainer approval. <a href="CONTRIBUTING.md">Contribution guide</a> · <a href="TERMS.md">Community terms</a></p>
+    </section>
+
+    <section class="section closing"><p class="eyebrow">The next layer is open</p><h2>Build intelligence<br>into the system.</h2><p>Help shape the interface between applications, controlled models and the machines they run on.</p><div class="actions"><a class="button primary" href="#community">Meet the community <span aria-hidden="true">↗</span></a><a class="text-link" href="CONTRIBUTING.md">Build with us <span aria-hidden="true">→</span></a></div></section>
+  </main>
+  <footer><a class="wordmark" href="#">ecOS <span>&gt;_</span> CogPOSIX</a><nav aria-label="Footer navigation"><a href="SPEC.md">Documentation</a><a href="#licenses">Licenses</a><a href="TERMS.md">Community terms</a></nav><p>© 2026 ecOS and CogPOSIX contributors.</p><p>Local intelligence. Shared foundations.</p></footer>
+  <dialog id="reader" aria-labelledby="reader-title">
+    <div class="reader-toolbar"><button type="button" id="reader-back" disabled>← Back</button><span id="reader-title">Documentation</span><button type="button" id="reader-close" autofocus>Close ×</button></div>
+    <div class="reader-layout"><aside><label for="reader-select">Documentation</label><select id="reader-select" aria-label="Select a document"></select><nav id="reader-toc" aria-label="On this page"></nav><div class="reader-links"><a id="reader-source" target="_blank" rel="noopener noreferrer">Markdown source ↗</a></div></aside><article id="reader-content" class="markdown-body" tabindex="0" aria-label="Document content"></article></div>
+  </dialog>
+</body>
+</html>
