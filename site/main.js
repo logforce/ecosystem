@@ -114,6 +114,7 @@ const architectureTopics = {
 
 const architectureControls = [...document.querySelectorAll('[data-architecture-topic]')];
 const architectureDetail = {
+  panel: document.querySelector('.architecture-detail'),
   label: document.getElementById('architecture-detail-label'),
   title: document.getElementById('architecture-detail-title'),
   copy: document.getElementById('architecture-detail-copy'),
@@ -125,6 +126,7 @@ const architectureDetail = {
 function showArchitectureTopic(control) {
   const topic = architectureTopics[control.dataset.architectureTopic];
   if (!topic || !architectureDetail.title) return;
+  if (architectureDetail.panel) architectureDetail.panel.hidden = false;
   for (const candidate of architectureControls) {
     const selected = candidate === control;
     candidate.classList.toggle('is-active', selected);

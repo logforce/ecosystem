@@ -31,83 +31,66 @@
         <div class="actions"><a class="button primary" href="#start">Start building <span aria-hidden="true">↗</span></a><a class="button secondary" href="#architecture-map">Explore the architecture <span aria-hidden="true">↓</span></a></div>
       </div>
     </section>
-    <figure class="capability-graphic">
-      <figcaption>One interface. Many kinds of intelligence.<span>Target architecture</span></figcaption>
-      <picture><source media="(max-width: 520px)" srcset="site/capabilities-mobile.svg"><img src="site/capabilities.svg" width="1000" height="230" alt="Applications connect to CogPOSIX, which branches to five model classes: vision, audio, documents, signals and language."></picture>
-    </figure>
-
     <section class="architecture-explorer" id="architecture-map" aria-labelledby="architecture-map-title">
-      <div class="architecture-intro">
-        <p class="eyebrow">System architecture</p>
-        <h2 id="architecture-map-title">One contract.<br>System-level control.</h2>
-        <p>Intelligence should execute as close to the data as possible, under operating-system control. ecOS chooses among eligible implementations and locations; applications keep one capability contract.</p>
-      </div>
-
+      <h2 id="architecture-map-title" class="sr-only">Traditional AI application compared with an ecOS application</h2>
       <div class="architecture-schema">
         <aside class="traditional-stack" aria-labelledby="traditional-title">
-          <div class="schema-heading"><h3 id="traditional-title">Traditional AI application</h3><p>Each application manages AI independently</p></div>
+          <div class="schema-heading"><h3 id="traditional-title">Traditional AI Application</h3><p>Each application manages AI independently</p></div>
           <div class="traditional-app">Application</div>
-          <ul>
-            <li>Model management</li><li>Cloud API</li><li>GPU runtime</li><li>Memory policy</li><li>Security policy</li><li>Model selection</li><li>Telemetry</li>
+          <ul class="traditional-responsibilities">
+            <li><img src="site/icons/box.svg" alt="">Model management</li><li><img src="site/icons/cloud.svg" alt="">Cloud API</li><li><img src="site/icons/cpu.svg" alt="">GPU runtime</li><li><img src="site/icons/database.svg" alt="">Memory policy</li><li><img src="site/icons/shield.svg" alt="">Security policy</li><li><img src="site/icons/settings.svg" alt="">Model selection</li><li><img src="site/icons/chart-no-axes-column.svg" alt="">Telemetry</li>
           </ul>
-          <div class="architecture-cost">
-            <h4>Without a shared system layer</h4>
-            <ol>
-              <li>Infrastructure is duplicated across applications</li>
-              <li>Security policy becomes fragmented</li>
-              <li>Models compete for resources independently</li>
-              <li>Hosted services become hidden dependencies</li>
-              <li>Execution boundaries are harder to inspect</li>
-            </ol>
+          <div class="architecture-cost" aria-label="Traditional application trade-offs">
+            <p>Duplicated infrastructure</p><p>Fragmented security policy</p><p>Higher resource consumption</p><p>Network dependencies</p><p>Execution boundary often invisible to the user</p>
           </div>
         </aside>
 
-        <div class="architecture-flow" aria-label="Interactive ecOS and CogPOSIX architecture">
-          <button class="architecture-node node-app is-active" type="button" data-architecture-topic="applications" aria-pressed="true">
-            <strong>Applications</strong><span>Request AI capabilities, not implementations</span><small>Productivity · Development · Analytics · Creative · More</small>
-          </button>
+        <div class="architecture-flow" aria-label="ecOS and CogPOSIX execution architecture">
+          <div class="architecture-node node-app">
+            <strong>Applications</strong><span>Request AI capabilities, not implementations</span>
+            <div class="application-types"><span><img src="site/icons/file-text.svg" alt="">Productivity</span><span><img src="site/icons/code.svg" alt="">Development</span><span><img src="site/icons/chart-no-axes-column.svg" alt="">Analytics</span><span><img src="site/icons/image.svg" alt="">Creative</span><span><img src="site/icons/ellipsis.svg" alt="">and more</span></div>
+          </div>
           <div class="flow-arrow" aria-hidden="true">↓</div>
-          <button class="architecture-node node-contract" type="button" data-architecture-topic="cogposix" aria-pressed="false">
-            <strong>CogPOSIX</strong><span>A system contract for AI computation</span><small>Standardized · Capability-based · Implementation-agnostic</small>
-          </button>
+          <div class="architecture-node node-contract">
+            <div class="contract-copy"><strong>CogPOSIX</strong><span>A system contract for AI computation<br>(inspired by POSIX)</span></div>
+            <div class="contract-traits"><img src="site/icons/file-text.svg" alt=""><ul><li>Standardized interface</li><li>Capability-based</li><li>Implementation-agnostic</li></ul></div>
+          </div>
           <div class="flow-arrow" aria-hidden="true">↓</div>
           <div class="ecos-control-plane">
-            <button class="ecos-heading" type="button" data-architecture-topic="ecos" aria-pressed="false">
-              <strong>ecOS</strong><span>The OS selects the implementation, execution location, resources and permitted data.</span>
-            </button>
-            <div class="ecos-capabilities" aria-label="ecOS control-plane responsibilities">
-              <button type="button" data-architecture-topic="resolution" aria-pressed="false">Capability resolution</button>
-              <button type="button" data-architecture-topic="models" aria-pressed="false">Model management</button>
-              <button type="button" data-architecture-topic="security" aria-pressed="false">Security &amp; policy</button>
-              <button type="button" data-architecture-topic="data" aria-pressed="false">Data governance</button>
-              <button type="button" data-architecture-topic="scheduling" aria-pressed="false">Resource scheduling</button>
-              <button type="button" data-architecture-topic="locality" aria-pressed="false">Execution locality</button>
-              <button type="button" data-architecture-topic="hardware" aria-pressed="false">Hardware arbitration</button>
-              <button type="button" data-architecture-topic="observability" aria-pressed="false">Observability</button>
-              <button type="button" data-architecture-topic="nodes" aria-pressed="false">Node coordination</button>
-              <button type="button" data-architecture-topic="lifecycle" aria-pressed="false">Lifecycle management</button>
+            <div class="ecos-heading"><strong>ecOS</strong><span>The operating system determines which implementation may satisfy the request, where it executes, which resources it may use, which data it may access, and whether it may leave the machine at all.</span></div>
+            <div class="ecos-capabilities" aria-label="Selectable ecOS control-plane responsibilities">
+              <button type="button" data-architecture-topic="resolution" aria-pressed="false"><img src="site/icons/shield.svg" alt="">Capability<br>Resolution</button>
+              <button type="button" data-architecture-topic="models" aria-pressed="false"><img src="site/icons/database.svg" alt="">Model<br>Management</button>
+              <button type="button" data-architecture-topic="security" aria-pressed="false"><img src="site/icons/shield.svg" alt="">Security &amp; Policy</button>
+              <button type="button" data-architecture-topic="data" aria-pressed="false"><img src="site/icons/database.svg" alt="">Data<br>Governance</button>
+              <button type="button" data-architecture-topic="scheduling" aria-pressed="false"><img src="site/icons/server.svg" alt="">Resource<br>Scheduling</button>
+              <button type="button" data-architecture-topic="locality" aria-pressed="false"><img src="site/icons/locate-fixed.svg" alt="">Execution<br>Locality</button>
+              <button type="button" data-architecture-topic="hardware" aria-pressed="false"><img src="site/icons/cpu.svg" alt="">Hardware<br>Arbitration</button>
+              <button type="button" data-architecture-topic="observability" aria-pressed="false"><img src="site/icons/search.svg" alt="">Observability</button>
+              <button type="button" data-architecture-topic="nodes" aria-pressed="false"><img src="site/icons/network.svg" alt="">Node<br>Coordination</button>
+              <button type="button" data-architecture-topic="lifecycle" aria-pressed="false"><img src="site/icons/route.svg" alt="">Lifecycle<br>Management</button>
             </div>
           </div>
           <div class="route-split" aria-hidden="true"><span></span><span></span><span></span></div>
-          <div class="execution-routes" aria-label="Execution locations">
-            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false"><span>Default</span><strong>Local compute</strong><small>Execute on this machine</small></button>
-            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false"><span>Opt-in</span><strong>Trusted nodes</strong><small>Execute on managed nodes</small></button>
-            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false"><span>Explicit only</span><strong>External compute</strong><small>Cross the boundary by policy</small></button>
+          <div class="execution-routes" aria-label="Selectable execution locations">
+            <button class="execution-route route-local" type="button" data-architecture-topic="local" aria-pressed="false"><img src="site/icons/laptop.svg" alt=""><strong>Local Compute</strong><span>DEFAULT</span><small>Execute on this machine</small></button>
+            <button class="execution-route route-trusted" type="button" data-architecture-topic="trusted" aria-pressed="false"><img src="site/icons/server.svg" alt=""><strong>Trusted Nodes</strong><span>OPT-IN</span><small>Execute on trusted, managed nodes</small></button>
+            <button class="execution-route route-external" type="button" data-architecture-topic="external" aria-pressed="false"><img src="site/icons/cloud.svg" alt=""><strong>External Compute</strong><span>EXPLICIT ONLY</span><small>Execute outside the machine only by policy decision</small></button>
           </div>
         </div>
 
         <aside class="ecos-application" aria-labelledby="ecos-app-title">
-          <div class="schema-heading"><h3 id="ecos-app-title">ecOS application</h3><p>Simple, standardized access to AI</p></div>
+          <div class="schema-heading"><h3 id="ecos-app-title">ecOS Application</h3><p>Simple, standardized access to AI</p></div>
           <div class="ecos-app-flow" aria-label="Application integration through CogPOSIX and ecOS">
-            <button type="button" data-architecture-topic="applications" aria-pressed="false">Application</button><span aria-hidden="true">↓</span>
-            <button type="button" data-architecture-topic="cogposix" aria-pressed="false">CogPOSIX <small>capability</small></button><span aria-hidden="true">↓</span>
-            <button type="button" data-architecture-topic="ecos" aria-pressed="false">ecOS <small>operating system</small></button>
+            <div>Application</div><span aria-hidden="true">↓</span>
+            <div class="right-contract"><img src="site/icons/file-text.svg" alt=""><strong>CogPOSIX</strong><small>capability</small></div><span aria-hidden="true">↓</span>
+            <div class="right-ecos"><img src="site/icons/settings.svg" alt=""><strong>ecOS</strong><small>(Operating System)</small></div>
           </div>
           <ul class="ecos-benefits"><li>Centralized model management</li><li>Unified security &amp; policy</li><li>Controlled execution locality</li><li>Efficient resource scheduling</li><li>Auditable and observable</li><li>Explicit trust boundaries</li></ul>
         </aside>
       </div>
 
-      <aside class="architecture-detail" aria-live="polite" aria-atomic="true">
+      <aside class="architecture-detail" aria-live="polite" aria-atomic="true" hidden>
         <p class="architecture-label" id="architecture-detail-label">Request</p>
         <h3 id="architecture-detail-title">Applications ask for capabilities.</h3>
         <p id="architecture-detail-copy">A writing tool, IDE, analytics workflow or creative application describes the AI task and its data contract without selecting a hard-coded model provider.</p>
@@ -115,10 +98,11 @@
       </aside>
 
       <div class="architecture-principles" aria-label="Core architecture principles">
-        <p><strong>Close to the data</strong><span>Execute where policy and workload requirements are best satisfied.</span></p>
-        <p><strong>Cloud is not the default</strong><span>External compute is available only through an explicit decision.</span></p>
-        <p><strong>Trust boundaries stay visible</strong><span>Every transition changes the security context.</span></p>
-        <p><strong>Distribution is controlled</strong><span>Node participation never grants automatic data or training access.</span></p>
+        <div class="principles-title"><h3>Core Principles</h3></div>
+        <div class="principle-item"><img src="site/icons/database.svg" alt=""><p>Intelligence should execute<br>as close to the data as possible</p></div>
+        <div class="principle-item"><img src="site/icons/cloud-off.svg" alt=""><p>Cloud computation<br>is not the default</p></div>
+        <div class="principle-item"><img src="site/icons/shield-check.svg" alt=""><p>Every transition across<br>a trust boundary is a policy decision</p></div>
+        <div class="principle-item"><img src="site/icons/network.svg" alt=""><p>Distribution<br>is not automatic</p></div>
       </div>
     </section>
 

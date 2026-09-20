@@ -27,9 +27,8 @@ test('public page has exact title and no deployment or old status copy', () => {
   const page = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   assert(page.includes('<title>ecOS &gt;_ CogPOSIX</title>'));
   assert(!/PUBLICATION|docs\/website|Provisional project names|Open development|live-dot/.test(page));
-  assert(page.includes('site/capabilities.svg'));
-  assert(page.includes('site/capabilities-mobile.svg'));
-  assert(!page.includes('class="capability-strip"'));
+  assert(!page.includes('One interface. Many kinds of intelligence.'));
+  assert(!page.includes('class="capability-graphic"'));
   assert(page.includes('id="distributed"'));
   assert(page.includes('Distributed execution and database integration are planned'));
   assert(page.includes('The open OS bringing a new POSIX to machine intelligence.'));
@@ -44,18 +43,20 @@ test('architecture explorer reproduces the system map as accessible interactive 
   const script = fs.readFileSync(new URL('../site/main.js', import.meta.url), 'utf8');
   const section = page.match(/<section class="architecture-explorer"[\s\S]*?<\/section>/)?.[0];
   assert(section);
-  assert.equal((section.match(/data-architecture-topic=/g) || []).length, 19);
-  for (const text of ['Applications', 'CogPOSIX', 'ecOS', 'Local compute', 'Trusted nodes',
-    'External compute', 'Capability resolution']) {
+  assert.equal((section.match(/data-architecture-topic=/g) || []).length, 13);
+  for (const text of ['Applications', 'CogPOSIX', 'ecOS', 'Local Compute', 'Trusted Nodes',
+    'External Compute', 'Capability']) {
     assert(page.includes(text), text);
   }
   assert(section.includes('aria-live="polite"'));
-  assert(section.includes('aria-pressed="true"'));
+  assert(section.includes('aria-pressed="false"'));
   assert(section.includes('Traditional AI application'));
   assert(section.includes('ecOS application'));
   assert(section.includes('Centralized model management'));
-  assert(section.includes('Without a shared system layer'));
-  assert(section.includes('Execution boundaries are harder to inspect'));
+  assert(section.includes('Duplicated infrastructure'));
+  assert(section.includes('Execution boundary often invisible to the user'));
+  assert(section.includes('Core Principles'));
+  assert(section.includes('cloud-off.svg'));
   assert(page.includes('<a href="#architecture-map">Architecture</a>'));
   assert(page.includes('href="#architecture-map">Explore the architecture'));
   assert(!page.includes('ecos-cogposix_simplified-schema.png'));
@@ -120,7 +121,7 @@ test('Pages preparation exports complete static files without deployment notes o
   t.after(() => fs.rmSync(parent, {recursive:true, force:true}));
   const destination = path.join(parent, 'public');
   execFileSync(process.execPath, [path.join(root, 'scripts/prepare-pages.mjs'), destination]);
-  for (const name of ['index.html', '.nojekyll', 'site/capabilities.svg', 'site/capabilities-mobile.svg',
+  for (const name of ['index.html', '.nojekyll', 'site/icons/laptop.svg',
     'site/documents.js', 'site/vendor/marked.js', 'docs/cogposix.md', 'LICENSE']) {
     assert(fs.existsSync(path.join(destination, name)), name);
   }

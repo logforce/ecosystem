@@ -11,7 +11,13 @@ import { documentBundleFromSnapshot, readerPaths } from './build-site-docs.mjs';
 // A website is not a source release. Do not recursively copy the working tree.
 export const websitePaths = [...new Set([
   'index.html', '.nojekyll', 'site/style.css', 'site/main.js', 'site/documents.js',
-  'site/capabilities.svg', 'site/capabilities-mobile.svg',
+  'site/icons/activity.svg', 'site/icons/box.svg', 'site/icons/chart-no-axes-column.svg',
+  'site/icons/cloud.svg', 'site/icons/cloud-off.svg', 'site/icons/code.svg', 'site/icons/cpu.svg', 'site/icons/database.svg',
+  'site/icons/ellipsis.svg', 'site/icons/file-text.svg', 'site/icons/image.svg',
+  'site/icons/list-check.svg', 'site/icons/locate-fixed.svg', 'site/icons/laptop.svg', 'site/icons/memory-stick.svg',
+  'site/icons/network.svg', 'site/icons/route.svg', 'site/icons/search.svg', 'site/icons/server.svg',
+  'site/icons/settings.svg', 'site/icons/share-2.svg', 'site/icons/shield-check.svg',
+  'site/icons/shield.svg', 'site/icons/workflow.svg',
   'site/vendor/marked.js', 'site/vendor/purify.js',
   'assets/ecOS-ystem_logo.png', 'assets/ecOS-ystem_square_logo.png',
   'assets/local-compute-hero.png', 'NOTICE', ...readerPaths,

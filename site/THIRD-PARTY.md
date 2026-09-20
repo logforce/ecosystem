@@ -13,7 +13,13 @@ Editorial prose: CC BY 4.0, attributed to ecOS and CogPOSIX contributors.
 
 The renderer sanitizes parsed Markdown and limits navigation to reviewed document
 content. It does not fetch arbitrary remote Markdown or execute embedded scripts.
-See [Marked](https://marked.js.org/) and [DOMPurify](https://github.com/cure53/DOMPurify).
+  See [Marked](https://marked.js.org/) and [DOMPurify](https://github.com/cure53/DOMPurify).
+
+## Architecture Icons
+
+- Lucide Static icons: MIT, copyright Lucide contributors. The selected SVG
+  icons are included locally for the interactive architecture diagram.
+  See [Lucide](https://lucide.dev/).
 
 ## Images
 
