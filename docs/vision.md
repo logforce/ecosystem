@@ -2,7 +2,7 @@
 
 ## 1. Thesis
 
-ecOS >_CogPOSIX is an open, next-generation operating-system project for local,
+ecOS >_ CogPOSIX is an open, next-generation operating-system project for local,
 sovereign and offline AI. It combines an OS architecture with a POSIX-inspired
 execution contract so that models can be managed as native computing resources.
 The Linux runtime is the current implementation milestone; an installable OS

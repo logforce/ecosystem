@@ -86,7 +86,7 @@ test('community destinations link to the approved workspace and repository', () 
 
 test('project introduction uses unified identity and states delivery status', () => {
   const readme = fs.readFileSync(new URL('../README.md', import.meta.url), 'utf8');
-  assert(readme.startsWith('# ecOS >_CogPOSIX\n'));
+  assert(readme.startsWith('# ecOS >_ CogPOSIX\n'));
   assert(readme.includes('local-first, not local-only'));
   assert(readme.includes('Authorized service'));
   assert(readme.includes('consumer laptop is a primary deployment target'));
@@ -95,7 +95,7 @@ test('project introduction uses unified identity and states delivery status', ()
   for (const name of ['README.md', 'docs/vision.md', 'docs/operating-system.md',
     'docs/deployment-examples.md', 'TRADEMARKS.md']) {
     const text = fs.readFileSync(path.join(root, name), 'utf8');
-    assert(text.includes('ecOS >_CogPOSIX'), name);
+    assert(text.includes('ecOS >_ CogPOSIX'), name);
     assert(!/our (?:new operating system|OS project)|third-party (?:OS that|operating.system (?:product|or product))/.test(text), name);
   }
 });

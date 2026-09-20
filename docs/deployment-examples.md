@@ -8,7 +8,7 @@ accelerator support and distributed fabric remain planned. See the
 
 ## 1. Read the Architecture Correctly
 
-ecOS >_CogPOSIX is a next-generation OS project for local, sovereign and offline
+ecOS >_ CogPOSIX is a next-generation OS project for local, sovereign and offline
 AI, with policy-controlled decentralized execution on the roadmap. Its system
 interface makes model execution a managed computing capability across desktops,
 workstations and edge systems. OT and IoT are two deployment domains within that
