@@ -174,6 +174,9 @@ mod tests {
         sync::{atomic::AtomicU64, Arc},
     };
     static NEXT: AtomicU64 = AtomicU64::new(0);
+    // Parallel fixture writes and process spawns can inherit a writable script
+    // descriptor before exec closes it, causing Linux ETXTBSY in another test.
+    static FIXTURE_LOCK: Mutex<()> = Mutex::new(());
     struct Fixture {
         backend: Arc<ProcessBackend>,
         directory: PathBuf,
@@ -205,6 +208,7 @@ mod tests {
     }
     #[test]
     fn crash_is_not_retried_and_next_job_starts_a_fresh_worker() {
+        let _fixture_guard = FIXTURE_LOCK.lock().unwrap();
         let f = Fixture::new(
             "printf COGW1\nwhile /usr/bin/head -c 792 >/dev/null; do printf 'DIG1\\001\\000\\000\\000\\000\\000\\000\\000\\003'; done",
             Duration::from_secs(2),
@@ -238,6 +242,7 @@ mod tests {
     }
     #[test]
     fn startup_and_inference_deadlines_reap_the_child() {
+        let _fixture_guard = FIXTURE_LOCK.lock().unwrap();
         for body in ["exec /bin/sleep 60", "printf COGW1\nexec /bin/sleep 60"] {
             let f = Fixture::new(body, Duration::from_millis(100));
             assert_eq!(
@@ -249,6 +254,7 @@ mod tests {
     }
     #[test]
     fn cancellation_and_malformed_responses_discard_workers() {
+        let _fixture_guard = FIXTURE_LOCK.lock().unwrap();
         let f = Fixture::new("printf COGW1\nexec /bin/sleep 60", Duration::from_secs(2));
         let cancelled = Arc::new(AtomicBool::new(false));
         let (backend, flag) = (f.backend.clone(), cancelled.clone());
@@ -273,6 +279,7 @@ mod tests {
     }
     #[test]
     fn capability_has_explicit_shapes_and_no_mock_delay() {
+        let _fixture_guard = FIXTURE_LOCK.lock().unwrap();
         let f = Fixture::new("exit 1", Duration::from_secs(2));
         let input = TensorDesc {
             offset: 0,

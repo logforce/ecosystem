@@ -31,8 +31,8 @@ test('public page has exact title and no deployment or old status copy', () => {
   assert(!page.includes('class="capability-graphic"'));
   assert(page.includes('id="distributed"'));
   assert(page.includes('Distributed execution and database integration are planned'));
-  assert(page.includes('The open OS bringing a new POSIX to machine intelligence.'));
-  assert(page.includes('ecOS is built around CogPOSIX, a system-level execution standard for running AI models as <strong>native</strong> computing resources, designed for performance and security.'));
+  assert(page.includes('The open OS bringing a new POSIX-inspired interface to machine intelligence.'));
+  assert(page.includes('ecOS is built around CogPOSIX, a system-level execution interface for running AI models as <strong>native</strong> computing resources, designed for performance and security.'));
   assert(!page.includes('reader-permalink'));
   assert(!/ecOS (?:&gt;|>)_[,.;:!?]/.test(page));
   assert(!/ecos\.sourceware|eCos RTOS|existing eCos project/.test(documentBundle(root)));

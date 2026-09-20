@@ -5,6 +5,11 @@ architecture, execution runtime and CogPOSIX system interface.
 This policy does not assert registered
 trademark status, POSIX certification or endorsement by a standards organization.
 
+ecOS >_CogPOSIX is an independent project and is not affiliated with, endorsed by,
+or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
+POSIX is a trademark of IEEE. References to POSIX describe the inspiration for
+the interface, not an official revision or extension of the POSIX standard.
+
 Accurate textual references to the project, attribution, discussion, and truthful
 statements about an independent implementation are welcome. Clearly identify
 modified or independent distributions and avoid suggesting endorsement or official

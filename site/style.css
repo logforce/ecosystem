@@ -304,6 +304,7 @@ body.reader-open{overflow:hidden}#reader{padding:0;width:min(1160px,94%);height:
 
 /* One synchronized invitation for the interactive controls. */
 .architecture-explorer{border-top:0}
+footer .trademark-notice{grid-column:1/-1;text-align:left;border-top:1px solid var(--line);padding-top:20px}
 .closing.ot-closing{position:relative;min-height:520px;background:#fff url('../assets/ot-system-hero.png') center right/cover no-repeat;color:var(--ink);overflow:hidden}
 .ot-closing>.eyebrow,.ot-closing>h2,.ot-closing>p,.ot-closing>.actions{position:relative;z-index:1;max-width:510px}
 .ot-closing>h2{font-size:58px}
