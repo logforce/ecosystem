@@ -9,6 +9,7 @@ const reviewedArt = new Map([
   ['assets/ecOS-ystem_logo.png', '72e319fd8ddb42c9d2f304af0ad82e819996a0920b1fd1b2452ebf4e51c75a4f'],
   ['assets/ecOS-ystem_square_logo.png', '597e4bd6be111b53726f8f1dbd4babe1830daed8f67edf52586d8a2f7f6dee0c'],
   ['assets/local-compute-hero.png', '461de48cb22a84074f29333978b9ade88597020af7c4c6d8477f8f203817e3e6'],
+  ['assets/ot-system-hero.png', 'c360083e2a04c5bd7ce303c9a9cfadcb2b63ac3ac70a4f40368ac02228007ca1'],
 ]);
 const excludedParts = new Set(['internal', 'private', 'enterprise', 'logforce']);
 const excludedNames = new Set(['docs/business-impact.md', 'docs/website.md']);
@@ -110,7 +111,8 @@ export function collectSnapshot(source) {
     }
     validatePath(entry.path);
     if (!licenses.has(entry.license)) throw new Error(`Unknown license: ${entry.path}`);
-    const artworkLicense = entry.path === 'assets/local-compute-hero.png' ? 'CC-BY-4.0' : 'LicenseRef-Brand-Reserved';
+    const artworkLicense = ['assets/local-compute-hero.png', 'assets/ot-system-hero.png'].includes(entry.path)
+      ? 'CC-BY-4.0' : 'LicenseRef-Brand-Reserved';
     if ((reviewedArt.has(entry.path) && entry.license !== artworkLicense) ||
         (!reviewedArt.has(entry.path) && entry.license === 'LicenseRef-Brand-Reserved')) {
       throw new Error(`Artwork license mismatch: ${entry.path}`);
