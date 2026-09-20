@@ -39,3 +39,9 @@ space for the website heading; crisp isometric detail; no text or logos.
 
 The documentation bundle retains each source document's license and notices.
 LOGFORCE technology is not included or licensed through these website assets.
+
+The [OT system illustration](../assets/ot-system-hero.png) was generated with
+OpenAI's built-in image-generation tool for the closing website section. It is
+conceptual artwork, not a product photograph or an industrial safety claim. It
+is offered under CC BY 4.0 to the extent copyright applies; attribute ecOS and
+CogPOSIX contributors and indicate modifications.

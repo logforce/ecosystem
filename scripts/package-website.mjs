@@ -20,7 +20,7 @@ export const websitePaths = [...new Set([
   'site/icons/shield.svg', 'site/icons/workflow.svg',
   'site/vendor/marked.js', 'site/vendor/purify.js',
   'assets/ecOS-ystem_logo.png', 'assets/ecOS-ystem_square_logo.png',
-  'assets/local-compute-hero.png', 'NOTICE', ...readerPaths,
+  'assets/local-compute-hero.png', 'assets/ot-system-hero.png', 'NOTICE', ...readerPaths,
 ])].sort();
 
 export function scanWebsiteText(name, text) {

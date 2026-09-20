@@ -118,6 +118,7 @@
     { "path": "assets/ecOS-ystem_logo.png", "license": "LicenseRef-Brand-Reserved" },
     { "path": "assets/ecOS-ystem_square_logo.png", "license": "LicenseRef-Brand-Reserved" },
     { "path": "assets/local-compute-hero.png", "license": "CC-BY-4.0" },
+    { "path": "assets/ot-system-hero.png", "license": "CC-BY-4.0" },
     { "path": "site/THIRD-PARTY.md", "license": "CC-BY-4.0" },
     { "path": "site/vendor/marked.js", "license": "MIT" },
     { "path": "site/vendor/MARKED-LICENSE.txt", "license": "License-Text" },
