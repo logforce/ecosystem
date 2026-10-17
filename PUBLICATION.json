@@ -25,6 +25,7 @@
     { "path": "docs/architecture.md", "license": "CC-BY-4.0" },
     { "path": "docs/deployment-examples.md", "license": "CC-BY-4.0" },
     { "path": "docs/distributed-intelligence.md", "license": "CC-BY-4.0" },
+    { "path": "docs/cogsheet-integration.md", "license": "CC-BY-4.0" },
     { "path": "docs/cogposix.md", "license": "CC-BY-4.0" },
     { "path": "docs/models-and-capabilities.md", "license": "CC-BY-4.0" },
     { "path": "docs/operating-system.md", "license": "CC-BY-4.0" },
@@ -50,6 +51,7 @@
     { "path": "crates/ecos-daemon/src/main.rs", "license": "Apache-2.0" },
     { "path": "crates/ecos-daemon/src/platform.rs", "license": "Apache-2.0" },
     { "path": "crates/ecos-daemon/src/runtime.rs", "license": "Apache-2.0" },
+    { "path": "crates/ecos-daemon/src/scheduler.rs", "license": "Apache-2.0" },
     { "path": "crates/ecos-daemon/tests/runtime.rs", "license": "Apache-2.0" },
     { "path": "crates/cog-client/Cargo.toml", "license": "Apache-2.0" },
     { "path": "crates/cog-client/src/lib.rs", "license": "Apache-2.0" },
@@ -129,6 +131,16 @@
     { "path": "scripts/prepare-pages.mjs", "license": "Apache-2.0" },
     { "path": "scripts/package-website.mjs", "license": "Apache-2.0" },
     { "path": "tests/website-package.test.mjs", "license": "Apache-2.0" },
-    { "path": "tests/site-docs.test.mjs", "license": "Apache-2.0" }
+    { "path": "tests/site-docs.test.mjs", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/README.md", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/error.schema.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/capability-request.schema.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/capability-result.schema.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/execution-receipt.schema.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/capability-manifest.schema.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/examples/numeric-summary-request.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/examples/numeric-summary-result.json", "license": "Apache-2.0" },
+    { "path": "contracts/capability/v1/examples/experimental-manifest.json", "license": "Apache-2.0" },
+    { "path": "tests/capability-contract.test.mjs", "license": "Apache-2.0" }
   ]
 }

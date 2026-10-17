@@ -80,8 +80,9 @@ covers setup, testing and troubleshooting.
 | --- | --- |
 | Local daemon, Rust client, C ABI and CLI | Graphical Live ISO, then disk installation |
 | Typed objects, bounded jobs, cancellation and cleanup | Broader capability profiles and model packages |
-| Sealed shared inputs and immutable output snapshots on Linux | Resource scheduling and accelerator backends |
+| Sealed shared inputs and immutable output snapshots on Linux | Accelerator backends |
 | Supervised CPU worker with one approved digit model | Multi-node execution and governed knowledge services |
+| Experimental per-session round-robin and elapsed-time counters (macOS checked) | Authorized priorities, deadline policy and scheduler performance qualification |
 
 The ABI remains experimental. A bootable OS image is not available yet, and the
 runtime is not a production security boundary. Evidence reports document the
@@ -189,6 +190,7 @@ licenses, with an integrated documentation reader.
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
 | [Deployment examples](docs/deployment-examples.md) | How would desktop, edge and OT/IoT applications use the system, and who acts on results? |
 | [Distributed intelligence](docs/distributed-intelligence.md) | How could explicitly enabled trusted nodes share compute and governed knowledge? |
+| [CogSheet™ integration](docs/cogsheet-integration.md) | Which responsibilities belong to the application, the capability contract and the OS runtime? |
 | [CogPOSIX contracts](docs/cogposix.md) | What does an application rely on? What is portable? |
 | [Models and capabilities](docs/models-and-capabilities.md) | How are multiple model classes packaged, evaluated and replaced? |
 | [Installable OS](docs/operating-system.md) | Why Linux, which distribution approach, and what about mobile? |

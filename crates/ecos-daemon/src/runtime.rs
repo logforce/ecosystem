@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
+use crate::scheduler::FairQueue;
 use cog_backend_api::Backend;
 use cog_core::*;
 use cog_protocol::{put32, put64, Request, FEATURES};
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::HashMap,
     panic::{catch_unwind, AssertUnwindSafe},
     sync::{
         atomic::{AtomicBool, AtomicUsize, Ordering},
         Arc, Condvar, Mutex,
     },
     thread,
+    time::{Duration, Instant},
 };
 
 enum Storage {
@@ -69,15 +71,28 @@ struct JobInner {
     status: JobStatus,
     error: Option<Error>,
     resources: Option<Resources>,
+    admitted: bool,
 }
 struct Job {
-    owner: u64,
     delay_ms: u32,
     inner: Mutex<JobInner>,
     cancelled: AtomicBool,
+    submitted_at: Instant,
+    accounting: Arc<Mutex<SchedulingStats>>,
+}
+
+fn duration_ns(duration: Duration) -> u64 {
+    duration.as_nanos().min(u128::from(u64::MAX)) as u64
 }
 
 impl Job {
+    fn admit(&self) {
+        let mut inner = self.inner.lock().unwrap();
+        let mut accounting = self.accounting.lock().unwrap();
+        inner.admitted = true;
+        accounting.accepted = accounting.accepted.saturating_add(1);
+        accounting.queued += 1;
+    }
     fn cancel(&self) {
         let mut inner = self.inner.lock().unwrap();
         if inner.status.terminal() {
@@ -88,16 +103,31 @@ impl Job {
             drop(inner.resources.take());
             inner.error = Some(Error::Cancelled);
             inner.status = JobStatus::Cancelled;
+            if inner.admitted {
+                let mut accounting = self.accounting.lock().unwrap();
+                accounting.queued -= 1;
+                accounting.cancelled = accounting.cancelled.saturating_add(1);
+                accounting.queue_wait_ns = accounting
+                    .queue_wait_ns
+                    .saturating_add(duration_ns(self.submitted_at.elapsed()));
+            }
         }
     }
     fn run(&self, backend: &dyn Backend) {
-        let resources = {
+        let (resources, started_at) = {
             let mut inner = self.inner.lock().unwrap();
             if inner.status != JobStatus::Queued {
                 return;
             }
             inner.status = JobStatus::Running;
-            inner.resources.take().unwrap()
+            let started_at = Instant::now();
+            let mut accounting = self.accounting.lock().unwrap();
+            accounting.queued -= 1;
+            accounting.running += 1;
+            accounting.queue_wait_ns = accounting
+                .queue_wait_ns
+                .saturating_add(duration_ns(started_at.duration_since(self.submitted_at)));
+            (inner.resources.take().unwrap(), started_at)
         };
         let input = {
             let data = resources.input.buffer.data.lock().unwrap();
@@ -145,6 +175,16 @@ impl Job {
             Some(Error::Cancelled) => JobStatus::Cancelled,
             _ => JobStatus::Failed,
         };
+        let mut accounting = self.accounting.lock().unwrap();
+        accounting.running -= 1;
+        accounting.execution_ns = accounting
+            .execution_ns
+            .saturating_add(duration_ns(started_at.elapsed()));
+        match inner.status {
+            JobStatus::Completed => accounting.completed = accounting.completed.saturating_add(1),
+            JobStatus::Cancelled => accounting.cancelled = accounting.cancelled.saturating_add(1),
+            _ => accounting.failed = accounting.failed.saturating_add(1),
+        }
     }
 }
 
@@ -158,11 +198,12 @@ enum Object {
 struct Session {
     objects: HashMap<Handle, Object>,
     bytes: Arc<AtomicUsize>,
+    accounting: Arc<Mutex<SchedulingStats>>,
 }
 struct State {
     next: u64,
     sessions: HashMap<u64, Session>,
-    queue: VecDeque<Arc<Job>>,
+    queue: FairQueue<Arc<Job>>,
     stopping: bool,
 }
 
@@ -184,7 +225,7 @@ impl Runtime {
             state: Mutex::new(State {
                 next: 1,
                 sessions: HashMap::new(),
-                queue: VecDeque::new(),
+                queue: FairQueue::default(),
                 stopping: false,
             }),
             ready: Condvar::new(),
@@ -200,7 +241,7 @@ impl Runtime {
                 if state.stopping {
                     break;
                 }
-                state.queue.pop_front().unwrap()
+                state.queue.pop().unwrap()
             };
             job.run(backend.as_ref());
         });
@@ -225,6 +266,7 @@ impl Runtime {
             Session {
                 objects: HashMap::new(),
                 bytes: Arc::new(AtomicUsize::new(0)),
+                accounting: Arc::new(Mutex::new(SchedulingStats::default())),
             },
         );
         Ok(id)
@@ -237,7 +279,7 @@ impl Runtime {
                     job.cancel();
                 }
             }
-            state.queue.retain(|job| job.owner != owner);
+            state.queue.remove_owner(owner);
         }
     }
     pub fn shutdown(&self) {
@@ -318,6 +360,23 @@ impl Runtime {
                         .filter(|o| matches!(o, Object::Job(_)))
                         .count() as u32,
                 );
+                Ok(out)
+            }
+            Request::SchedulingStats => {
+                let accounting = state.sessions[&owner].accounting.lock().unwrap();
+                let mut out = Vec::with_capacity(56);
+                put32(&mut out, accounting.queued);
+                put32(&mut out, accounting.running);
+                for value in [
+                    accounting.accepted,
+                    accounting.completed,
+                    accounting.failed,
+                    accounting.cancelled,
+                    accounting.queue_wait_ns,
+                    accounting.execution_ns,
+                ] {
+                    put64(&mut out, value);
+                }
                 Ok(out)
             }
             Request::ModelOpen(name) => {
@@ -437,12 +496,14 @@ impl Runtime {
                     b.busy = true;
                 }
                 let job = Arc::new(Job {
-                    owner,
                     delay_ms,
                     cancelled: AtomicBool::new(false),
+                    submitted_at: Instant::now(),
+                    accounting: state.sessions[&owner].accounting.clone(),
                     inner: Mutex::new(JobInner {
                         status: JobStatus::Queued,
                         error: None,
+                        admitted: false,
                         resources: Some(Resources {
                             input,
                             output,
@@ -456,7 +517,8 @@ impl Runtime {
                     job.cancel();
                     return result;
                 }
-                state.queue.push_back(job);
+                job.admit();
+                state.queue.push(owner, job);
                 self.ready.notify_one();
                 result
             }
@@ -475,7 +537,9 @@ impl Runtime {
                     return Err(Error::Invalid);
                 };
                 job.cancel();
-                state.queue.retain(|queued| !Arc::ptr_eq(queued, &job));
+                state
+                    .queue
+                    .retain_owner(owner, |queued| !Arc::ptr_eq(queued, &job));
                 Ok(vec![])
             }
             Request::ModelClose(h)

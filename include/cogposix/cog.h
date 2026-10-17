@@ -21,6 +21,7 @@ extern "C" {
 #define COG_FEATURE_INLINE_IO 1
 #define COG_FEATURE_INLINE_MOCK COG_FEATURE_INLINE_IO
 #define COG_FEATURE_SEALED_SHM 2
+#define COG_FEATURE_SESSION_SCHEDULING 4
 #define COG_MAX_RANK 8
 #define COG_DTYPE_U8 1
 typedef uint64_t cog_context_t;
@@ -41,9 +42,28 @@ typedef struct cog_tensor_desc {
     uint64_t shape[COG_MAX_RANK]; /* unused entries zero; contiguous layout */
 } cog_tensor_desc_t;
 
+/* Optional additive ABI 0.2 extension, gated by SESSION_SCHEDULING.
+ * Set struct_size = sizeof(cog_scheduling_stats_t), reserved = 0.
+ * Counters are session-scoped, saturating and retained until context destruction.
+ * Times are elapsed nanoseconds, not CPU usage or a hard latency guarantee. */
+typedef struct cog_scheduling_stats {
+    uint32_t struct_size;
+    uint32_t reserved;
+    uint32_t queued;
+    uint32_t running;
+    uint64_t accepted;
+    uint64_t completed;
+    uint64_t failed;
+    uint64_t cancelled;
+    uint64_t queue_wait_ns;
+    uint64_t execution_ns;
+} cog_scheduling_stats_t;
+
 cog_status_t cog_context_create(const char *socket, cog_context_t *out);
 cog_status_t cog_context_destroy(cog_context_t context);
 cog_status_t cog_context_features(cog_context_t context, uint64_t *out);
+/* Valid-sized output counters are cleared before a failed context/query lookup. */
+cog_status_t cog_context_scheduling_stats(cog_context_t context, cog_scheduling_stats_t *out);
 /* Linux only: import an immutable memfd with WRITE/GROW/SHRINK/SEAL seals and
  * exact declared size. fd is borrowed through this call; the daemon owns a copy.
  * Imported buffers are input-only. No process may retain a writable shared map.

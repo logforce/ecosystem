@@ -3,10 +3,13 @@
 #include "cogposix/cog.h"
 #include <assert.h>
 #include <pthread.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <time.h>
 
 _Static_assert(sizeof(cog_tensor_desc_t) == 88, "unexpected tensor ABI layout");
+_Static_assert(sizeof(cog_scheduling_stats_t) == 64, "unexpected scheduling ABI layout");
+_Static_assert(offsetof(cog_scheduling_stats_t, accepted) == 16, "unexpected counter offset");
 struct wait_args { cog_context_t ctx; cog_handle_t job; cog_status_t result; };
 static void *wait_job(void *data) {
     struct wait_args *args = data;
@@ -25,6 +28,15 @@ int main(int argc, char **argv) {
     uint64_t features = 0;
     assert(cog_context_features(a, &features) == COG_OK);
     assert(features & COG_FEATURE_INLINE_MOCK);
+    assert(features & COG_FEATURE_SESSION_SCHEDULING);
+    cog_scheduling_stats_t scheduling = {0};
+    assert(cog_context_scheduling_stats(a, NULL) == COG_EINVAL);
+    assert(cog_context_scheduling_stats(a, &scheduling) == COG_EINVAL);
+    scheduling.struct_size = sizeof(scheduling); scheduling.reserved = 1;
+    assert(cog_context_scheduling_stats(a, &scheduling) == COG_EINVAL);
+    scheduling.reserved = 0;
+    assert(cog_context_scheduling_stats(a, &scheduling) == COG_OK);
+    assert(scheduling.accepted == 0 && scheduling.queued == 0 && scheduling.running == 0);
 #ifndef __linux__
     assert(!(features & COG_FEATURE_SEALED_SHM));
     int32_t unsupported_fd = 0; uint64_t unsupported_size = 1;
@@ -56,8 +68,16 @@ int main(int argc, char **argv) {
     assert(args.result == COG_ECANCELLED);
     assert(cog_job_release(a, job) == COG_OK);
     assert(cog_job_release(a, job) == COG_EINVAL);
+    assert(cog_context_scheduling_stats(a, &scheduling) == COG_OK);
+    assert(scheduling.accepted == 1 && scheduling.cancelled == 1);
+    assert(scheduling.completed == 0 && scheduling.failed == 0 && scheduling.queued == 0 && scheduling.running == 0);
+    assert(cog_context_scheduling_stats(b, &scheduling) == COG_OK);
+    assert(scheduling.accepted == 0 && scheduling.execution_ns == 0);
     assert(cog_context_destroy(a) == COG_OK);
     assert(cog_context_destroy(a) == COG_EINVAL);
+    scheduling.accepted = 999;
+    assert(cog_context_scheduling_stats(a, &scheduling) == COG_EINVAL);
+    assert(scheduling.accepted == 0);
     assert(cog_context_destroy(b) == COG_OK);
     puts("C ABI errors, ownership, layout, size query and concurrent cancellation verified.");
     return 0;

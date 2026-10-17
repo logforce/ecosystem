@@ -12,7 +12,7 @@ use std::{
     process::{Command, Stdio},
     sync::{
         atomic::{AtomicBool, AtomicU64, Ordering},
-        Arc,
+        Arc, Condvar, Mutex,
     },
     thread,
     time::{Duration, Instant},
@@ -90,6 +90,168 @@ fn work(client: &mut Client) -> Work {
         a,
         b,
     }
+}
+
+#[derive(Default)]
+struct GatedBackend {
+    trace: Mutex<Vec<u8>>,
+    open: Mutex<bool>,
+    wake: Condvar,
+}
+impl GatedBackend {
+    fn release(&self) {
+        *self.open.lock().unwrap() = true;
+        self.wake.notify_all();
+    }
+}
+impl Backend for GatedBackend {
+    fn supports(&self, artifact: &str) -> bool {
+        artifact == "mock.increment.v1"
+    }
+    fn execute(&self, input: &[u8], _: u32, cancelled: &AtomicBool) -> cog_core::Result<Vec<u8>> {
+        self.trace.lock().unwrap().push(input[0]);
+        if input[0] == 0 {
+            let mut open = self.open.lock().unwrap();
+            while !*open && !cancelled.load(Ordering::Acquire) {
+                open = self
+                    .wake
+                    .wait_timeout(open, Duration::from_millis(2))
+                    .unwrap()
+                    .0;
+            }
+        }
+        if cancelled.load(Ordering::Acquire) {
+            return Err(Error::Cancelled);
+        }
+        Ok(input.iter().map(|value| value.wrapping_add(1)).collect())
+    }
+}
+fn marked_job(client: &mut Client, marker: u8) -> (Work, u64) {
+    let data = work(client);
+    client.buffer_write(data.input, &[marker; 4]).unwrap();
+    let job = client.submit(data.model, data.a, data.b, 0).unwrap();
+    (data, job)
+}
+
+#[test]
+fn round_robin_runs_three_real_clients_without_backlog_monopoly() {
+    let backend = Arc::new(GatedBackend::default());
+    let f = Fixture::backend(backend.clone());
+    let (mut a, mut b, mut c) = (f.client(), f.client(), f.client());
+    let first = marked_job(&mut a, 0);
+    until(|| a.job_status(first.1).unwrap().0 == JobStatus::Running);
+    let a_jobs: Vec<_> = (1..=3).map(|marker| marked_job(&mut a, marker)).collect();
+    let b_jobs: Vec<_> = (10..=11).map(|marker| marked_job(&mut b, marker)).collect();
+    let c_jobs: Vec<_> = (20..=21).map(|marker| marked_job(&mut c, marker)).collect();
+    let before = a.scheduling_stats().unwrap();
+    assert_eq!((before.accepted, before.running, before.queued), (4, 1, 3));
+    assert_eq!(b.scheduling_stats().unwrap().queued, 2);
+    assert_eq!(c.scheduling_stats().unwrap().queued, 2);
+    backend.release();
+    for (client, jobs) in [(&mut a, &a_jobs), (&mut b, &b_jobs), (&mut c, &c_jobs)] {
+        for (_, job) in jobs {
+            assert_eq!(
+                client.wait(*job, Duration::from_secs(2)),
+                Ok(JobStatus::Completed)
+            );
+            client.job_release(*job).unwrap();
+        }
+        let stats = client.scheduling_stats().unwrap();
+        assert_eq!(stats.accepted, stats.completed);
+        assert_eq!(stats.queued + stats.running, 0);
+        assert_eq!(stats.failed + stats.cancelled, 0);
+        assert!(stats.queue_wait_ns > 0 && stats.execution_ns > 0);
+    }
+    assert_eq!(
+        *backend.trace.lock().unwrap(),
+        vec![0, 1, 10, 20, 2, 11, 21, 3]
+    );
+    a.job_release(first.1).unwrap();
+    assert_eq!(a.scheduling_stats().unwrap().completed, 4);
+    assert_eq!(a.buffer_read(a_jobs[2].0.output).unwrap(), vec![4; 4]);
+    drop((a, b, c));
+    f.empty();
+}
+
+#[test]
+fn scheduler_cancellation_disconnect_and_session_accounting_do_not_leave_turns() {
+    let backend = Arc::new(GatedBackend::default());
+    let f = Fixture::backend(backend.clone());
+    let (mut a, mut b, mut disconnected) = (f.client(), f.client(), f.client());
+    let first = marked_job(&mut a, 0);
+    until(|| a.job_status(first.1).unwrap().0 == JobStatus::Running);
+    let cancelled = marked_job(&mut b, 8);
+    let abandoned = marked_job(&mut disconnected, 9);
+    b.job_cancel(cancelled.1).unwrap();
+    b.job_cancel(cancelled.1).unwrap();
+    b.job_release(cancelled.1).unwrap();
+    let before = b.scheduling_stats().unwrap();
+    assert_eq!(
+        (
+            before.accepted,
+            before.cancelled,
+            before.queued,
+            before.running
+        ),
+        (1, 1, 0, 0)
+    );
+    assert_eq!(before.execution_ns, 0);
+    assert!(before.queue_wait_ns > 0);
+    drop((disconnected, abandoned));
+    until(|| f.server.as_ref().unwrap().metrics().sessions == 2);
+    let next = marked_job(&mut b, 2);
+    backend.release();
+    b.wait(next.1, Duration::from_secs(2)).unwrap();
+    a.wait(first.1, Duration::from_secs(2)).unwrap();
+    assert_eq!(*backend.trace.lock().unwrap(), vec![0, 2]);
+    let stats = b.scheduling_stats().unwrap();
+    assert_eq!(
+        (
+            stats.accepted,
+            stats.completed,
+            stats.cancelled,
+            stats.failed
+        ),
+        (2, 1, 1, 0)
+    );
+    drop((a, b));
+    f.empty();
+}
+
+struct RejectingBackend;
+impl Backend for RejectingBackend {
+    fn supports(&self, artifact: &str) -> bool {
+        artifact == "mock.increment.v1"
+    }
+    fn execute(&self, _: &[u8], _: u32, _: &AtomicBool) -> cog_core::Result<Vec<u8>> {
+        Err(Error::Backend)
+    }
+}
+#[test]
+fn failure_counters_survive_release_rejections_do_not_count_and_other_sessions_are_empty() {
+    let f = Fixture::backend(Arc::new(RejectingBackend));
+    let (mut a, mut b) = (f.client(), f.client());
+    let (data, job) = marked_job(&mut a, 1);
+    assert_eq!(a.wait(job, Duration::from_secs(2)), Err(Error::Backend));
+    a.job_release(job).unwrap();
+    assert_eq!(a.submit(data.model, data.a, data.a, 0), Err(Error::Invalid));
+    let stats = a.scheduling_stats().unwrap();
+    assert_eq!(
+        (
+            stats.accepted,
+            stats.failed,
+            stats.completed,
+            stats.cancelled
+        ),
+        (1, 1, 0, 0)
+    );
+    assert_eq!(stats.queued + stats.running, 0);
+    assert_eq!(
+        b.scheduling_stats().unwrap(),
+        cog_core::SchedulingStats::default()
+    );
+    drop((a, b));
+    f.empty();
 }
 
 #[test]

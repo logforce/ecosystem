@@ -3,6 +3,7 @@
 compile_error!("R1 supports Linux and macOS Unix sockets only");
 mod platform;
 mod runtime;
+mod scheduler;
 use cog_backend_api::Backend;
 use cog_backend_mock::MockBackend;
 use cog_protocol::{Frame, Request, RESPONSE};

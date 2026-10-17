@@ -13,7 +13,7 @@ fn main() {
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.len() == 1 && args[0] == "--help" {
-        println!("cog --socket PATH demo [byte,byte,...]\ncog --socket PATH stats\ncog --socket PATH transport-bench (Linux)\ncog --socket PATH digit INPUT.u8 (784 grayscale bytes)");
+        println!("cog --socket PATH demo [byte,byte,...]\ncog --socket PATH stats\ncog --socket PATH scheduling-stats\ncog --socket PATH transport-bench (Linux)\ncog --socket PATH digit INPUT.u8 (784 grayscale bytes)");
         return Ok(());
     }
     if args.len() < 3 || args[0] != "--socket" {
@@ -65,6 +65,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(target_os = "linux")]
         "transport-bench" if args.len() == 3 => bench::run(&mut client)?,
         "stats" if args.len() == 3 => println!("{:?}", client.stats()?),
+        "scheduling-stats" if args.len() == 3 => println!("{:?}", client.scheduling_stats()?),
         "demo" if args.len() <= 4 => {
             let data = args
                 .get(3)
@@ -96,6 +97,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             client.buffer_free(output)?;
             client.model_close(model)?;
             println!("cleanup={:?}", client.stats()?);
+            println!("scheduling={:?}", client.scheduling_stats()?);
         }
         _ => return Err("use cog --help".into()),
     }

@@ -28,7 +28,7 @@ cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --offline -- -D warnings
 cargo test --workspace --offline
 node scripts/smoke.mjs
-node --test tests/publication.test.mjs
+node --test
 node scripts/publication.mjs check
 ```
 
@@ -69,6 +69,61 @@ are two CPUs, 2 GiB memory and 256 processes. The container is removed after the
 run; the tooling image remains cached locally. This is a development validation
 image, not an ecOS distribution or a production base image. The Docker service
 itself is outside the test container's security boundary.
+
+## Local Scheduling and Accounting Subset
+
+Implementation increment, 17 October 2026. ecOS >_ CogPOSIX now dispatches one
+queued job per ready session in round-robin order, keeping FIFO order within each
+session. A large backlog no longer takes every turn ahead of another ready
+session. Active work remains nonpreemptive. Existing memory, session, object and
+job admission limits remain in force.
+
+The optional wire-1.1 extension uses HELLO feature bit 4 and opcode 3. Rust exposes
+`Client::scheduling_stats`; C exposes `cog_context_scheduling_stats` with a new
+separate 64-byte output struct. Existing wire messages and C ABI 0.2 layouts remain
+unchanged. The [protocol](protocol.md) defines field order and timing semantics.
+
+Counters are private to a connection and retain its accepted/completed/failed/
+cancelled totals even after terminal handles are released. Rejected submissions
+do not count. Queue wait and execution are cumulative monotonic elapsed intervals,
+not CPU usage, model accuracy or billing records. No user data, prompts or model
+outputs are included in this query. Disconnect ends the session's counters.
+
+The existing CLI `demo` command now prints its own scheduling totals before exit.
+`cog --socket PATH scheduling-stats` queries its newly opened session, so its
+initial counters are zero; it does not inspect a different application's work.
+The byte-transform backend in that demo is explicitly a conformance fixture, not
+an AI model. Scheduling does not replace LOGFORCE model recognition, authorize
+generated code, implement the CogSheet™ capability adapter or add a hosted call.
+
+Verification scope for this increment is native macOS with Rust 1.90.0 and the
+installed C compiler. Tests exercise three actual Unix-socket clients, deterministic
+dispatch order with a controlled backend gate, cancellation/disconnection cleanup,
+terminal-counter retention, rejected-admission accounting, session separation and
+the real compiled C library. The subprocess crash helper remains intentionally
+ignored as a direct test and is exercised by its parent test.
+
+Observed on Darwin x86_64, Rust 1.90.0 and Apple clang 21.0.0:
+
+| Check | Result |
+| --- | --- |
+| Offline workspace build, rustfmt and strict Clippy | Passed |
+| Rust unit/integration tests | 28 passed; one ignored crash helper exercised by its parent |
+| Queue churn | 20,000 seeded transitions preserve FIFO and one ready turn per nonempty session |
+| Unix-socket three-client ordering and cleanup | Passed |
+| CLI and compiled C ABI smoke tests | Passed; temporary daemon stopped and resources reclaimed |
+| Documentation, publication and capability-contract Node tests | 39 passed |
+| Shared CogSheet™ contract pin | All nine capability files unchanged |
+
+These are functional results, not a scheduler performance benchmark or a model
+quality evaluation. Reproduce them with the Build and Verify commands above.
+
+Full R4 remains open: Linux rerun (including the supervised CPU worker), priority
+authorization, application identities rather than connection counts, explicit
+deadline/maintenance policy and representative latency/overhead measurements.
+Docker was not running during this increment, so no new Linux or real-model
+validation is claimed. No Live ISO, installation, mesh or production security
+qualification follows from these local scheduler tests.
 
 ## Run Manually
 

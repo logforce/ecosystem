@@ -45,8 +45,9 @@ descriptors on failure. Receipt uses close-on-exec. macOS has no descriptor path
 
 | Opcode | Request | Success response |
 | --- | --- | --- |
-| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline I/O, 2 = sealed shared memory), max buffer u32, max rank u32 |
+| 1 HELLO | Empty; required once as first request | Feature bits u64 (1 = inline I/O, 2 = sealed shared memory, 4 = session scheduling), max buffer u32, max rank u32 |
 | 2 STATS | Empty | Object count u32, backing buffer bytes u64, retained jobs u32 |
+| 3 SCHEDULING_STATS | Empty; optional feature bit 4 | Queued u32, running u32, then accepted, completed, failed, cancelled, cumulative queue-wait ns and cumulative execution ns (six u64) |
 | 10 MODEL_OPEN | UTF-8 byte length u32, name bytes, at most 128 | h |
 | 11 MODEL_CLOSE | h | Empty |
 | 20 BUFFER_ALLOC | Size u32, nonzero | h; initially zeroed |
@@ -71,6 +72,11 @@ client-selected model file loading or network backend. Feature bits describe
 transport support, not model availability; the historical `INLINE_MOCK` name is
 retained as an alias for inline I/O.
 
+The optional session-scheduling extension advertises feature bit 4 in HELLO.
+Its response is exactly 56 bytes. Wire framing remains 1.1, the existing STATS
+layout is unchanged, and peers ignore unknown feature bits. New clients return
+Unsupported without sending opcode 3 when an older daemon lacks the bit.
+
 ## Ownership and Execution
 
 Tensors are contiguous U8 views, rank 1 through 8, with nonzero dimensions and a
@@ -86,7 +92,10 @@ a daemon's lifetime. Stale or foreign handles are invalid, not transferable toke
 
 Accepted jobs pin both buffers exclusively. Buffer reads and writes return Busy
 until pinning ends; a second job using either buffer is also Busy. One trusted
-worker processes a bounded FIFO queue. No priorities or fairness guarantee exist.
+worker processes bounded per-session FIFO queues, alternating ready sessions in
+round-robin order. A session with several queued jobs receives one dispatch per
+turn, then moves to the back of the ready-session ring. Cancellation/disconnection
+remove empty turns. No priority classes, preemption or hard deadline are provided.
 Imported shared buffers reject writes and use as output with Permission. Export
 returns Busy while the source buffer is pinned. See the shared-memory contract for
 seal validation and the distinction between a snapshot and a live output view.
@@ -122,6 +131,22 @@ is not a hard deadline API. The daemon has a 120-second read timeout and a 5-sec
 write timeout; these are per-I/O safeguards, not a total frame deadline or a
 complete denial-of-service defense. An idle connection can therefore expire.
 
+Scheduling counters belong only to the requesting session and persist after job
+handles are released. Rejected submissions do not increment accepted. Queued and
+running describe current accepted work; completed, failed and cancelled count
+terminal outcomes once. Queued cancellation adds queue wait and no execution
+time. Running cancellation is accounted only after backend access ends. Until
+u64 saturation, accepted equals queued + running + completed + failed + cancelled.
+Lifetime totals saturate at u64::MAX and reset on reconnect, not on each query.
+
+Times use the daemon's monotonic clock. Queue wait ends at dispatch or queued
+cancellation; execution covers dispatch bookkeeping, input preparation, backend
+access and output commit/cleanup. These are elapsed intervals, not CPU/GPU usage,
+end-to-end application latency, persistent billing or real-time guarantees.
+Transport time is not included. Fairness is per connection, not verified application
+identity: opening more sessions can gain more turns within the existing session
+limit. One nonpreemptive long-running job still delays every other session.
+
 The client poisons a disconnected or protocol-invalid transport and does not retry
 or reconnect automatically. Applications must create a new context; old handles
 do not survive. The Rust client rejects reuse after fork. C applications must exec
@@ -141,3 +166,9 @@ dimensions. Dtype 1 means U8, flags must be zero, and unused dimensions must be 
 The [C integration test](../tests/c-abi.c) checks layout and lifecycle behavior.
 This is not a stable backend plugin ABI: backends currently implement an internal
 [Rust trait](../crates/cog-backend-api/src/lib.rs).
+
+The additive optional `cog_context_scheduling_stats` C entry point uses a separate
+64-byte `cog_scheduling_stats_t`: struct_size, reserved, queued and running (four
+u32), followed by the six u64 counters. Set struct_size to sizeof the struct and
+reserved to zero. No existing C layout or symbol changes. Inspect feature bit 4
+before depending on this extension with an independently installed library/daemon.
