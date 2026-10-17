@@ -98,10 +98,16 @@ profile may deliberately incur a copy.
 
 ## 5. Scheduling and Memory Policy
 
-The first scheduler uses FIFO within authorized priority classes. Limit queue
-length and concurrent jobs, add aging or another specified starvation bound, and
-reserve capacity for system maintenance. Requests for elevated priority must be
-authorized; every client calling itself REALTIME defeats arbitration.
+The experimental local scheduler now uses per-session FIFO queues with
+round-robin dispatch between ready sessions. It preserves existing admission and
+memory limits and reports session-scoped queue/execution counters. This first R4
+subset is nonpreemptive and has no client-selectable priorities. It is not yet
+application-identity fairness, a distributed scheduler or a real-time guarantee.
+
+Authorized priority classes, explicit starvation/maintenance policies and measured
+overhead remain future work. Requests for elevated priority must be authorized;
+every client calling itself REALTIME defeats arbitration. See the
+[development evidence and limits](development.md#local-scheduling-and-accounting-subset).
 
 Deadline metadata is a requirement or target as explicitly declared by the caller.
 The runtime must report unsupported guarantees. It must not describe nonpreemptive

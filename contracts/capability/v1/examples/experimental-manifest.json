@@ -1,0 +1,18 @@
+{
+  "contract": "ecos-capability-exchange.v1",
+  "runtime_id": "org.logforce.ecos.reference",
+  "runtime_version": "0.1.0",
+  "generated_at": "2026-10-06T10:00:00Z",
+  "manifest_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+  "capabilities": [
+    {
+      "capability": "numeric.summary.v1",
+      "input_schemas": ["numeric.vector.f64.v1"],
+      "output_schema": "numeric.summary.v1",
+      "status": "experimental",
+      "placements": ["endpoint"],
+      "devices": ["cpu"],
+      "deployment_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  ]
+}

@@ -115,6 +115,19 @@ pub struct Stats {
     pub jobs: u32,
 }
 
+/// Session-lifetime counters; durations are monotonic elapsed nanoseconds, not CPU time.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub struct SchedulingStats {
+    pub queued: u32,
+    pub running: u32,
+    pub accepted: u64,
+    pub completed: u64,
+    pub failed: u64,
+    pub cancelled: u64,
+    pub queue_wait_ns: u64,
+    pub execution_ns: u64,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

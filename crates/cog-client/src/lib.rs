@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 //! Synchronous local control client; submitted computation is asynchronous.
 mod ffi;
-pub use cog_core::{Error, Handle, JobStatus, Result, Stats, TensorDesc, MAX_BUFFER, MAX_RANK};
-use cog_protocol::{Decoder, Frame, Request, FEATURE_INLINE_MOCK, FEATURE_SEALED_SHM, RESPONSE};
+pub use cog_core::{
+    Error, Handle, JobStatus, Result, SchedulingStats, Stats, TensorDesc, MAX_BUFFER, MAX_RANK,
+};
+use cog_protocol::{
+    Decoder, Frame, Request, FEATURE_INLINE_MOCK, FEATURE_SEALED_SHM, FEATURE_SESSION_SCHEDULING,
+    RESPONSE,
+};
 #[cfg(target_os = "linux")]
 pub use cog_shm::SharedBuffer;
 use std::{
@@ -247,6 +252,26 @@ impl Client {
         d.finish()?;
         Ok(stats)
     }
+    /// Counters belong only to this connection and survive terminal-handle release.
+    pub fn scheduling_stats(&mut self) -> Result<SchedulingStats> {
+        if self.features & FEATURE_SESSION_SCHEDULING == 0 {
+            return Err(Error::Unsupported);
+        }
+        let body = self.request(Request::SchedulingStats)?;
+        let mut d = Decoder::new(&body);
+        let stats = SchedulingStats {
+            queued: d.u32()?,
+            running: d.u32()?,
+            accepted: d.u64()?,
+            completed: d.u64()?,
+            failed: d.u64()?,
+            cancelled: d.u64()?,
+            queue_wait_ns: d.u64()?,
+            execution_ns: d.u64()?,
+        };
+        d.finish()?;
+        Ok(stats)
+    }
 }
 
 fn wait_with(
@@ -263,5 +288,24 @@ fn wait_with(
             return Err(Error::Timeout);
         }
         thread::sleep(Duration::from_millis(2).min(timeout.saturating_sub(start.elapsed())));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn old_peer_without_scheduling_feature_is_not_sent_the_extension() {
+        let mut client = Client {
+            stream: None,
+            next: 1,
+            process: std::process::id(),
+            features: FEATURE_INLINE_MOCK,
+            traffic: (0, 0),
+        };
+        assert_eq!(client.scheduling_stats(), Err(Error::Unsupported));
+        assert_eq!(client.next, 1);
+        assert_eq!(client.traffic(), (0, 0));
     }
 }

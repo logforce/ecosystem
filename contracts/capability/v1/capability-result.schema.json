@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://logforce.github.io/contracts/capability/v1/capability-result.schema.json",
+  "title": "ecOS Capability Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract", "request_id", "status", "receipt"],
+  "properties": {
+    "contract": { "const": "ecos-capability-exchange.v1" },
+    "request_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "status": { "enum": ["complete", "failed", "blocked", "cancelled"] },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location", "media_type", "schema", "digest"],
+      "properties": {
+        "location": { "enum": ["inline", "artifact"] },
+        "media_type": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+        },
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "value": {},
+        "artifact_ref": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "location": { "const": "inline" } } },
+          "then": { "required": ["value"], "not": { "required": ["artifact_ref"] } }
+        },
+        {
+          "if": { "properties": { "location": { "const": "artifact" } } },
+          "then": { "required": ["artifact_ref"], "not": { "required": ["value"] } }
+        }
+      ]
+    },
+    "error": { "$ref": "error.schema.json" },
+    "receipt": { "$ref": "execution-receipt.schema.json" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "complete" } } },
+      "then": { "required": ["output"], "not": { "required": ["error"] } },
+      "else": { "required": ["error"], "not": { "required": ["output"] } }
+    }
+  ]
+}

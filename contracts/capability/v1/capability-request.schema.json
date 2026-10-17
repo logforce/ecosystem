@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://logforce.github.io/contracts/capability/v1/capability-request.schema.json",
+  "title": "ecOS Capability Request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "request_id",
+    "idempotency_key",
+    "capability",
+    "inputs",
+    "output_schema",
+    "placement",
+    "constraints"
+  ],
+  "properties": {
+    "contract": { "const": "ecos-capability-exchange.v1" },
+    "request_id": { "$ref": "#/$defs/identifier" },
+    "idempotency_key": { "$ref": "#/$defs/identifier" },
+    "capability": { "$ref": "#/$defs/profile" },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/input" }
+    },
+    "output_schema": { "$ref": "#/$defs/profile" },
+    "placement": {
+      "enum": [
+        "local-required",
+        "local-preferred",
+        "approved-node-allowed",
+        "external-allowed"
+      ]
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "timeout_ms", "max_output_bytes"],
+      "properties": {
+        "network": { "enum": ["deny", "approved-external-only"] },
+        "timeout_ms": { "type": "integer", "minimum": 1, "maximum": 3600000 },
+        "max_output_bytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 },
+        "deterministic_required": { "type": "boolean" }
+      }
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/profile" },
+        "version": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "workload_ref": { "$ref": "#/$defs/identifier" }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "profile": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "location", "media_type", "schema", "digest"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+        },
+        "location": { "enum": ["inline", "artifact"] },
+        "media_type": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "schema": { "$ref": "#/$defs/profile" },
+        "digest": { "$ref": "#/$defs/digest" },
+        "value": {},
+        "artifact_ref": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "location": { "const": "inline" } } },
+          "then": { "required": ["value"], "not": { "required": ["artifact_ref"] } }
+        },
+        {
+          "if": { "properties": { "location": { "const": "artifact" } } },
+          "then": { "required": ["artifact_ref"], "not": { "required": ["value"] } }
+        }
+      ]
+    }
+  }
+}

@@ -11,7 +11,9 @@ pub const RESPONSE: u16 = 1;
 pub const FEATURE_INLINE_IO: u64 = 1;
 pub const FEATURE_INLINE_MOCK: u64 = FEATURE_INLINE_IO;
 pub const FEATURE_SEALED_SHM: u64 = 2;
+pub const FEATURE_SESSION_SCHEDULING: u64 = 4;
 pub const FEATURES: u64 = FEATURE_INLINE_MOCK
+    | FEATURE_SESSION_SCHEDULING
     | if cfg!(target_os = "linux") {
         FEATURE_SEALED_SHM
     } else {
@@ -120,6 +122,7 @@ impl Frame {
 pub enum Request {
     Hello,
     Stats,
+    SchedulingStats,
     ModelOpen(String),
     ModelClose(Handle),
     BufferAlloc(u32),
@@ -189,6 +192,7 @@ impl Request {
         let op = match self {
             Self::Hello => 1,
             Self::Stats => 2,
+            Self::SchedulingStats => 3,
             Self::ModelOpen(name) => {
                 put32(&mut b, name.len() as u32);
                 b.extend_from_slice(name.as_bytes());
@@ -270,6 +274,7 @@ impl Request {
         let request = match op {
             1 => Self::Hello,
             2 => Self::Stats,
+            3 => Self::SchedulingStats,
             10 => {
                 let n = d.u32()? as usize;
                 if n > 128 {
@@ -334,6 +339,16 @@ impl Request {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn scheduling_query_is_optional_empty_and_rejects_trailing_bytes() {
+        assert_eq!(Request::SchedulingStats.encode(), (3, vec![]));
+        assert!(matches!(
+            Request::decode(3, &[]),
+            Ok(Request::SchedulingStats)
+        ));
+        assert!(matches!(Request::decode(3, &[0]), Err(Error::Invalid)));
+        assert_ne!(FEATURES & FEATURE_SESSION_SCHEDULING, 0);
+    }
     #[cfg(target_os = "linux")]
     #[test]
     fn malformed_frames_drop_descriptors_and_midframe_rights_are_rejected() {

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://logforce.github.io/contracts/capability/v1/execution-receipt.schema.json",
+  "title": "ecOS Execution Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capability",
+    "executor",
+    "deployment_digest",
+    "locality",
+    "device",
+    "network_used",
+    "started_at",
+    "finished_at",
+    "duration_ms",
+    "cache"
+  ],
+  "properties": {
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+    },
+    "executor": { "type": "string", "minLength": 3, "maxLength": 128 },
+    "deployment_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "package_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "locality": { "enum": ["endpoint", "approved-node", "external-service"] },
+    "device": { "enum": ["cpu", "gpu", "npu", "other", "not-applicable"] },
+    "network_used": { "type": "boolean" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" },
+    "duration_ms": { "type": "integer", "minimum": 0, "maximum": 3600000 },
+    "cache": { "enum": ["hit", "miss", "not-applicable"] }
+  }
+}

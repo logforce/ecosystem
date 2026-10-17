@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://logforce.github.io/contracts/capability/v1/capability-manifest.schema.json",
+  "title": "ecOS Capability Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "runtime_id",
+    "runtime_version",
+    "generated_at",
+    "manifest_digest",
+    "capabilities"
+  ],
+  "properties": {
+    "contract": { "const": "ecos-capability-exchange.v1" },
+    "runtime_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*$"
+    },
+    "runtime_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "manifest_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "value"],
+      "properties": {
+        "algorithm": { "type": "string", "minLength": 3, "maxLength": 64 },
+        "key_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "value": { "type": "string", "minLength": 16, "maxLength": 4096 }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capability",
+          "input_schemas",
+          "output_schema",
+          "status",
+          "placements",
+          "devices",
+          "deployment_digest"
+        ],
+        "properties": {
+          "capability": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+          },
+          "input_schemas": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 64,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+            }
+          },
+          "output_schema": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)*\\.v[1-9][0-9]*$"
+          },
+          "status": { "enum": ["experimental", "approved", "revoked"] },
+          "placements": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["endpoint", "approved-node"] }
+          },
+          "devices": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["cpu", "gpu", "npu", "other", "not-applicable"] }
+          },
+          "deployment_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "contract": "ecos-capability-exchange.v1",
+  "request_id": "request.demo.0001",
+  "idempotency_key": "workbook.demo.sheet1.cellA1.rev1",
+  "capability": "numeric.summary.v1",
+  "inputs": [
+    {
+      "name": "values",
+      "location": "inline",
+      "media_type": "application/json",
+      "schema": "numeric.vector.f64.v1",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "value": [1, 2, 3, 4]
+    }
+  ],
+  "output_schema": "numeric.summary.v1",
+  "placement": "local-required",
+  "constraints": {
+    "network": "deny",
+    "timeout_ms": 5000,
+    "max_output_bytes": 65536,
+    "deterministic_required": true
+  },
+  "application": {
+    "id": "logforce.cogsheet.v1",
+    "version": "0.1.0",
+    "workload_ref": "workbook.demo.sheet1.cellA1.rev1"
+  }
+}

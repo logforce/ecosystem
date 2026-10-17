@@ -12,6 +12,55 @@ use std::{
 
 type SharedClient = Arc<Mutex<Client>>;
 
+#[repr(C)]
+#[derive(Default)]
+pub struct SchedulingStatsC {
+    pub struct_size: u32,
+    pub reserved: u32,
+    pub queued: u32,
+    pub running: u32,
+    pub accepted: u64,
+    pub completed: u64,
+    pub failed: u64,
+    pub cancelled: u64,
+    pub queue_wait_ns: u64,
+    pub execution_ns: u64,
+}
+
+/// # Safety
+/// `out` points to valid, aligned storage of its declared struct_size.
+#[no_mangle]
+pub unsafe extern "C" fn cog_context_scheduling_stats(ctx: u64, out: *mut SchedulingStatsC) -> i32 {
+    status(|| {
+        let size = std::mem::size_of::<SchedulingStatsC>() as u32;
+        if out.is_null() || unsafe { (*out).struct_size != size || (*out).reserved != 0 } {
+            return Err(Error::Invalid);
+        }
+        unsafe {
+            *out = SchedulingStatsC {
+                struct_size: size,
+                ..SchedulingStatsC::default()
+            };
+        }
+        let value = with(ctx, |client| client.scheduling_stats())?;
+        unsafe {
+            *out = SchedulingStatsC {
+                struct_size: size,
+                reserved: 0,
+                queued: value.queued,
+                running: value.running,
+                accepted: value.accepted,
+                completed: value.completed,
+                failed: value.failed,
+                cancelled: value.cancelled,
+                queue_wait_ns: value.queue_wait_ns,
+                execution_ns: value.execution_ns,
+            };
+        }
+        Ok(())
+    })
+}
+
 /// # Safety
 /// `out` points to writable u64 storage.
 #[no_mangle]
