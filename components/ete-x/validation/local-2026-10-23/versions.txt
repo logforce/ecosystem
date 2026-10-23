@@ -1,0 +1,9 @@
+Python 3.12.15
+rustc 1.90.0 (1159e78c4 2025-09-14)
+cargo 1.90.0 (840b83a10 2025-07-30)
+v22.19.0
+g++ (Debian 12.2.0-14+deb12u1) 12.2.0
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+

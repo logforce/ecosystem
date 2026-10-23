@@ -1,0 +1,55 @@
+{
+  "kind": "real_etex_worker_smoke",
+  "performance_benchmark": false,
+  "fixture_is_ai": false,
+  "passed": true,
+  "requests": 2,
+  "persistent_process": true,
+  "strategy_requested": "bounded",
+  "python": "3.12.15",
+  "engine": "etex",
+  "dense_count": 8,
+  "reranked_count": 3,
+  "reranked_dense_scores_bitwise_equal": true,
+  "query_not_echoed": true,
+  "diagnostics_bytes": 0,
+  "provenance": {
+    "encoder_model_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+    "encoder_tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+    "fixture": false,
+    "index_manifest_sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+    "model_quantization_note": "The bundled INT8 ONNX model can produce embeddings/logits different from its FP32 source model.",
+    "native_backend": "portable_tile16_quad4",
+    "reranker_model_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+    "reranker_tokenizer_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+    "snapshot_sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+    "source_sha256": "4cec264be72a3518896257618dd7c5991646d4c1b3e148fbf17d87aa3e17fcf0",
+    "worker_version": "1.0.0"
+  },
+  "index_layout": "packed",
+  "dense_row_ids": [
+    0,
+    2,
+    6,
+    9,
+    8,
+    11,
+    1,
+    5
+  ],
+  "reranked_row_ids": [
+    0,
+    6,
+    2
+  ],
+  "dense_certificate": {
+    "certified": true,
+    "excluded_count": 8,
+    "fallback": false,
+    "reference": "fp32-products-fp64-eight-lanes-no-fma-v1",
+    "refined_count": 8,
+    "scope": "Exact dense top-k over this immutable snapshot's stored FP32 vectors under the eight-lane FP64 no-FMA scorer; conditional on verified source binding and its checked IEEE environment. This does not certify model quantization, relevance, or global cross-encoder ranking.",
+    "source_verified": true
+  },
+  "worker_source_sha256": "fff3590c2f46c6395f81d4c23f356eaf001a1d9b1eae0a8b71d80e135c1e6b05"
+}

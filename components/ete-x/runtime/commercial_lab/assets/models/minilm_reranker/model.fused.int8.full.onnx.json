@@ -1,0 +1,58 @@
+{
+  "schema": "nonar_dynamic_int8_v1",
+  "created_utc": "2026-10-22T07:01:46.701385+00:00",
+  "source": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.fused.onnx",
+  "source_sha256": "e6db057129826bdb4425d5b413fa1df433b82f56ebc97d4984eac3caccd13f90",
+  "source_bytes": 90938006,
+  "destination": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx",
+  "destination_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+  "destination_bytes": 23029327,
+  "seconds_to_build_and_check": 9.937703015999432,
+  "onnxruntime_version": "1.31.0",
+  "onnx_version": "1.23.2",
+  "weight_type_requested": "QInt8",
+  "weight_type": "INT8 and UINT8",
+  "quantized_weight_tensor_types": {
+    "INT8": 26,
+    "UINT8": 3
+  },
+  "activation_quantization": "dynamic at inference time",
+  "per_channel": true,
+  "reduce_range": false,
+  "per_channel_scope": "constant MatMul weights; ORT Gather uses its own per-tensor quantizer",
+  "op_types_to_quantize": [
+    "MatMul",
+    "Attention",
+    "Gather"
+  ],
+  "MatMulConstBOnly": true,
+  "qattention_operator_note": "ORT 1.31 AttentionQuant requests reduced-range quantization for its merged QKV weights",
+  "preprocess": "ONNX shape inference; no symbolic shape inference or offline graph optimization",
+  "graph_node_counts": {
+    "Add": 4,
+    "BiasGelu": 6,
+    "Cast": 21,
+    "DequantizeLinear": 3,
+    "DynamicQuantizeLinear": 26,
+    "Gather": 5,
+    "LayerNormalization": 1,
+    "MatMulInteger": 20,
+    "Mul": 40,
+    "QAttention": 6,
+    "ReduceSum": 1,
+    "Shape": 1,
+    "SkipLayerNormalization": 12,
+    "Slice": 1,
+    "Tanh": 1,
+    "Unsqueeze": 1
+  },
+  "initializer_data_types": {
+    "FLOAT": 81,
+    "INT64": 6,
+    "INT8": 52,
+    "UINT8": 6
+  },
+  "quality_status": "requires evaluation; quantization is lossy",
+  "scope": "MatMul, Attention, Gather; other operations remain FP32; embedding tables quantized",
+  "size_reduction_pct": 74.67579506856572
+}

@@ -111,6 +111,31 @@ test('rejects private content in website HTML', t => {
   assert.throws(() => collectSnapshot(root), /Internal classification/);
 });
 
+test('ETE-X binary assets require their reviewed identity and original license', t => {
+  const name = 'components/ete-x/runtime/commercial_lab/demo_snapshot/vectors.npy';
+  const { root, base } = fixture(t, [{ path: name, license: 'CC-BY-NC-ND-4.0' }]);
+  const target = path.join(root, name);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.copyFileSync(new URL(`../${name}`, import.meta.url), target);
+  const snapshot = collectSnapshot(root);
+  exportSnapshot(snapshot, path.join(base, 'with-reviewed-vectors'));
+  assert.equal(snapshot.files.find(file => file.path === name).license, 'CC-BY-NC-ND-4.0');
+  fs.appendFileSync(target, 'changed');
+  assert.throws(() => collectSnapshot(root), /Binary asset changed/);
+  const wrong = fixture(t, [{ path: name, license: 'Apache-2.0' }]);
+  assert.throws(() => collectSnapshot(wrong.root), /Binary asset license mismatch/);
+});
+
+test('approved ETE-X model does not authorize another model or a different license', t => {
+  const model = 'components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx';
+  const wrong = fixture(t, [{ path: model, license: 'CC-BY-NC-ND-4.0' }]);
+  assert.throws(() => collectSnapshot(wrong.root), /Binary asset license mismatch/);
+  for (const name of ['components/ete-x/runtime/other.onnx', 'vectors.npy', 'weights.safetensors']) {
+    const { root } = fixture(t, [{ path: name, license: 'Apache-2.0' }]);
+    assert.throws(() => collectSnapshot(root), /unreviewed path/);
+  }
+});
+
 test('allows only the root static-site marker without opening other hidden paths', t => {
   const { root } = fixture(t, [{ path: '.nojekyll', license: 'Apache-2.0' }]);
   fs.writeFileSync(path.join(root, '.nojekyll'), '');

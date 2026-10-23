@@ -1,0 +1,8 @@
+{
+  "schema": "etex.rag.search.request.v1",
+  "request_id": "example-1",
+  "query": "Check the transport",
+  "candidate_count": 3,
+  "top_k": 2,
+  "rerank": false
+}

@@ -16,3 +16,9 @@
 /draft_*
 /docs/business-impact.md
 /public-export/
+
+# Local ETE-X environments and native build caches are never release inputs.
+__pycache__/
+*.pyc
+components/ete-x/**/.build/
+components/ete-x/.work/

@@ -19,7 +19,7 @@
   <header class="header">
     <a class="wordmark" href="#" aria-label="ecOS and CogPOSIX home">ecOS <span>&gt;_</span> CogPOSIX</a>
     <nav aria-label="Main navigation">
-      <a href="#architecture-map">Architecture</a><a href="#progress">Roadmap</a><a href="#licenses">Licenses</a><a href="SPEC.md">Docs</a><a class="nav-cta" href="#start">Start building <span aria-hidden="true">↗</span></a>
+      <a href="#architecture-map">Architecture</a><a href="#ete-x">ETE-X</a><a href="#progress">Roadmap</a><a href="#licenses">Licenses</a><a href="SPEC.md">Docs</a><a class="nav-cta" href="#start">Start building <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
   <main id="main">
@@ -116,6 +116,19 @@
       <div class="principle"><strong>Your compute.<br>Your control.</strong><p>The right tool may be a vision model, a signal processor, a language model or a conventional algorithm. The design puts task suitability and local control first. It does not make every problem an LLM request.</p></div>
     </section>
 
+    <section class="section etex" id="ete-x" aria-labelledby="etex-title">
+      <div class="section-heading"><p class="eyebrow">ETE-X · Early Termination Encoding</p><h2 id="etex-title">Find the evidence.<br>Keep it local.</h2><p>A CPU-only retrieval engine built to help make Sovereign AI practical. Search an approved local corpus with compact models, and return the documents, scores and source identities your application needs.</p></div>
+      <div class="etex-intro"><p>ETE-X checks which candidates can still reach the best results, then refines the possible winners against their original vectors. An optional second model reranks the selected documents. Provisioned inference runs on the CPU, without a hosted model or an API key.</p><p>In ecOS &gt;_ CogPOSIX, retrieval becomes an explicit capability with bounded inputs, a managed job lifecycle and typed results. A CogSheet™ semantic mapper provides the application integration boundary; connecting it to the live sheet is the next application step.</p></div>
+      <figure class="etex-diagram" aria-labelledby="etex-diagram-caption">
+        <div class="etex-contract">ecOS &gt;_ CogPOSIX <span>Local corpus · explicit configuration · managed execution</span></div>
+        <ol class="etex-flow"><li><span class="etex-step">01</span><img src="site/icons/search.svg" alt=""><strong>Your query</strong><p>Ask for relevant evidence.</p></li><li><span class="etex-step">02</span><img src="site/icons/cpu.svg" alt=""><strong>Local encoder</strong><p>Represent the query as a vector.</p></li><li><span class="etex-step">03</span><img src="site/icons/database.svg" alt=""><strong>ETE-X search</strong><p>Bound candidates. Refine possible winners.</p></li><li><span class="etex-step">04</span><img src="site/icons/list-check.svg" alt=""><strong>Optional reranking</strong><p>Score the selected documents.</p></li><li><span class="etex-step">05</span><img src="site/icons/file-text.svg" alt=""><strong>Typed results</strong><p>References, scores and provenance.</p></li></ol>
+        <figcaption id="etex-diagram-caption">A local retrieval pipeline. Dense-search scores and reranker scores remain separate and inspectable.</figcaption>
+      </figure>
+      <div class="etex-details"><article><h3>Useful on everyday CPUs.</h3><p>Compact non-autoregressive models and CPU search support a practical local deployment. The reference profile includes two ONNX models and a sixteen-document synthetic corpus for a reproducible first run.</p></article><article><h3>Evidence you can reuse.</h3><p>Document identifiers, corpus and model identities, execution metadata and typed failures give downstream applications a clear result contract. Exact ranking refers to the declared vector scorer; semantic quality is evaluated for each task.</p></article><article><h3>An optional capability.</h3><p>The native backend and semantic mapper come with regression tests. ETE-X is enabled explicitly and separately licensed; the community core keeps its existing license and independent default build.</p></article></div>
+      <div class="etex-actions"><a class="button primary" href="docs/ete-x.md">Explore ETE-X <span aria-hidden="true">→</span></a><a class="text-link" href="https://github.com/logforce/ecosystem/tree/main/components/ete-x" target="_blank" rel="noopener noreferrer">Source, models and tests <span aria-hidden="true">↗</span></a></div>
+      <p class="etex-evidence">Developer integration for Linux x86-64. Standalone research measurements and native functional tests have distinct scopes; the technical guide explains the numerical contract and deployment requirements.</p>
+    </section>
+
     <section class="section distributed" id="distributed" aria-labelledby="distributed-title">
       <div class="section-heading"><p class="eyebrow">Planned capability</p><h2 id="distributed-title">Distributed intelligence,<br>when you want it.</h2><p>Local-first does not mean isolated. ecOS is designed to let approved workstations, AI nodes and edge devices share execution within a controlled policy domain, only when distribution has been explicitly enabled.</p></div>
       <figure class="fabric-diagram" aria-label="An ecOS policy domain connects a workstation, an AI node and an edge node through the proposed CogPOSIX fabric.">
@@ -129,7 +142,7 @@
     </section>
 
     <section class="section progress" id="progress" aria-labelledby="progress-title">
-      <div class="section-heading"><p class="eyebrow">From interface to operating system</p><h2 id="progress-title">The foundation is running.<br>Now build on it.</h2><p>The developer prototype connects Rust and C applications to local inference. Today it runs one pinned digit-classification model. Scheduling, model packages and the installable OS are the next chapters.</p></div>
+      <div class="section-heading"><p class="eyebrow">From interface to operating system</p><h2 id="progress-title">The foundation is running.<br>Now build on it.</h2><p>The developer prototype connects Rust and C applications to local inference. Its pinned digit-classification worker is joined by an optional ETE-X document-retrieval profile. Model packages, broader policy and the installable OS remain the next chapters.</p></div>
       <div class="milestones">
         <article><span class="status working">Working / R1</span><h3>Execution contracts</h3><p>Rust and C clients, typed handles, asynchronous jobs, cancellation and resource cleanup.</p><a href="docs/implementation-r1.md">R1 evidence <span aria-hidden="true">↗</span></a></article>
         <article><span class="status working">Working / R2</span><h3>Linux shared memory</h3><p>Sealed inputs and immutable output snapshots passed by file descriptor. Not end-to-end zero-copy.</p><a href="docs/shared-memory.md">Memory contract <span aria-hidden="true">↗</span></a></article>
@@ -155,10 +168,11 @@ node scripts/smoke.mjs</code></pre><p id="copy-status" role="status" aria-live="
     </section>
 
     <section class="section licenses" id="licenses" aria-labelledby="license-title">
-      <div class="section-heading"><p class="eyebrow">Built to be built on</p><h2 id="license-title">Open code.<br>Clear commitments.</h2><p>Apache-2.0 for the community software. CC BY 4.0 for the specification and documentation. Commercial use is welcome under those terms; LOGFORCE and third-party assets keep their separate licenses.</p></div>
+      <div class="section-heading"><p class="eyebrow">Built to be built on</p><h2 id="license-title">Open code.<br>Clear commitments.</h2><p>Apache-2.0 for the community core. CC BY 4.0 for the public specification and documentation. Optional ETE-X uses CC BY-NC-ND 4.0; third-party models and other LOGFORCE components retain their own terms.</p></div>
       <details class="license-details"><summary>Licenses by component <span aria-hidden="true">+</span></summary><div class="license-table-wrap"><table><caption class="sr-only">Component licensing and availability</caption><thead><tr><th scope="col">Component</th><th scope="col">License / terms</th><th scope="col">Scope &amp; availability</th></tr></thead><tbody>
         <tr><th scope="row">CogPOSIX headers, SDK &amp; reference code</th><td><a href="LICENSE">Apache-2.0</a></td><td>Listed software, schemas, examples and tests. Experimental ABI.</td></tr>
         <tr><th scope="row">ecOS community runtime</th><td><a href="LICENSE">Apache-2.0</a></td><td>Listed project-owned runtime and backend code. Broader policy and diagnostics remain roadmap work.</td></tr>
+        <tr><th scope="row">Optional ETE-X retrieval component</th><td><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></td><td>Separately licensed original engine, worker, mapper and marked tests. Explicit opt-in build; commercial permissions are separate. <a href="docs/ete-x.md">Component guide</a>.</td></tr>
         <tr><th scope="row">Specification &amp; public documentation</th><td><a href="LICENSES/CC-BY-4.0.txt">CC BY 4.0</a></td><td>Attribution to ecOS and CogPOSIX contributors. Original embedded code and schemas also offered under Apache-2.0.</td></tr>
         <tr><th scope="row">Community OS recipes &amp; integration</th><td>Apache-2.0 <span class="table-note">Planned</span></td><td>Project-owned code when explicitly released. No installable ecOS image today.</td></tr>
         <tr><th scope="row">Community distributed fabric &amp; basic data adapters</th><td>Apache-2.0 <span class="table-note">Planned</span></td><td>Project-owned distributed execution and baseline policy when explicitly released. Independent of LOGFORCE.</td></tr>
@@ -168,7 +182,7 @@ node scripts/smoke.mjs</code></pre><p id="copy-status" role="status" aria-live="
         <tr><th scope="row">LOGFORCE intelligence, models &amp; enterprise sensors</th><td>Proprietary / separate agreement</td><td>Not included. No rights granted by this repository's open licenses.</td></tr>
         <tr><th scope="row">Enterprise modules &amp; premium feeds</th><td>Separate commercial agreements</td><td>Optional proprietary distribution; data and service rights defined separately. No current support SLA.</td></tr>
         <tr><th scope="row">Linux, dependencies, firmware &amp; datasets</th><td>Original component licenses</td><td>No umbrella relicensing. OS distribution requires an inventory and applicable notices/source delivery.</td></tr>
-        <tr><th scope="row">Third-party model weights</th><td>Original artifact terms</td><td>Not in the source export. The optional MNIST download has an upstream MIT model notice and Apache-2.0 repository license; <a href="docs/onnx-worker.md">asset review remains required</a>.</td></tr>
+        <tr><th scope="row">Third-party model weights</th><td>Original artifact terms</td><td>The ETE-X source package includes two attributed Apache-2.0 demonstration models. MNIST remains a separate optional download. <a href="docs/ete-x.md">Model identities and scope</a>.</td></tr>
         <tr><th scope="row">Website &amp; document reader</th><td>Apache-2.0 / CC BY 4.0 / MIT</td><td>Project code: Apache-2.0. Prose and generated concept illustration: CC BY 4.0 where copyright applies. Marked: MIT. DOMPurify: Apache-2.0 option. <a href="site/THIRD-PARTY.md">Third-party notices</a>.</td></tr>
         <tr><th scope="row">Logos &amp; brand artwork</th><td><a href="assets/BRAND-NOTICE.md">Reserved artwork rights</a></td><td>Shown to identify the project. No open artwork or trademark license; separate permission may be needed for reuse.</td></tr>
       </tbody></table></div></details>

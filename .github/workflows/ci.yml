@@ -22,9 +22,14 @@ jobs:
         run: |
           node scripts/publication.mjs check
           node scripts/build-site-docs.mjs --check
-          node --test tests/publication.test.mjs tests/site-docs.test.mjs tests/website-package.test.mjs
+          node --test tests/*.test.mjs
       - name: Test community runtime
         run: |
           cargo test --workspace --offline
           cargo build --workspace --offline
           node scripts/smoke.mjs
+      - name: Test the optional ETE-X integration
+        run: |
+          cargo test --workspace --offline --locked --features etex -- --test-threads=1
+          python3 -I -B components/ete-x/integration/tests/run_tests.py --output-dir "$RUNNER_TEMP/etex-worker-checks"
+          node components/ete-x/cogsheet/adapter.test.mjs

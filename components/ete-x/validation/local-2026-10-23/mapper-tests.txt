@@ -1,0 +1,196 @@
+TAP version 13
+# Subtest: maps an authorized request using a distinct semantic query schema
+ok 1 - maps an authorized request using a distinct semantic query schema
+  ---
+  duration_ms: 4.775323
+  type: 'test'
+  ...
+# Subtest: requires a trusted authenticated corpus grant
+ok 2 - requires a trusted authenticated corpus grant
+  ---
+  duration_ms: 1.270867
+  type: 'test'
+  ...
+# Subtest: rejects another snapshot and forged query digest
+ok 3 - rejects another snapshot and forged query digest
+  ---
+  duration_ms: 0.603958
+  type: 'test'
+  ...
+# Subtest: the partial semantic query cannot claim the full worker request schema
+ok 4 - the partial semantic query cannot claim the full worker request schema
+  ---
+  duration_ms: 0.582187
+  type: 'test'
+  ...
+# Subtest: rejects remote placement and network-enabled policy
+ok 5 - rejects remote placement and network-enabled policy
+  ---
+  duration_ms: 0.438716
+  type: 'test'
+  ...
+# Subtest: does not infer a qualified deterministic deployment from a request
+ok 6 - does not infer a qualified deterministic deployment from a request
+  ---
+  duration_ms: 0.351915
+  type: 'test'
+  ...
+# Subtest: rejects deadlines and capacities outside the semantic profile
+ok 7 - rejects deadlines and capacities outside the semantic profile
+  ---
+  duration_ms: 0.439543
+  type: 'test'
+  ...
+# Subtest: rejects duplicate inputs, extra authority fields and unknown properties
+ok 8 - rejects duplicate inputs, extra authority fields and unknown properties
+  ---
+  duration_ms: 0.716245
+  type: 'test'
+  ...
+# Subtest: request IDs satisfy both upstream and worker contracts without coercion
+ok 9 - request IDs satisfy both upstream and worker contracts without coercion
+  ---
+  duration_ms: 0.934174
+  type: 'test'
+  ...
+# Subtest: idempotency IDs retain upstream range but require actual strings
+ok 10 - idempotency IDs retain upstream range but require actual strings
+  ---
+  duration_ms: 0.820472
+  type: 'test'
+  ...
+# Subtest: rejects C0 controls and permits only worker-supported whitespace controls
+ok 11 - rejects C0 controls and permits only worker-supported whitespace controls
+  ---
+  duration_ms: 1.844599
+  type: 'test'
+  ...
+# Subtest: query byte budget and encoded frame budget are distinct
+ok 12 - query byte budget and encoded frame budget are distinct
+  ---
+  duration_ms: 1.823453
+  type: 'test'
+  ...
+# Subtest: optional application presence and upstream types are checked
+ok 13 - optional application presence and upstream types are checked
+  ---
+  duration_ms: 0.89607
+  type: 'test'
+  ...
+# Subtest: canonical JSON rejects nonfinite values, malformed Unicode and non-JSON structures
+ok 14 - canonical JSON rejects nonfinite values, malformed Unicode and non-JSON structures
+  ---
+  duration_ms: 0.392227
+  type: 'test'
+  ...
+# Subtest: commits a complete real-mode shape and preserves separate score meanings
+ok 15 - commits a complete real-mode shape and preserves separate score meanings
+  ---
+  duration_ms: 2.886283
+  type: 'test'
+  ...
+# Subtest: schema-valid worker status must explicitly indicate success
+ok 16 - schema-valid worker status must explicitly indicate success
+  ---
+  duration_ms: 0.929111
+  type: 'test'
+  ...
+# Subtest: old incomplete test-shaped results are no longer accepted
+ok 17 - old incomplete test-shaped results are no longer accepted
+  ---
+  duration_ms: 0.238369
+  type: 'test'
+  ...
+# Subtest: real output is bound to its approved snapshot, not only to request ID
+ok 18 - real output is bound to its approved snapshot, not only to request ID
+  ---
+  duration_ms: 0.33877
+  type: 'test'
+  ...
+# Subtest: fixture output requires a trusted explicit transport-only designation
+ok 19 - fixture output requires a trusted explicit transport-only designation
+  ---
+  duration_ms: 0.876134
+  type: 'test'
+  ...
+# Subtest: transport fixture cannot add model hashes or dense certification
+ok 20 - transport fixture cannot add model hashes or dense certification
+  ---
+  duration_ms: 0.981044
+  type: 'test'
+  ...
+# Subtest: metadata counts and requested limits must match the actual request and result
+ok 21 - metadata counts and requested limits must match the actual request and result
+  ---
+  duration_ms: 1.617144
+  type: 'test'
+  ...
+# Subtest: rerank metadata and nullable logits cannot be silently substituted
+ok 22 - rerank metadata and nullable logits cannot be silently substituted
+  ---
+  duration_ms: 1.401982
+  type: 'test'
+  ...
+# Subtest: row types, byte caps, finite scores and duplicate row IDs are enforced
+ok 23 - row types, byte caps, finite scores and duplicate row IDs are enforced
+  ---
+  duration_ms: 0.99821
+  type: 'test'
+  ...
+# Subtest: provenance and exactness metadata cannot omit hashes or invent mixed-v3 support
+ok 24 - provenance and exactness metadata cannot omit hashes or invent mixed-v3 support
+  ---
+  duration_ms: 1.411629
+  type: 'test'
+  ...
+# Subtest: canonical output budget is enforced after full semantic validation
+ok 25 - canonical output budget is enforced after full semantic validation
+  ---
+  duration_ms: 0.974075
+  type: 'test'
+  ...
+# Subtest: receipt requires typed valid UTC RFC3339 calendar timestamps
+ok 26 - receipt requires typed valid UTC RFC3339 calendar timestamps
+  ---
+  duration_ms: 0.628623
+  type: 'test'
+  ...
+# Subtest: receipt locality/network and request elapsed budget cannot become success
+ok 27 - receipt locality/network and request elapsed budget cannot become success
+  ---
+  duration_ms: 1.501108
+  type: 'test'
+  ...
+# Subtest: committed output does not alias the mutable worker object
+ok 28 - committed output does not alias the mutable worker object
+  ---
+  duration_ms: 1.601375
+  type: 'test'
+  ...
+# Subtest: terminal native errors map to typed failures and never include output
+ok 29 - terminal native errors map to typed failures and never include output
+  ---
+  duration_ms: 0.556697
+  type: 'test'
+  ...
+# Subtest: checked-in semantic examples have valid digests and map to the worker schema
+ok 30 - checked-in semantic examples have valid digests and map to the worker schema
+  ---
+  duration_ms: 0.572223
+  type: 'test'
+  ...
+# Subtest: accepts recorded real C ABI and direct-worker outputs without rerunning inference
+ok 31 - accepts recorded real C ABI and direct-worker outputs without rerunning inference
+  ---
+  duration_ms: 2.645345
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.897565

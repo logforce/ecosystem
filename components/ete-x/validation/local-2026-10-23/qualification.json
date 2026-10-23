@@ -1,0 +1,73 @@
+{
+  "kind": "Local ETE-X qualification",
+  "status": "passed",
+  "network": "disabled by Docker",
+  "uid": 10001,
+  "steps": [
+    {
+      "name": "versions",
+      "exit_code": 0,
+      "seconds": 0.148
+    },
+    {
+      "name": "rust-format",
+      "exit_code": 0,
+      "seconds": 0.247
+    },
+    {
+      "name": "rust-tests",
+      "exit_code": 0,
+      "seconds": 12.467
+    },
+    {
+      "name": "rust-release",
+      "exit_code": 0,
+      "seconds": 3.218
+    },
+    {
+      "name": "python-environment",
+      "exit_code": 0,
+      "seconds": 3.345
+    },
+    {
+      "name": "offline-dependencies",
+      "exit_code": 0,
+      "seconds": 8.031
+    },
+    {
+      "name": "offline-test-dependencies",
+      "exit_code": 0,
+      "seconds": 3.378
+    },
+    {
+      "name": "worker-tests",
+      "exit_code": 0,
+      "seconds": 0.715
+    },
+    {
+      "name": "mapper-tests",
+      "exit_code": 0,
+      "seconds": 0.137
+    },
+    {
+      "name": "search-and-model-tests",
+      "exit_code": 0,
+      "seconds": 8.031
+    },
+    {
+      "name": "runtime-copy",
+      "exit_code": 0,
+      "seconds": 0.101
+    },
+    {
+      "name": "real-persistent-worker",
+      "exit_code": 0,
+      "seconds": 4.417
+    },
+    {
+      "name": "native-c-abi",
+      "exit_code": 0,
+      "seconds": 2.631
+    }
+  ]
+}

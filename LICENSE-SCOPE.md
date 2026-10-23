@@ -31,6 +31,23 @@ testing. The community runtime and intended community OS remain independently us
 
 ## Exclusions
 
+### Optional ETE-X component
+
+Effective 22 October 2026, the original ETE-X implementation, worker, semantic
+mapper, synthetic corpus and marked ETE-X tests are separately licensed under
+**CC BY-NC-ND 4.0**, as authorized by their rights holder. Their exact paths are
+identified in the publication manifest. See the
+[ETE-X license](https://github.com/logforce/ecosystem/blob/main/components/ete-x/LICENSE.md) and
+[third-party notices](https://github.com/logforce/ecosystem/blob/main/components/ete-x/NOTICE.md).
+
+This is not an Apache-2.0 grant for ETE-X. Commercial use and distribution of
+adapted ETE-X material are not granted by that CC license. The default community
+runtime does not compile or link ETE-X; `--features etex` explicitly selects this
+separately licensed component. The process-backend source package therefore
+contains separately licensed files, reflected in its Cargo metadata. The existing
+Apache-2.0 core and its thin dispatch/configuration code retain their license.
+Third-party demonstration model assets retain their own original terms.
+
 Website markup, CSS and JavaScript are Apache-2.0; editorial prose within
 `index.html` is additionally identified here as CC BY 4.0, not solely by the HTML
 file's software classification. Images are separate assets, not embedded prose.
@@ -55,7 +72,9 @@ be Apache-2.0. No proprietary engine is licensed through an example mentioning i
 Linux, dependencies, firmware, model weights and datasets retain their original
 licenses. Future OS distributions require component inventories and applicable
 source/notice delivery. A commercial OS offering is not a proprietary relicensing
-of its open-source components. No model weights are included in this release.
+of its open-source components. The optional ETE-X directory includes the two
+explicitly inventoried third-party ONNX demonstration models; other model weights
+are not included in this release.
 
 ## Patents, Brands and Future Contributions
 

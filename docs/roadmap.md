@@ -21,6 +21,12 @@ Linux, priority, latency and application-identity gates are recorded in the
 [development guide](development.md#local-scheduling-and-accounting-subset).
 This is not full R4 sign-off; R5 onward remain planned.
 
+As of 23 October 2026, the optional [ETE-X retrieval integration](ete-x.md) adds a
+persistent CPU worker, compact local encoder/reranker models and real C ABI
+acceptance tests. A fresh non-root offline Linux run passed. This is a bounded
+developer profile with explicit model/corpus paths, not completion of the R5
+package manager, live CogSheet application bridge or graphical OS preview.
+
 ## Next Delivery: Graphical Live Preview
 
 Decision recorded 18 September 2026. The next customer-facing artifact is an

@@ -1,0 +1,30 @@
+{
+  "kind": "offline_worker_correctness",
+  "engine": "fixture",
+  "fixture_is_ai": false,
+  "real_ai_tested": false,
+  "performance_benchmark": false,
+  "python": "3.12.15",
+  "tests_run": 36,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "source_sha256": {
+    "etex_bridge/__init__.py": "3a39e4a7b9801c9df718ef33e51a7e2987397cc723c02c295234a629d146749f",
+    "etex_bridge/backends.py": "8420030f41112ec14276fc2f24eb79d28da1a1f8d7dad327f2d1fc1097f575f6",
+    "etex_bridge/cogposix.py": "8b56ff8becd1dbb79a8fe655ee3a79aacfeef0badc23e36fb88d7c5b64bacd52",
+    "etex_bridge/protocol.py": "5713d565744fe587d9af436ada08126e9d26191eefddee4a3380127cb0f265b0",
+    "etex_bridge/worker.py": "b39194e550966d148930197b23e8c4345bb1279b9e125caaaff97078af6b2d35",
+    "tests/native_e2e.py": "5dac516d5015380e46dc5865e4d9767bd76e64286383327e9d22ae7062d55870",
+    "tests/real_smoke.py": "c3bf2ada1dc88df0e526dcd3bb8b652929265a154336c40c3e223fc895384ebc",
+    "tests/run_tests.py": "06b415dbf5a5bb51e37187f67869d086ef3f7fefb950339eb7cc092ebcc305b0",
+    "tests/test_protocol.py": "9fbc93d622228105f763dc38c8eca452c384f6d008923379326b58bb386e6b39",
+    "tests/test_worker.py": "dca868caf78368c5f217f094ad71a70b370f113341a49b220c8f9e9c9e5f2bd7",
+    "schemas/build_schemas.py": "85d9d34b7bc97f201b7ba57836b445b1eed1be2b4c8f8bc1bb135afdb4ab6891",
+    "examples/cogposix_client.py": "7d179fbb241ca60f6226d57cb1002f1e9e9133c25eabc4a269488480e155c0ba",
+    "worker.py": "fff3590c2f46c6395f81d4c23f356eaf001a1d9b1eae0a8b71d80e135c1e6b05",
+    "client.py": "b4bfec7ff98fc10594416736db9d5b4f7ec161df8b60cc49710678763c8b8b6c",
+    "prepare_runtime.py": "45657fc31076b0a7977c35d7d1c9ef7c31102384604bda5a33bc0002391f4d40"
+  }
+}

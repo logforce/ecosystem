@@ -7,6 +7,10 @@ rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
 
+[features]
+default = []
+etex = ["cog-backend-process/etex"]
+
 [[bin]]
 name = "ecosd"
 path = "src/main.rs"

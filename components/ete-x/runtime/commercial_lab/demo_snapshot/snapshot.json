@@ -1,0 +1,43 @@
+{
+  "format": "ete-x-local-rag-snapshot-v1",
+  "rows": 16,
+  "dimension": 384,
+  "encoder": {
+    "model_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+    "tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+    "max_length": 256,
+    "config_sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+    "pooling": "attention-mask mean, then FP32 L2 normalization",
+    "document_batch_size": 32,
+    "sort_by_length": true,
+    "query_batch_size": 1,
+    "dimension": 384
+  },
+  "source_file": "vectors.npy",
+  "index_layout": "packed",
+  "original_storage": "raw_fp32_npy",
+  "files": {
+    "documents.jsonl": {
+      "sha256": "a694f58aab104eda77540d27e563901f04c911a17e7d797d859e906f72adf1d7",
+      "bytes": 5241
+    },
+    "document_offsets.npy": {
+      "sha256": "cd242ecf5d65f31d110fdc14cbf333486bea7eb785eade044d4c92fb85ca3a15",
+      "bytes": 264
+    },
+    "vectors.npy": {
+      "sha256": "af5c186dd8b8a9cd8a37c9d4de0483e07e67d36b19e3a11d50290e1230b68b2c",
+      "bytes": 24704
+    }
+  },
+  "contract": "Immutable snapshot; dense exactness is relative to stored FP32 vectors and the eight-lane FP64 scorer.",
+  "build_runtime": {
+    "versions": {
+      "numpy": "2.3.5",
+      "onnxruntime": "1.31.0",
+      "tokenizers": "0.23.3"
+    },
+    "threads": 4
+  },
+  "model_quantization_note": "A quantized model can produce different embeddings from its FP32 source model."
+}

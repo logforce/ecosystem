@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:etex:rag:query:v1",
+  "title": "ETE-X semantic query payload v1",
+  "description": "The query input value in Capability Exchange. The mapper adds schema/request_id to construct the distinct etex.rag.search.request.v1 worker request. Runtime additionally enforces <=3000 UTF-8 query bytes, top_k <= candidate_count, valid Unicode scalar text, C0-control restrictions, and the full encoded request capacity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "query",
+    "candidate_count",
+    "top_k",
+    "rerank"
+  ],
+  "properties": {
+    "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3000,
+      "x-max-utf8-bytes": 3000
+    },
+    "candidate_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "rerank": {
+      "type": "boolean"
+    }
+  }
+}
