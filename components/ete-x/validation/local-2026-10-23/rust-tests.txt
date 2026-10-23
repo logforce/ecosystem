@@ -1,0 +1,172 @@
+   Compiling cog-core v0.1.0 (/work/project/crates/cog-core)
+   Compiling cog-shm v0.1.0 (/work/project/crates/cog-shm)
+   Compiling cog-backend-api v0.1.0 (/work/project/crates/cog-backend-api)
+   Compiling cog-backend-mock v0.1.0 (/work/project/crates/cog-backend-mock)
+   Compiling cog-protocol v0.1.0 (/work/project/crates/cog-protocol)
+   Compiling cog-backend-process v0.1.0 (/work/project/crates/cog-backend-process)
+   Compiling cog-client v0.1.0 (/work/project/crates/cog-client)
+   Compiling ecos-daemon v0.1.0 (/work/project/crates/ecos-daemon)
+   Compiling cog-cli v0.1.0 (/work/project/crates/cog-cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.77s
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_backend_api-80bec596e88053e9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_backend_mock-ab106b329a608f0f)
+
+running 1 test
+test tests::reproducible_wrapping_and_cancellation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_backend_process-1ec4c699f85a6d5f)
+
+running 13 tests
+test etex::tests::cancellation_interrupts_waiting_for_worker_reply ... ok
+test etex::tests::fixed_shapes_and_private_model_identity ... ok
+test etex::tests::invalid_envelopes_are_rejected_before_starting_a_worker ... ok
+test etex::tests::malformed_ready_headers_sequence_status_and_output_are_not_accepted ... ok
+test etex::tests::nonblocking_write_backpressure_obeys_deadline_and_cancellation ... ok
+test etex::tests::partial_response_reads_and_successive_sequences_reuse_one_worker ... ok
+test etex::tests::startup_and_response_deadlines_reap_direct_child ... ok
+test etex::tests::waiting_for_backend_lock_is_cancellable ... ok
+test etex::tests::worker_errors_propagate_without_committing_payload_or_replaying_job ... ok
+test linux::tests::cancellation_and_malformed_responses_discard_workers ... ok
+test linux::tests::capability_has_explicit_shapes_and_no_mock_delay ... ok
+test linux::tests::crash_is_not_retried_and_next_job_starts_a_fresh_worker ... ok
+test linux::tests::startup_and_inference_deadlines_reap_the_child ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.20s
+
+     Running unittests src/main.rs (/work/native/cargo_target/debug/deps/cog-79fc76ded3e3dac4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cogposix-191382cb8c404595)
+
+running 1 test
+test tests::old_peer_without_scheduling_feature_is_not_sent_the_extension ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_core-2c722ee8fdccf2f7)
+
+running 1 test
+test tests::tensor_extents_are_checked ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_protocol-d768f5ec6c29a310)
+
+running 4 tests
+test tests::malformed_frames_drop_descriptors_and_midframe_rights_are_rejected ... ok
+test tests::rejects_bad_frames_before_payload_allocation ... ok
+test tests::rejects_truncation_and_trailing_fields ... ok
+test tests::scheduling_query_is_optional_empty_and_rejects_trailing_bytes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/cog_shm-6342943254d8197d)
+
+running 1 test
+test linux::tests::sealed_mapping_is_readable_and_cannot_be_resized ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/work/native/cargo_target/debug/deps/ecos_daemon-f6f5d4355a35dafe)
+
+running 3 tests
+test scheduler::tests::cancellation_disconnect_reentry_and_clear_leave_no_duplicate_turns ... ok
+test scheduler::tests::deterministic_queue_churn_preserves_one_turn_per_nonempty_session ... ok
+test scheduler::tests::round_robin_preserves_session_fifo_and_does_not_starve_third_session ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running unittests src/main.rs (/work/native/cargo_target/debug/deps/ecosd-c699051dd31ebadc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/runtime.rs (/work/native/cargo_target/debug/deps/runtime-4ce5c29a0e8e9539)
+
+running 24 tests
+test backend_panic_fails_job_without_killing_coordinator ... ok
+test bind_refuses_existing_paths_and_public_directories ... ok
+test cancellation_completion_stress_never_commits_cancelled_output ... ok
+test crash_child ... ignored, subprocess helper, exercised by killed_client_reclaims_resources
+test descriptors_on_wrong_requests_close_the_session ... ok
+test failure_counters_survive_release_rejections_do_not_count_and_other_sessions_are_empty ... ok
+test global_memory_limit_counts_tensor_retained_buffers_and_recovers ... ok
+test job_admission_is_bounded_even_for_tiny_buffers ... ok
+test killed_client_reclaims_resources ... ok
+test malformed_and_ungreeted_connections_are_reclaimed ... ok
+test memory_objects_and_sessions_are_bounded ... ok
+test protocol_errors_are_explicit_without_corrupting_session ... ok
+test queued_job_cancels_without_waiting_for_running_work ... ok
+test round_robin_runs_three_real_clients_without_backlog_monopoly ... ok
+test running_cancellation_preserves_lifetimes_and_wait_timeout_is_not_cancellation ... ok
+test scheduler_cancellation_disconnect_and_session_accounting_do_not_leave_turns ... ok
+test server_shutdown_disconnects_clients_and_cleans_socket ... ok
+test shared_cancellation_does_not_commit_output ... ok
+test shared_import_inference_and_export_preserve_ownership ... ok
+test shared_import_validation_and_disconnect_reclaim_quota ... ok
+test shutdown_does_not_remove_a_replacement_file ... ok
+test stale_handles_and_overflowing_or_aliased_tensors_are_rejected ... ok
+test tensor_and_job_references_retain_closed_resources ... ok
+test two_independent_clients_execute_and_cannot_borrow_handles ... ok
+
+test result: ok. 23 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.16s
+
+   Doc-tests cog_backend_api
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cog_backend_mock
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cog_backend_process
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cogposix
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cog_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cog_protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests cog_shm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ecos_daemon
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,62 @@
+{
+  "schema": "nonar_dynamic_int8_v1",
+  "created_utc": "2026-10-22T06:41:06.003994+00:00",
+  "source": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.onnx",
+  "source_sha256": "5d3e70fd0c9ff14b9b5169a51e957b7a9c74897afd0a35ce4bd318150c1d4d4a",
+  "source_bytes": 91011230,
+  "destination": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.int8.onnx",
+  "destination_sha256": "fffc170bb9b9c234215d961a7d7da40acceb2597955e0298a77c8794863fd613",
+  "destination_bytes": 58933016,
+  "seconds_to_build_and_check": 6.870271913000124,
+  "onnxruntime_version": "1.31.0",
+  "onnx_version": "1.23.2",
+  "weight_type": "INT8",
+  "activation_quantization": "dynamic at inference time",
+  "per_channel": true,
+  "reduce_range": false,
+  "op_types_to_quantize": [
+    "MatMul"
+  ],
+  "MatMulConstBOnly": true,
+  "preprocess": "ONNX shape inference; no symbolic shape inference or offline graph optimization",
+  "graph_node_counts": {
+    "Add": 90,
+    "Cast": 53,
+    "Concat": 25,
+    "Constant": 219,
+    "ConstantOfShape": 1,
+    "Div": 25,
+    "DynamicQuantizeLinear": 26,
+    "Equal": 1,
+    "Erf": 6,
+    "Expand": 1,
+    "Gather": 55,
+    "MatMul": 12,
+    "MatMulInteger": 38,
+    "Mul": 114,
+    "Pow": 13,
+    "ReduceMean": 26,
+    "Reshape": 25,
+    "Shape": 58,
+    "Slice": 7,
+    "Softmax": 6,
+    "Sqrt": 31,
+    "Sub": 14,
+    "Tanh": 1,
+    "Transpose": 24,
+    "Unsqueeze": 54,
+    "Where": 2
+  },
+  "initializer_data_types": {
+    "FLOAT": 105,
+    "INT8": 76
+  },
+  "quality_status": "requires evaluation; quantization is lossy",
+  "scope": "MatMul projections only; embeddings remain FP32",
+  "size_reduction_pct": 35.246434972914884,
+  "weight_type_requested": "QInt8",
+  "quantized_weight_tensor_types": {
+    "INT8": 38
+  },
+  "per_channel_scope": "constant MatMul weights; ORT Gather uses its own per-tensor quantizer"
+}

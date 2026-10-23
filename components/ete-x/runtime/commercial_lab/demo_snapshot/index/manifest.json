@@ -1,0 +1,48 @@
+{
+  "chunk_rows": 5456,
+  "files": {
+    "packed_codes.npy": {
+      "bytes": 6272,
+      "dtype": "|i1",
+      "sha256": "2d31b1fa2594dfc9db85e62985000119b1833dfc4062bdd12f20d7a7f8b3273b",
+      "shape": [
+        1,
+        96,
+        16,
+        4
+      ]
+    },
+    "scales.npy": {
+      "bytes": 192,
+      "dtype": "<f4",
+      "sha256": "ca518dac7e38a65c4ae378b4200b1ca8cd7d83ac4daebc3f58d33554882cc295",
+      "shape": [
+        16
+      ]
+    },
+    "sums.npy": {
+      "bytes": 192,
+      "dtype": "<i4",
+      "sha256": "7066dcd371c684755c0c000606e7f7790744de2a1d6d84ec798e4caf0e12f80e",
+      "shape": [
+        16
+      ]
+    }
+  },
+  "format": "etex-bounded-index",
+  "layout": "tile16_quad4",
+  "norm_envelope": {
+    "residual_upper": 0.009514953680131345,
+    "x_upper": 1.0000000454066043,
+    "xhat_upper": 1.0008057285098415
+  },
+  "reference": "fp32-products-fp64-eight-lanes-no-fma-v1",
+  "scheme": "fp32-int8-residual-upper-v1",
+  "shape": [
+    16,
+    384
+  ],
+  "source_dtype": "<f4",
+  "source_sha256": "4cec264be72a3518896257618dd7c5991646d4c1b3e148fbf17d87aa3e17fcf0",
+  "version": 2
+}

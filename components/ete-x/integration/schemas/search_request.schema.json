@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "request_id",
+    "query",
+    "candidate_count",
+    "top_k",
+    "rerank"
+  ],
+  "properties": {
+    "schema": {
+      "const": "etex.rag.search.request.v1"
+    },
+    "request_id": {
+      "type": "string",
+      "maxLength": 64,
+      "x-max-utf8-bytes": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+    },
+    "query": {
+      "type": "string",
+      "maxLength": 3072,
+      "x-max-utf8-bytes": 3072,
+      "minLength": 1,
+      "description": "Non-whitespace Unicode scalar text. UTF-8 byte cap is enforced by the worker; C0 controls except TAB/LF/CR are rejected."
+    },
+    "candidate_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "rerank": {
+      "type": "boolean"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:etex:rag:search:request:v1",
+  "title": "ETE-X search request v1",
+  "description": "Closed application request. No snapshot, path, tenant, corpus, engine, or runtime selection. Runtime also requires top_k <= candidate_count, strict UTF-8, unique JSON keys, finite numbers and a <=4092-byte encoded document."
+}

@@ -1,0 +1,906 @@
+{
+  "schema": "etex.public-component.provenance.v1",
+  "date": "2026-10-23",
+  "authentication": "Unsigned source and asset inventory; hashes establish consistency, not publisher authentication.",
+  "handoff": {
+    "archive": "ETE_X_ecOS_CogPOSIX_CogSheet_Implementation_Kit.zip",
+    "archive_sha256": "c1f300d2cd547b580c6f6d032e85a2d038c7efc9d5cad024ef247bfd07f0da89",
+    "manifest_sha256": "816ab601a88854abceb8d2f16bafb8dfe16fd544bec758aaeef5ee9df719659b",
+    "date": "2026-10-22",
+    "upstream_commit": "760f2cdb521b77bdcd491f7466f920bd344444fd",
+    "strict_integrity_check": "765 listed files verified; no mismatches or symlinks"
+  },
+  "license_authorization": {
+    "original_ete_x": "CC-BY-NC-ND-4.0 selected by the rights holder",
+    "community_core": "Existing Apache-2.0 scope retained",
+    "third_party_models": "Apache-2.0; original cards, revisions and transformation records retained"
+  },
+  "integration_changes": [
+    "Rehome the original retrieval runtime under components/ete-x/runtime; update the worker packaged-root resolver.",
+    "Replace handoff-only comment references with the public component license notice.",
+    "Mark ETE-X native files with their separate license; format Rust source and gate native integration behind an opt-in etex feature.",
+    "Retain the original native acceptance harness under integration/tests/native_e2e.py.",
+    "Project the original C ABI report to three unchanged result objects for mapper compatibility, omitting operator paths.",
+    "Add hash-locked development dependencies and fresh offline functional evidence; keep original standalone performance records distinct."
+  ],
+  "qualification": {
+    "date": "2026-10-23",
+    "record": "components/ete-x/validation/local-2026-10-23/qualification.json",
+    "network": "disabled",
+    "uid": 10001,
+    "platform": "Linux x86-64; CPython 3.12.15; Rust 1.90.0; Node.js 22.19.0",
+    "scope": "Functional and numerical checks, including real compact models and C ABI; not a new performance benchmark.",
+    "control_model_skips": 2
+  },
+  "files": [
+    {
+      "path": "components/ete-x/LICENSE.md",
+      "license": "License-Text",
+      "bytes": 1844,
+      "sha256": "3ac96ad85c9240107d81a87009078e26e4c9ab2a4c931b630feb8b1cc2af5092",
+      "origin": "Repository publication preparation"
+    },
+    {
+      "path": "components/ete-x/NOTICE.md",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1602,
+      "sha256": "7e4710cef70f27ad87177421c893bc63698b2c9d92816a08b21245df3a4cbf26",
+      "origin": "Repository publication preparation"
+    },
+    {
+      "path": "components/ete-x/README.md",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 6004,
+      "sha256": "365ea50b18842406abd620d007f12260653c7f649be009f9c2de79dfb35d391e",
+      "handoff_path": "README.md",
+      "handoff_sha256": "80c45549868d9b8c60d1e19638ad5c1c0ceeea57e8a313c3b65884333b15a4a7",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/cogsheet/adapter.mjs",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 15904,
+      "sha256": "80691c6088b47b993f7f7c7faf470b7d547bc5e5ac14bf4a9e4744434d1709d6",
+      "handoff_path": "cogsheet/adapter.mjs",
+      "handoff_sha256": "de98e4acfb9255494add3e61a135c1bac7986d19ebd781224b0d3097aa483cd1",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/cogsheet/adapter.test.mjs",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 18747,
+      "sha256": "062e4b7c09d70311343d40e225197627ba8a35f8e5113099142036fe8d0075b7",
+      "handoff_path": "cogsheet/adapter.test.mjs",
+      "handoff_sha256": "280883e4948bc6d3b724a85cb9c5d5073e6e286c57733163b94169564fd85421",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/cogsheet/examples/deployment_inventory.example.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1706,
+      "sha256": "cd34b23e2680ad3f4b052a80ee2b340536d754f5377541f0518444ef2e3dbb1d",
+      "handoff_path": "cogsheet/examples/deployment_inventory.example.json",
+      "handoff_sha256": "cd34b23e2680ad3f4b052a80ee2b340536d754f5377541f0518444ef2e3dbb1d",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/cogsheet/examples/document_search_request.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1312,
+      "sha256": "7536656c87cc6c9a00207863f65544b2cf49baaa5e98b5273ed6fc8947a47ae3",
+      "handoff_path": "cogsheet/examples/document_search_request.json",
+      "handoff_sha256": "7536656c87cc6c9a00207863f65544b2cf49baaa5e98b5273ed6fc8947a47ae3",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/cogsheet/examples/semantic_query.schema.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1000,
+      "sha256": "48d8f77dc1ac319e3506cb0a81ebf4a7a42af652c8c5c2f7890e03ad4644617a",
+      "handoff_path": "cogsheet/examples/semantic_query.schema.json",
+      "handoff_sha256": "48d8f77dc1ac319e3506cb0a81ebf4a7a42af652c8c5c2f7890e03ad4644617a",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/cogsheet/examples/trusted_context.example.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 337,
+      "sha256": "093a1f7d00aecbeac9ac67240f7808bf70c76dc7f8e39380a47b237ef70b036c",
+      "handoff_path": "cogsheet/examples/trusted_context.example.json",
+      "handoff_sha256": "093a1f7d00aecbeac9ac67240f7808bf70c76dc7f8e39380a47b237ef70b036c",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/client.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 3659,
+      "sha256": "b4bfec7ff98fc10594416736db9d5b4f7ec161df8b60cc49710678763c8b8b6c",
+      "handoff_path": "integration/client.py",
+      "handoff_sha256": "30f45d083a1ea1d2de79390a132bc9e3ffb62686fb4b6241737f6b9a0ad6b0d8",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/etex_bridge/__init__.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 120,
+      "sha256": "3a39e4a7b9801c9df718ef33e51a7e2987397cc723c02c295234a629d146749f",
+      "handoff_path": "integration/etex_bridge/__init__.py",
+      "handoff_sha256": "51bd34be700b53a7d5a7b0c1a290347ac0d3ec3ba243cab394740dda4b6a0685",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/etex_bridge/backends.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 12521,
+      "sha256": "8420030f41112ec14276fc2f24eb79d28da1a1f8d7dad327f2d1fc1097f575f6",
+      "handoff_path": "integration/etex_bridge/backends.py",
+      "handoff_sha256": "d547c367d0320fe5f65ab8db3d05ffa1fdaffc85b2e5bac4e662f7b09a7a6259",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/etex_bridge/cogposix.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 6701,
+      "sha256": "8b56ff8becd1dbb79a8fe655ee3a79aacfeef0badc23e36fb88d7c5b64bacd52",
+      "handoff_path": "integration/etex_bridge/cogposix.py",
+      "handoff_sha256": "f070ca2850e043f06ed07c0b48bce23fc7198446f03e0329e28a087508e759d6",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/etex_bridge/protocol.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 14752,
+      "sha256": "5713d565744fe587d9af436ada08126e9d26191eefddee4a3380127cb0f265b0",
+      "handoff_path": "integration/etex_bridge/protocol.py",
+      "handoff_sha256": "9342b49f3850518c1c32e935e91e1c2e866c24bc4a13eb09ddc3475934e8659d",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/etex_bridge/worker.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 5060,
+      "sha256": "b39194e550966d148930197b23e8c4345bb1279b9e125caaaff97078af6b2d35",
+      "handoff_path": "integration/etex_bridge/worker.py",
+      "handoff_sha256": "30731d41a53acc55797a08aaec5727aaff3376c0ff3c4ede6686f06894c55abc",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/examples/cogposix_client.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1801,
+      "sha256": "7d179fbb241ca60f6226d57cb1002f1e9e9133c25eabc4a269488480e155c0ba",
+      "handoff_path": "integration/examples/cogposix_client.py",
+      "handoff_sha256": "7684c2d9ab980c637d01c96bb6eedec5594d2561f80f7490566c9bde46516e14",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/examples/fixture_result.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1956,
+      "sha256": "97121e37ab9e2e6382fa23a6470b448d05f2c22f68fdc52867e44cfbc5223440",
+      "handoff_path": "integration/examples/fixture_result.json",
+      "handoff_sha256": "97121e37ab9e2e6382fa23a6470b448d05f2c22f68fdc52867e44cfbc5223440",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/examples/request.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 165,
+      "sha256": "f2167d10c5ff601884480895ca59af17cf34a677eefed660371672239de1000b",
+      "handoff_path": "integration/examples/request.json",
+      "handoff_sha256": "f2167d10c5ff601884480895ca59af17cf34a677eefed660371672239de1000b",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/prepare_runtime.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1653,
+      "sha256": "45657fc31076b0a7977c35d7d1c9ef7c31102384604bda5a33bc0002391f4d40",
+      "handoff_path": "integration/prepare_runtime.py",
+      "handoff_sha256": "09152577c41b5f52aaacd4a79af34a688f9bf7410803c96e3bfd4be849a0c36e",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/schemas/build_schemas.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 7619,
+      "sha256": "85d9d34b7bc97f201b7ba57836b445b1eed1be2b4c8f8bc1bb135afdb4ab6891",
+      "handoff_path": "integration/schemas/build_schemas.py",
+      "handoff_sha256": "08506fb47fae5f1dc2e8fd6b3f7b5f392daaaf1c1635f31747f485610fe1e4b2",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/schemas/search_request.schema.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1305,
+      "sha256": "aa8c2704098a86ae90022e06493419420899ff5328170cff4ac345024134582c",
+      "handoff_path": "integration/schemas/search_request.schema.json",
+      "handoff_sha256": "aa8c2704098a86ae90022e06493419420899ff5328170cff4ac345024134582c",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/schemas/search_result.schema.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 29024,
+      "sha256": "85059f0dc16f68dfb7d52b1ca313b90c342f68059e13b6c0a181cfb33975755b",
+      "handoff_path": "integration/schemas/search_result.schema.json",
+      "handoff_sha256": "85059f0dc16f68dfb7d52b1ca313b90c342f68059e13b6c0a181cfb33975755b",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/tests/native_e2e.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 13217,
+      "sha256": "5dac516d5015380e46dc5865e4d9767bd76e64286383327e9d22ae7062d55870",
+      "handoff_path": "scripts/ecos-owned/run_c_abi_e2e.py",
+      "handoff_sha256": "5dac516d5015380e46dc5865e4d9767bd76e64286383327e9d22ae7062d55870",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/integration/tests/real_smoke.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 6609,
+      "sha256": "c3bf2ada1dc88df0e526dcd3bb8b652929265a154336c40c3e223fc895384ebc",
+      "handoff_path": "integration/tests/real_smoke.py",
+      "handoff_sha256": "e61cb0bb3cf56f53c6b41ee49fc9600c62d82522f52937551af2ab4c9f2702a9",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/tests/run_tests.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1912,
+      "sha256": "06b415dbf5a5bb51e37187f67869d086ef3f7fefb950339eb7cc092ebcc305b0",
+      "handoff_path": "integration/tests/run_tests.py",
+      "handoff_sha256": "12abb5ec63eed4f1452da51cd59000676e332b838375e95d30b1fc43068b5993",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/tests/test_protocol.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 9926,
+      "sha256": "9fbc93d622228105f763dc38c8eca452c384f6d008923379326b58bb386e6b39",
+      "handoff_path": "integration/tests/test_protocol.py",
+      "handoff_sha256": "47dbf7f1e7219a9086eb66043b193df31ad809a6736b481379d75491ea53616b",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/tests/test_worker.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 9705,
+      "sha256": "dca868caf78368c5f217f094ad71a70b370f113341a49b220c8f9e9c9e5f2bd7",
+      "handoff_path": "integration/tests/test_worker.py",
+      "handoff_sha256": "0fd6030206e2a74b9d6a792a32fdb674586f602594b109fdf04824afe6e7c256",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/integration/worker.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 307,
+      "sha256": "fff3590c2f46c6395f81d4c23f356eaf001a1d9b1eae0a8b71d80e135c1e6b05",
+      "handoff_path": "integration/worker.py",
+      "handoff_sha256": "a6f57d99c283eac40c85784e2661631ce9aec027d75cce29ffd533f8fa584c1e",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/requirements-linux-x86_64-cp312.lock",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 2091,
+      "sha256": "e210a8a47beaadc3e38c6ba217f0d3199a1c89c3ce655d6dd01168831245d1a2",
+      "handoff_path": "dependencies/requirements-linux-x86_64-cp312.lock",
+      "handoff_sha256": "e210a8a47beaadc3e38c6ba217f0d3199a1c89c3ce655d6dd01168831245d1a2",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/requirements-tests-linux-x86_64-cp312.lock",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 684,
+      "sha256": "db2bdc269c321fe4ecd10829b9fc0bc047f52d8000a0fc6dd507c1d96853d113",
+      "origin": "Repository publication preparation"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/README.md",
+      "license": "Apache-2.0",
+      "bytes": 10502,
+      "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/README.md",
+      "handoff_sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/config.json",
+      "license": "Apache-2.0",
+      "bytes": 612,
+      "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/config.json",
+      "handoff_sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx",
+      "license": "Apache-2.0",
+      "bytes": 22867989,
+      "sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx",
+      "handoff_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 2005,
+      "sha256": "7c8cd5c0f2f5a7d49d5d4bb62107e1d0e3ac33b19279359b30c839e5a8dbbb77",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx.json",
+      "handoff_sha256": "7c8cd5c0f2f5a7d49d5d4bb62107e1d0e3ac33b19279359b30c839e5a8dbbb77",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.int8.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 1911,
+      "sha256": "e694443689c94abd7b3f99f6116c34aa002584b128a462874478d0a82e477560",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.fused.int8.onnx.json",
+      "handoff_sha256": "e694443689c94abd7b3f99f6116c34aa002584b128a462874478d0a82e477560",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 3058,
+      "sha256": "18774fb86028b47b97a1681d9453e2be32394dd79933e67d0b34add532901d0c",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.fused.onnx.json",
+      "handoff_sha256": "18774fb86028b47b97a1681d9453e2be32394dd79933e67d0b34add532901d0c",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.int8.full.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 1990,
+      "sha256": "56b82b46ee13e6d4db6cf6c96961a7979d44e08933e2116820fc0d266e52aed3",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.int8.full.onnx.json",
+      "handoff_sha256": "56b82b46ee13e6d4db6cf6c96961a7979d44e08933e2116820fc0d266e52aed3",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.int8.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 1887,
+      "sha256": "42413bcc4a1956321c066f2b23486515e7ba21f93f5c8196bac4f242a0817456",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.int8.onnx.json",
+      "handoff_sha256": "42413bcc4a1956321c066f2b23486515e7ba21f93f5c8196bac4f242a0817456",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/pooling_config.json",
+      "license": "Apache-2.0",
+      "bytes": 190,
+      "sha256": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/pooling_config.json",
+      "handoff_sha256": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/special_tokens_map.json",
+      "license": "Apache-2.0",
+      "bytes": 112,
+      "sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/special_tokens_map.json",
+      "handoff_sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/tokenizer.json",
+      "license": "Apache-2.0",
+      "bytes": 466247,
+      "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/tokenizer.json",
+      "handoff_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/tokenizer_config.json",
+      "license": "Apache-2.0",
+      "bytes": 350,
+      "sha256": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/tokenizer_config.json",
+      "handoff_sha256": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/README.md",
+      "license": "Apache-2.0",
+      "bytes": 3673,
+      "sha256": "7c0ec39941d0d1d766ccde671f592971d82fe45b7eea550a80d1ea864ebc3baa",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/README.md",
+      "handoff_sha256": "7c0ec39941d0d1d766ccde671f592971d82fe45b7eea550a80d1ea864ebc3baa",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/config.json",
+      "license": "Apache-2.0",
+      "bytes": 794,
+      "sha256": "380e02c93f431831be65d99a4e7e5f67c133985bf2e77d9d4eba46847190bacc",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/config.json",
+      "handoff_sha256": "380e02c93f431831be65d99a4e7e5f67c133985bf2e77d9d4eba46847190bacc",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx",
+      "license": "Apache-2.0",
+      "bytes": 23029327,
+      "sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx",
+      "handoff_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 2022,
+      "sha256": "f82de319442093a563b482220bbf60d823fc83877045cbc872d651ad815647f1",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx.json",
+      "handoff_sha256": "f82de319442093a563b482220bbf60d823fc83877045cbc872d651ad815647f1",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.fused.int8.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 1928,
+      "sha256": "9d531378522311f9bf5ad163ae7cbf9e4162e43c7b3fbe909a690b7cf36f2d03",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.fused.int8.onnx.json",
+      "handoff_sha256": "9d531378522311f9bf5ad163ae7cbf9e4162e43c7b3fbe909a690b7cf36f2d03",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.fused.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 3119,
+      "sha256": "804381f7b371ba2fb4e9efd9e5c6480d74ff808b2177df4a46989bfb08078cd2",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.fused.onnx.json",
+      "handoff_sha256": "804381f7b371ba2fb4e9efd9e5c6480d74ff808b2177df4a46989bfb08078cd2",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.int8.full.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 2007,
+      "sha256": "d68d7ea4172fa2a6cf10896bb925c1c5b63efd4a1df151c94ec6dd3e8e0d7cd6",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.int8.full.onnx.json",
+      "handoff_sha256": "d68d7ea4172fa2a6cf10896bb925c1c5b63efd4a1df151c94ec6dd3e8e0d7cd6",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.int8.onnx.json",
+      "license": "Apache-2.0",
+      "bytes": 1904,
+      "sha256": "4d74bbf9a11cb9168dffb9f8251925d73b9428ecd087dba2f01a28e9087e80ba",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.int8.onnx.json",
+      "handoff_sha256": "4d74bbf9a11cb9168dffb9f8251925d73b9428ecd087dba2f01a28e9087e80ba",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/special_tokens_map.json",
+      "license": "Apache-2.0",
+      "bytes": 132,
+      "sha256": "3c3507f36dff57bce437223db3b3081d1e2b52ec3e56ee55438193ecb2c94dd6",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/special_tokens_map.json",
+      "handoff_sha256": "3c3507f36dff57bce437223db3b3081d1e2b52ec3e56ee55438193ecb2c94dd6",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/tokenizer.json",
+      "license": "Apache-2.0",
+      "bytes": 711396,
+      "sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/tokenizer.json",
+      "handoff_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/tokenizer_config.json",
+      "license": "Apache-2.0",
+      "bytes": 1330,
+      "sha256": "a5c2e5a7b1a29a0702cd28c08a399b5ecc110c263009d17f7e3b415f25905fd8",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/tokenizer_config.json",
+      "handoff_sha256": "a5c2e5a7b1a29a0702cd28c08a399b5ecc110c263009d17f7e3b415f25905fd8",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/__init__.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 237,
+      "sha256": "864f85178b7788d16dc9e8466c9c835f03f24ca95fd5e493c9440c860bd03dba",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/__init__.py",
+      "handoff_sha256": "864f85178b7788d16dc9e8466c9c835f03f24ca95fd5e493c9440c860bd03dba",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/index.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 32267,
+      "sha256": "7d4147789a8b2f60ad9676bcbea02a4c35212eb3937e3b84560812f61d269067",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/index.py",
+      "handoff_sha256": "7d4147789a8b2f60ad9676bcbea02a4c35212eb3937e3b84560812f61d269067",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/kernels.cpp",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 14113,
+      "sha256": "1c3307c6e17c5e28b97874943bb512b1d6f700e71a49a42693e5c4368e721721",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/kernels.cpp",
+      "handoff_sha256": "1c3307c6e17c5e28b97874943bb512b1d6f700e71a49a42693e5c4368e721721",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/kernels_mixed.cpp",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 3963,
+      "sha256": "b6c4412059a89918e287a155d2f630027d1cba2cc83def9458c159329147e7a7",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/kernels_mixed.cpp",
+      "handoff_sha256": "b6c4412059a89918e287a155d2f630027d1cba2cc83def9458c159329147e7a7",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/kernels_packed.cpp",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 8538,
+      "sha256": "3154896c9c754598476f90843ad78107a8971b500957af8ee98c1f1902e306a3",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/kernels_packed.cpp",
+      "handoff_sha256": "3154896c9c754598476f90843ad78107a8971b500957af8ee98c1f1902e306a3",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/mixed_index.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 18092,
+      "sha256": "c56a4b07dabb8d62926a6cfefcae4d28a19db17a2597f49e16466cf337f9315f",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/mixed_index.py",
+      "handoff_sha256": "c56a4b07dabb8d62926a6cfefcae4d28a19db17a2597f49e16466cf337f9315f",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/native.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 8426,
+      "sha256": "c52d9db5d95ad171c5da79be7dd4d4960c163d777b359c97aef2dc55a126dd4d",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/native.py",
+      "handoff_sha256": "c52d9db5d95ad171c5da79be7dd4d4960c163d777b359c97aef2dc55a126dd4d",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/native_mixed.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 4949,
+      "sha256": "1ac8482947fcbf1877bf51fca37bf0ec49b8cef6bf0f2e8cbff807ef0d1bb1c0",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/native_mixed.py",
+      "handoff_sha256": "1ac8482947fcbf1877bf51fca37bf0ec49b8cef6bf0f2e8cbff807ef0d1bb1c0",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/native_packed.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 5699,
+      "sha256": "1992d07de4ac3ced6a228851cf6ba9fd7128d165c56d994e8438365955beb22b",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/native_packed.py",
+      "handoff_sha256": "1992d07de4ac3ced6a228851cf6ba9fd7128d165c56d994e8438365955beb22b",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/bounded_search/packed_index.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 19726,
+      "sha256": "170b21d21b858f727706a43d5763b30e44a6e3ea438cf0a4590f63174f0b91b1",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/bounded_search/packed_index.py",
+      "handoff_sha256": "170b21d21b858f727706a43d5763b30e44a6e3ea438cf0a4590f63174f0b91b1",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/document_offsets.npy",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 264,
+      "sha256": "cd242ecf5d65f31d110fdc14cbf333486bea7eb785eade044d4c92fb85ca3a15",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/document_offsets.npy",
+      "handoff_sha256": "cd242ecf5d65f31d110fdc14cbf333486bea7eb785eade044d4c92fb85ca3a15",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/documents.jsonl",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 5241,
+      "sha256": "a694f58aab104eda77540d27e563901f04c911a17e7d797d859e906f72adf1d7",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/documents.jsonl",
+      "handoff_sha256": "a694f58aab104eda77540d27e563901f04c911a17e7d797d859e906f72adf1d7",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/index/manifest.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1116,
+      "sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/index/manifest.json",
+      "handoff_sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/index/packed_codes.npy",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 6272,
+      "sha256": "2d31b1fa2594dfc9db85e62985000119b1833dfc4062bdd12f20d7a7f8b3273b",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/index/packed_codes.npy",
+      "handoff_sha256": "2d31b1fa2594dfc9db85e62985000119b1833dfc4062bdd12f20d7a7f8b3273b",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/index/scales.npy",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 192,
+      "sha256": "ca518dac7e38a65c4ae378b4200b1ca8cd7d83ac4daebc3f58d33554882cc295",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/index/scales.npy",
+      "handoff_sha256": "ca518dac7e38a65c4ae378b4200b1ca8cd7d83ac4daebc3f58d33554882cc295",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/index/sums.npy",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 192,
+      "sha256": "7066dcd371c684755c0c000606e7f7790744de2a1d6d84ec798e4caf0e12f80e",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/index/sums.npy",
+      "handoff_sha256": "7066dcd371c684755c0c000606e7f7790744de2a1d6d84ec798e4caf0e12f80e",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/snapshot.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1472,
+      "sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/snapshot.json",
+      "handoff_sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/demo_snapshot/vectors.npy",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 24704,
+      "sha256": "af5c186dd8b8a9cd8a37c9d4de0483e07e67d36b19e3a11d50290e1230b68b2c",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/vectors.npy",
+      "handoff_sha256": "af5c186dd8b8a9cd8a37c9d4de0483e07e67d36b19e3a11d50290e1230b68b2c",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/etex_mmap/__init__.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 240,
+      "sha256": "6699c76f6bc8caa934e60567bef9622b03bbcb9e31ae517c7feee659671ce433",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/etex_mmap/__init__.py",
+      "handoff_sha256": "6699c76f6bc8caa934e60567bef9622b03bbcb9e31ae517c7feee659671ce433",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/etex_mmap/store.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 24922,
+      "sha256": "0c242f3880e90148e3cb383fa8be8cf47fb778d8c6e53dc4ab35f4858cca165d",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/etex_mmap/store.py",
+      "handoff_sha256": "0c242f3880e90148e3cb383fa8be8cf47fb778d8c6e53dc4ab35f4858cca165d",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/licenses/Apache-2.0.txt",
+      "license": "License-Text",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/licenses/Apache-2.0.txt",
+      "handoff_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/nonar/__init__.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 233,
+      "sha256": "247b614f2e9d1ecc183010be56fc9f39ed83fa8a620f48be421b2b0d9f6f4ae6",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/nonar/__init__.py",
+      "handoff_sha256": "247b614f2e9d1ecc183010be56fc9f39ed83fa8a620f48be421b2b0d9f6f4ae6",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/nonar/benchmark.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 14002,
+      "sha256": "5ecd762365f3efec7aed8308ce012a869e0f2ca7459ba1cb4567464b0a702829",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/nonar/benchmark.py",
+      "handoff_sha256": "5ecd762365f3efec7aed8308ce012a869e0f2ca7459ba1cb4567464b0a702829",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/nonar/encoder.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 17073,
+      "sha256": "d0477a97c5dfcee33a68fae70cae39b94e5636b1b225f66357fae0fbded30fcc",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/nonar/encoder.py",
+      "handoff_sha256": "d0477a97c5dfcee33a68fae70cae39b94e5636b1b225f66357fae0fbded30fcc",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/rag.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 16279,
+      "sha256": "6e2cc1b22528982754f2df06f570c7d30881d23af9324ae845b4d550f7f52eae",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/rag.py",
+      "handoff_sha256": "6e2cc1b22528982754f2df06f570c7d30881d23af9324ae845b4d550f7f52eae",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_bounded_search.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 18437,
+      "sha256": "bd80d5b03b33744a6253568cf849311f285b8ee092aa1c6d0b5e166a6a917c85",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_bounded_search.py",
+      "handoff_sha256": "bd80d5b03b33744a6253568cf849311f285b8ee092aa1c6d0b5e166a6a917c85",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_mixed_search.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 11956,
+      "sha256": "221333e677a28be46a71fa890fbb2b69d561e7462a0985e9c161ea4602a06761",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_mixed_search.py",
+      "handoff_sha256": "221333e677a28be46a71fa890fbb2b69d561e7462a0985e9c161ea4602a06761",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_mmap_store.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 13828,
+      "sha256": "a865ba308644adc805f7e538a65cb8eecc2a0060630963366e1da521306a5ff8",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_mmap_store.py",
+      "handoff_sha256": "a865ba308644adc805f7e538a65cb8eecc2a0060630963366e1da521306a5ff8",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_nonar.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 10227,
+      "sha256": "b4eae03f383f2aa4cdbe31022c9479942a64895db8a29126c503615bcc8d13ad",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_nonar.py",
+      "handoff_sha256": "b4eae03f383f2aa4cdbe31022c9479942a64895db8a29126c503615bcc8d13ad",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_packed_search.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 20305,
+      "sha256": "a678a3676d181ea9bf77a87419895d04a189376d820759446e0f0a70decb2116",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_packed_search.py",
+      "handoff_sha256": "a678a3676d181ea9bf77a87419895d04a189376d820759446e0f0a70decb2116",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/runtime/commercial_lab/tests/test_rag_snapshot.py",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 4104,
+      "sha256": "650ce462995aa4c90a86fcce254ca75d75d85359e5ad2f29d9f5154ea4fe29e7",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/tests/test_rag_snapshot.py",
+      "handoff_sha256": "650ce462995aa4c90a86fcce254ca75d75d85359e5ad2f29d9f5154ea4fe29e7",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/validation/ecos/c_abi_e2e.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 14341,
+      "sha256": "8a38ce30131794013262aa8c5bb97445b736daf103088326890d0b0b72f9d1e9",
+      "handoff_path": "validation/ecos/c_abi_e2e.json",
+      "handoff_sha256": "163efbc329e0b472bf143667343c222ee1e63d8eb8ef7e8cfebd5ea846e594bc",
+      "copy": "adapted"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/mapper-tests.txt",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 6433,
+      "sha256": "39ee662917abcad3441d91b065639838e0e4ccdc9d460a831f1804d4db056e38",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/native-c-abi.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 26442,
+      "sha256": "36fca8dbb1575ead3acd07eb9fd359f828c9a9069cfa1dd5c265d4197e92a9b1",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/qualification.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1317,
+      "sha256": "4ed8e40c193dfc2e4e5495e5d92824ee8c9ffec22c95b67fa53c8745a5a7713d",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/real-worker.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 2061,
+      "sha256": "dfa311572dcee80f12cea48ec96eb93cb3d0e040cc6f854d9178f2c742029825",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/rust-tests.txt",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 7672,
+      "sha256": "f77e7954891549ef65516ad3e71865c9496b2b5a868a18e3ea01017dd4348bb2",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/search-and-model-tests.txt",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 207,
+      "sha256": "2df25e2ac16b05e1343e6e9b5f63554ed8f82fb03e0df1fa23a7de05dfcd56f0",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/versions.txt",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 336,
+      "sha256": "07238088d1edf193151a1f582cdc8aacd8ad858f2e57ca77ec664fb2e31b3984",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/local-2026-10-23/worker.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 1724,
+      "sha256": "1efb86fe1423012773226bc2903c75401d52e90540f7fa59847323c41afcc3f3",
+      "origin": "Fresh offline qualification, 23 October 2026"
+    },
+    {
+      "path": "components/ete-x/validation/standalone/compact-models-summary.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 163567,
+      "sha256": "014deb57f9db273edd7b9b54c0483911ce909d94ad63c21f2823722c6c956eee",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/nonar/results/summary.json",
+      "handoff_sha256": "014deb57f9db273edd7b9b54c0483911ce909d94ad63c21f2823722c6c956eee",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/validation/standalone/dbpedia-mixed-v3.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 213194,
+      "sha256": "01a9a0b6b561d6a01427793921705b2c5d9843f6405f556362fed9b4b6284c98",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/results/dbpedia1536/mixed_search_benchmark_k10.json",
+      "handoff_sha256": "01a9a0b6b561d6a01427793921705b2c5d9843f6405f556362fed9b4b6284c98",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/validation/standalone/glove100-packed-v2.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 347915,
+      "sha256": "df5983f4c7cd50fa18b64a02c7f8bafdec8636613f45c375085b0ebd12dd66f8",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/results/glove100/packed_search_benchmark_k10.json",
+      "handoff_sha256": "df5983f4c7cd50fa18b64a02c7f8bafdec8636613f45c375085b0ebd12dd66f8",
+      "copy": "unchanged"
+    },
+    {
+      "path": "components/ete-x/validation/standalone/pipeline-threads4.json",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 572154,
+      "sha256": "3d07d773536f1644a5b0af2baa52672e6814faf4a1fab794d0427128092cc03c",
+      "handoff_path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/nonar/results/pipeline_threads4.json",
+      "handoff_sha256": "3d07d773536f1644a5b0af2baa52672e6814faf4a1fab794d0427128092cc03c",
+      "copy": "unchanged"
+    },
+    {
+      "path": "crates/cog-backend-process/src/etex.rs",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 13720,
+      "sha256": "fd97ccde137c2d4134b0f50ce6c905cfc9a8d1feb8d1a33ae415869932bc5587",
+      "handoff_path": "ecos/crates/cog-backend-process/src/etex.rs",
+      "handoff_sha256": "040a9d98f28e71b3fe74b3f57908986cff0025dd20307999a74f5aeabec082e8",
+      "copy": "adapted"
+    },
+    {
+      "path": "crates/cog-backend-process/src/etex_tests.rs",
+      "license": "CC-BY-NC-ND-4.0",
+      "bytes": 10553,
+      "sha256": "7d885c12ed586454417ec20d136f0660480f7ad1e2c2a003e144aa975e67f35d",
+      "handoff_path": "ecos/crates/cog-backend-process/src/etex_tests.rs",
+      "handoff_sha256": "e59012900910500bc9417ac3a60a847d987d040d79ed9ed658315ed654698e9e",
+      "copy": "adapted"
+    }
+  ]
+}

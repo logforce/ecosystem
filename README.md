@@ -74,6 +74,14 @@ That optional path uses a pinned digit-classification model; obtain its approved
 dependencies and model before offline execution. The [development guide](docs/development.md)
 covers setup, testing and troubleshooting.
 
+For document retrieval, [ETE-X — Early Termination Encoding](docs/ete-x.md) is an
+optional CPU-only engine with local query encoding, bounded vector search and
+reranking. Its package includes source, tests, two attributed ONNX models and a
+16-document synthetic snapshot. Enable its separately licensed native backend
+with `--features etex`; default community builds remain independent of ETE-X.
+The [component README](components/ete-x/README.md) distinguishes transport checks
+from real local inference.
+
 ## Development Status
 
 | Available and tested | In development or planned |
@@ -82,6 +90,7 @@ covers setup, testing and troubleshooting.
 | Typed objects, bounded jobs, cancellation and cleanup | Broader capability profiles and model packages |
 | Sealed shared inputs and immutable output snapshots on Linux | Accelerator backends |
 | Supervised CPU worker with one approved digit model | Multi-node execution and governed knowledge services |
+| Optional ETE-X retrieval backend and pure CogSheet™ semantic mapper | Live CogSheet bridge, corpus authorization service and integrated retrieval performance qualification |
 | Experimental per-session round-robin and elapsed-time counters (macOS checked) | Authorized priorities, deadline policy and scheduler performance qualification |
 
 The ABI remains experimental. A bootable OS image is not available yet, and the
@@ -186,6 +195,7 @@ licenses, with an integrated documentation reader.
 | [R1 evidence](docs/implementation-r1.md) | What has been tested, and what is still missing? |
 | [Shared memory](docs/shared-memory.md) | How does R2 exchange immutable tensor data outside the socket? |
 | [ONNX worker](docs/onnx-worker.md) | Which real model works, how is it restricted, and what was verified? |
+| [ETE-X retrieval](docs/ete-x.md) | How do CPU document search, optional reranking, native execution and the CogSheet mapper fit together? |
 | [Vision and product](docs/vision.md) | What is the platform designed to deliver, and what does sovereignty mean? |
 | [Architecture](docs/architecture.md) | What runs where, who owns resources, and how does execution work? |
 | [Deployment examples](docs/deployment-examples.md) | How would desktop, edge and OT/IoT applications use the system, and who acts on results? |
@@ -231,8 +241,10 @@ ecOS >_ CogPOSIX is an independent project and is not affiliated with, endorsed 
 or sponsored by IEEE or The Open Group. CogPOSIX is not POSIX-certified.
 POSIX is a trademark of IEEE. See [trademark notices](TRADEMARKS.md).
 
-Public project software is Apache-2.0 and public prose is CC BY 4.0 within the explicit
-[license scope](LICENSE-SCOPE.md). Third-party assets retain their own terms.
+The community core is Apache-2.0 and public project prose is CC BY 4.0 within the
+explicit [license scope](LICENSE-SCOPE.md). Optional ETE-X original code and marked
+integration files use CC BY-NC-ND 4.0, not Apache-2.0. Third-party assets retain
+their own terms.
 
 ## Community and Optional Enterprise Services
 

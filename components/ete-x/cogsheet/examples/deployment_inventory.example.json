@@ -1,0 +1,39 @@
+{
+  "status": "illustrative unsigned deployment inventory, not approved discovery",
+  "capability": "etex.rag.search.v1",
+  "upstream_commit": "760f2cdb521b77bdcd491f7466f920bd344444fd",
+  "assets": [
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/snapshot.json",
+      "sha256": "sha256:a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4"
+    },
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/demo_snapshot/index/manifest.json",
+      "sha256": "sha256:45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7"
+    },
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx",
+      "sha256": "sha256:a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79"
+    },
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_encoder/tokenizer.json",
+      "sha256": "sha256:be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+    },
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx",
+      "sha256": "sha256:ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6"
+    },
+    {
+      "path": "ete_x/software/ETE_X_RAG_Lab/commercial_lab/assets/models/minilm_reranker/tokenizer.json",
+      "sha256": "sha256:d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"
+    }
+  ],
+  "policy": {
+    "max_length": 256,
+    "query_batch": 1,
+    "max_rerank_batch": 32,
+    "threads": 1,
+    "scope": "one operator-selected local corpus"
+  },
+  "activation": "requires trusted host configuration; no automatic download or activation"
+}

@@ -18,9 +18,12 @@ Start with a small supported collection and grow it through evaluated releases.
 | Language | Drafting, summarization, generation | Tokenizer, context budget, output validation |
 | Security analysis | Event classification and anomaly scoring | Feature schema, baseline version, threshold and calibration |
 
-This is a capability plan. No specific model weights have been selected, downloaded,
-licensed or benchmarked in this repository. Exact candidates require evaluation
-against redistribution rights, hardware requirements, quality and update burden.
+The table is a capability plan, not an installed catalogue. The existing CPU
+digit-classification example and optional [ETE-X retrieval profile](ete-x.md) are
+concrete developer paths. ETE-X includes two attributed compact ONNX models and a
+synthetic corpus; its manifest records identities and third-party terms. New
+candidates still require evaluation against redistribution rights, hardware
+requirements, quality and update burden.
 
 ## 2. Three Separate Identities
 

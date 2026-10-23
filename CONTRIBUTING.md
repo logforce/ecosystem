@@ -38,7 +38,10 @@ conformance suite under Apache-2.0. Certification marks remain separately contro
 ## Licensing and Naming
 
 The explicit grants and exclusions are in [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
-Listed community code is Apache-2.0; listed public prose is CC BY 4.0. Original code
+Listed community core code is Apache-2.0; listed public prose is CC BY 4.0. The
+optional ETE-X component and its marked native files have a separate CC BY-NC-ND
+4.0 grant, as recorded in their license and publication entries. Do not assume the
+core license covers ETE-X, its modifications or third-party model assets. Original code
 examples embedded in public prose are additionally Apache-2.0. Internal material,
 private models and unreviewed assets are excluded; no rights to another repository
 are granted by a contribution here.

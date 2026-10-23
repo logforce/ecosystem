@@ -27,7 +27,9 @@ test('ZIP contains only site dependencies, documents and licenses, with index at
   const entries = execFileSync('unzip', ['-Z1', target], {encoding:'utf8'}).trim().split('\n');
   assert.deepEqual(entries.sort(), [...websitePaths].sort());
   assert(entries.includes('index.html') && entries.includes('.nojekyll'));
-  assert(!entries.some(name => /^(?:crates|tests|scripts|internal|\.git|PUBLICATION)/.test(name)));
+  assert(!entries.some(name => /^(?:components|crates|tests|scripts|internal|\.git|PUBLICATION)/.test(name)));
+  assert(entries.includes('docs/ete-x.md'));
+  assert(!entries.some(name => /\.(?:onnx|npy|whl)$/.test(name)));
   const bundle = execFileSync('unzip', ['-p', target, 'site/documents.js'], {encoding:'utf8'});
   const context = {window:{}};
   vm.runInNewContext(bundle, context);

@@ -1,0 +1,8 @@
+{
+  "authorized": true,
+  "subject": "operator-local-demo",
+  "snapshot_digest": "sha256:a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+  "deterministic_qualified": false,
+  "usage_note": "Example of trusted host context; not a credential, grant token, or authentication implementation.",
+  "transport_only": false
+}

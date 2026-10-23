@@ -45,6 +45,21 @@ and recovery on disposable VM disks; bare-metal support follows separate tests.
 See the [roadmap](roadmap.md) for acceptance evidence. This supersedes ADR-004 for
 the initial preview only; it does not freeze production update architecture.
 
+## Optional Local Retrieval Integration
+
+ADR-025, verified developer integration, 23 October 2026: publish ETE-X as an
+optional CPU-only retrieval component with a persistent worker, the existing C
+ABI and a pure Capability Exchange v1 mapper. Default builds remain independent;
+the native backend requires `--features etex`. The C header and existing default
+backend are unchanged. The daemon still selects one backend per instance.
+
+The rights holder selected CC BY-NC-ND 4.0 for original ETE-X and the marked
+integration source. The community core remains Apache-2.0, and attributed model
+assets retain their own terms. A new offline Linux qualification exercised real
+encoder/search/reranker execution; historical timing results remain separate.
+This does not declare live CogSheet application wiring, a capability registry or
+production isolation complete. See [the integration and evidence](ete-x.md).
+
 ## Reconsideration Criteria
 
 Revisit ADR-024 if the selected image cannot support required drivers, desktop

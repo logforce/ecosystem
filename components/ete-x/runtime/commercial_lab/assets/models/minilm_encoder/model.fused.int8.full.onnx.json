@@ -1,0 +1,57 @@
+{
+  "schema": "nonar_dynamic_int8_v1",
+  "created_utc": "2026-10-22T07:01:20.912339+00:00",
+  "source": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_encoder/model.fused.onnx",
+  "source_sha256": "49bfd6f672727b19d700add1a87ba03de498e7e2980d284d9007d1f165934da3",
+  "source_bytes": 90338998,
+  "destination": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx",
+  "destination_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+  "destination_bytes": 22867989,
+  "seconds_to_build_and_check": 6.262403039999299,
+  "onnxruntime_version": "1.31.0",
+  "onnx_version": "1.23.2",
+  "weight_type_requested": "QInt8",
+  "weight_type": "INT8 and UINT8",
+  "quantized_weight_tensor_types": {
+    "INT8": 24,
+    "UINT8": 3
+  },
+  "activation_quantization": "dynamic at inference time",
+  "per_channel": true,
+  "reduce_range": false,
+  "per_channel_scope": "constant MatMul weights; ORT Gather uses its own per-tensor quantizer",
+  "op_types_to_quantize": [
+    "MatMul",
+    "Attention",
+    "Gather"
+  ],
+  "MatMulConstBOnly": true,
+  "qattention_operator_note": "ORT 1.31 AttentionQuant requests reduced-range quantization for its merged QKV weights",
+  "preprocess": "ONNX shape inference; no symbolic shape inference or offline graph optimization",
+  "graph_node_counts": {
+    "Add": 2,
+    "BiasGelu": 6,
+    "Cast": 19,
+    "DequantizeLinear": 3,
+    "DynamicQuantizeLinear": 24,
+    "Gather": 4,
+    "LayerNormalization": 1,
+    "MatMulInteger": 18,
+    "Mul": 36,
+    "QAttention": 6,
+    "ReduceSum": 1,
+    "Shape": 1,
+    "SkipLayerNormalization": 12,
+    "Slice": 1,
+    "Unsqueeze": 1
+  },
+  "initializer_data_types": {
+    "FLOAT": 77,
+    "INT64": 5,
+    "INT8": 48,
+    "UINT8": 6
+  },
+  "quality_status": "requires evaluation; quantization is lossy",
+  "scope": "MatMul, Attention, Gather; other operations remain FP32; embedding tables quantized",
+  "size_reduction_pct": 74.68647039897431
+}

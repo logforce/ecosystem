@@ -4,8 +4,12 @@ name = "cog-backend-process"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
-license.workspace = true
+license = "Apache-2.0 AND CC-BY-NC-ND-4.0"
 publish.workspace = true
+
+[features]
+default = []
+etex = []
 
 [dependencies]
 cog-core.workspace = true

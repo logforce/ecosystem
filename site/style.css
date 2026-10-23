@@ -324,3 +324,26 @@ body.reader-open{overflow:hidden}#reader{padding:0;width:min(1160px,94%);height:
 .ecos-capabilities button.is-active,.execution-route.is-active{animation:none!important;background:#fff!important;border-color:#2874d4!important;box-shadow:0 0 0 2px #2874d4!important}
 @keyframes schema-synchronized-hint{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(40,116,212,0)}35%{opacity:.9;box-shadow:0 0 0 3px rgba(40,116,212,.2)}58%{opacity:1;box-shadow:0 0 0 1px rgba(40,116,212,.08)}78%{opacity:1;box-shadow:0 0 0 0 rgba(40,116,212,0)}}
 @media(prefers-reduced-motion:reduce){.ecos-capabilities button,.execution-route{animation:none!important}}
+
+/* ETE-X uses the existing project palette and local icon system. */
+.etex{background:#f7fafb;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.etex-intro{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px;font-size:16px;line-height:1.75}
+.etex-diagram{margin:44px 0 0;border:1px solid #cbdadc;border-radius:12px;background:white;overflow:hidden}
+.etex-contract{padding:18px 24px;border-bottom:1px solid #dbe5e7;color:var(--ink);font-size:18px;font-weight:600;text-align:center;background:#edf6f7}
+.etex-contract span{display:block;margin-top:5px;font-size:13px;line-height:1.6;font-weight:400;color:var(--muted)}
+.etex-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:28px 12px;margin:0;list-style:none}
+.etex-flow li{position:relative;display:flex;align-items:center;flex-direction:column;padding:0 15px;text-align:center;min-width:0}
+.etex-flow li+li{border-left:1px solid #e0e9e9}
+.etex-flow li+li::before{content:'→';position:absolute;left:-9px;top:61px;background:white;color:#6c898c;font-size:18px;line-height:1}
+.etex-step{font-size:12px;font-weight:600;color:#58777a;margin-bottom:16px}
+.etex-flow img{width:30px;height:30px;margin-bottom:16px}
+.etex-flow strong{font-size:16px;line-height:1.45;font-weight:600}
+.etex-flow p{font-size:13px;line-height:1.65;margin-top:10px}
+.etex-diagram figcaption{padding:16px 24px;border-top:1px solid #e0e9e9;font-size:13px;line-height:1.6;color:var(--muted);text-align:center}
+.etex-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:36px}
+.etex-details h3{font-size:21px;line-height:1.35;margin-bottom:14px}
+.etex-details p{font-size:15px;line-height:1.75}
+.etex-actions{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:32px}
+.etex-evidence{font-size:13px;line-height:1.7;max-width:850px;margin-top:22px}
+@media(max-width:1050px){.header nav{gap:18px}.etex-flow{grid-template-columns:1fr;padding:8px 24px}.etex-flow li{display:grid;grid-template-columns:24px 36px minmax(0,1fr);column-gap:16px;row-gap:3px;text-align:left;align-items:center;padding:18px 0}.etex-flow li+li{border-left:0;border-top:1px solid #e0e9e9}.etex-flow li+li::before{display:none}.etex-step{grid-column:1;grid-row:1/3;margin:0}.etex-flow img{grid-column:2;grid-row:1/3;margin:0}.etex-flow strong{grid-column:3}.etex-flow p{grid-column:3;margin:0}.etex-details{gap:24px}}
+@media(max-width:760px){.header nav{max-width:100%;flex-wrap:wrap;justify-content:center;gap:12px 16px}.etex-intro,.etex-details{grid-template-columns:1fr;gap:24px}.etex-contract{padding:16px;font-size:17px}.etex-flow{padding-inline:18px}.etex-actions{gap:24px}.etex-intro{font-size:16px}.etex-diagram{margin-top:32px}}

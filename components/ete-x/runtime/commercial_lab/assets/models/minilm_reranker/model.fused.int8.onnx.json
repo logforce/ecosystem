@@ -1,0 +1,54 @@
+{
+  "schema": "nonar_dynamic_int8_v1",
+  "created_utc": "2026-10-22T07:01:37.792436+00:00",
+  "source": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.fused.onnx",
+  "source_sha256": "e6db057129826bdb4425d5b413fa1df433b82f56ebc97d4984eac3caccd13f90",
+  "source_bytes": 90938006,
+  "destination": "/workspace/scratch/c1260d5037bb/commercial_lab/assets/models/minilm_reranker/model.fused.int8.onnx",
+  "destination_sha256": "a02f7ae69f76b5498919b2fb05c88f9ee8bc1be68c35bad9defbf831f0d6436b",
+  "destination_bytes": 58781418,
+  "seconds_to_build_and_check": 8.618778998999915,
+  "onnxruntime_version": "1.31.0",
+  "onnx_version": "1.23.2",
+  "weight_type_requested": "QInt8",
+  "weight_type": "INT8",
+  "quantized_weight_tensor_types": {
+    "INT8": 26
+  },
+  "activation_quantization": "dynamic at inference time",
+  "per_channel": true,
+  "reduce_range": false,
+  "per_channel_scope": "constant MatMul weights; ORT Gather uses its own per-tensor quantizer",
+  "op_types_to_quantize": [
+    "MatMul",
+    "Attention"
+  ],
+  "MatMulConstBOnly": true,
+  "qattention_operator_note": "ORT 1.31 AttentionQuant requests reduced-range quantization for its merged QKV weights",
+  "preprocess": "ONNX shape inference; no symbolic shape inference or offline graph optimization",
+  "graph_node_counts": {
+    "Add": 4,
+    "BiasGelu": 6,
+    "Cast": 21,
+    "DynamicQuantizeLinear": 26,
+    "Gather": 5,
+    "LayerNormalization": 1,
+    "MatMulInteger": 20,
+    "Mul": 40,
+    "QAttention": 6,
+    "ReduceSum": 1,
+    "Shape": 1,
+    "SkipLayerNormalization": 12,
+    "Slice": 1,
+    "Tanh": 1,
+    "Unsqueeze": 1
+  },
+  "initializer_data_types": {
+    "FLOAT": 81,
+    "INT64": 6,
+    "INT8": 52
+  },
+  "quality_status": "requires evaluation; quantization is lossy",
+  "scope": "MatMul, Attention; other operations remain FP32; embedding tables remain FP32",
+  "size_reduction_pct": 35.36099966827951
+}

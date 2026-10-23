@@ -1,7 +1,8 @@
 # CogSheet™ Integration Boundary
 
-Status: architecture decision and draft contract, 6 October 2026. No CogSheet™
-adapter is implemented in the current runtime or OS image.
+Status: architecture decision and draft contract, 6 October 2026, extended with an
+ETE-X semantic mapping reference on 22 October 2026. The live CogSheet™ application
+bridge and OS-image integration remain separate deliverables.
 
 ## Decision
 
@@ -43,6 +44,13 @@ The draft [Capability Exchange v1](../contracts/capability/v1/README.md) defines
 request, result, error, receipt and discovery-manifest schemas. It is a semantic
 layer above the current tensor-oriented CogPOSIX wire protocol. A future adapter
 maps a supported semantic profile to runtime objects and jobs.
+
+The optional [ETE-X component](ete-x.md) now supplies a pure, tested mapping for
+`etex.rag.search.v1`, alongside the native retrieval backend. The host must supply
+an authenticated, authorized corpus context; the mapper validates request/result
+shape and binds the actual snapshot digest to that grant. It does not authenticate
+a browser or connect the current cloud preview to the native daemon. No ETE-X
+spreadsheet formula is advertised as available by this reference alone.
 
 Product formula names do not become system ABI names. For example:
 

@@ -4,16 +4,67 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
-const licenses = new Set(['Apache-2.0', 'CC-BY-4.0', 'MIT', 'License-Text', 'LicenseRef-Brand-Reserved']);
+const licenses = new Set(['Apache-2.0', 'CC-BY-4.0', 'CC-BY-NC-ND-4.0', 'MIT', 'License-Text', 'LicenseRef-Brand-Reserved']);
 const reviewedArt = new Map([
   ['assets/ecOS-ystem_logo.png', '72e319fd8ddb42c9d2f304af0ad82e819996a0920b1fd1b2452ebf4e51c75a4f'],
   ['assets/ecOS-ystem_square_logo.png', '597e4bd6be111b53726f8f1dbd4babe1830daed8f67edf52586d8a2f7f6dee0c'],
   ['assets/local-compute-hero.png', '461de48cb22a84074f29333978b9ade88597020af7c4c6d8477f8f203817e3e6'],
   ['assets/ot-system-hero.png', 'c360083e2a04c5bd7ce303c9a9cfadcb2b63ac3ac70a4f40368ac02228007ca1'],
 ]);
+const reviewedBinaryAssets = new Map([
+  [
+    "components/ete-x/runtime/commercial_lab/assets/models/minilm_encoder/model.fused.int8.full.onnx",
+    {
+      "sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+      "license": "Apache-2.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/assets/models/minilm_reranker/model.fused.int8.full.onnx",
+    {
+      "sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+      "license": "Apache-2.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/demo_snapshot/document_offsets.npy",
+    {
+      "sha256": "cd242ecf5d65f31d110fdc14cbf333486bea7eb785eade044d4c92fb85ca3a15",
+      "license": "CC-BY-NC-ND-4.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/demo_snapshot/index/packed_codes.npy",
+    {
+      "sha256": "2d31b1fa2594dfc9db85e62985000119b1833dfc4062bdd12f20d7a7f8b3273b",
+      "license": "CC-BY-NC-ND-4.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/demo_snapshot/index/scales.npy",
+    {
+      "sha256": "ca518dac7e38a65c4ae378b4200b1ca8cd7d83ac4daebc3f58d33554882cc295",
+      "license": "CC-BY-NC-ND-4.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/demo_snapshot/index/sums.npy",
+    {
+      "sha256": "7066dcd371c684755c0c000606e7f7790744de2a1d6d84ec798e4caf0e12f80e",
+      "license": "CC-BY-NC-ND-4.0"
+    }
+  ],
+  [
+    "components/ete-x/runtime/commercial_lab/demo_snapshot/vectors.npy",
+    {
+      "sha256": "af5c186dd8b8a9cd8a37c9d4de0483e07e67d36b19e3a11d50290e1230b68b2c",
+      "license": "CC-BY-NC-ND-4.0"
+    }
+  ]
+]);
 const excludedParts = new Set(['internal', 'private', 'enterprise', 'logforce']);
 const excludedNames = new Set(['docs/business-impact.md', 'docs/website.md']);
-const attachment = /\.(?:docx?|pdf|jpe?g|png|zip|onnx|gguf|safetensors|pem|key)$/i;
+const attachment = /\.(?:docx?|pdf|jpe?g|png|zip|onnx|npy|gguf|safetensors|pem|key)$/i;
 const reviewedHiddenPaths = new Set(['.gitignore', '.nojekyll', '.github/workflows/ci.yml']);
 const restrictedMarkerHashes = new Set([
   '54b01587ffef5a6128e05f9b5e36cfcbf1393728209449e802873be3264482e7',
@@ -57,7 +108,7 @@ function validatePath(relative) {
     throw new Error(`Hidden path excluded: ${relative}`);
   }
   if (parts.some(part => excludedParts.has(part.toLowerCase())) ||
-      excludedNames.has(relative.toLowerCase()) || (attachment.test(relative) && !reviewedArt.has(relative))) {
+      excludedNames.has(relative.toLowerCase()) || (attachment.test(relative) && !reviewedArt.has(relative) && !reviewedBinaryAssets.has(relative))) {
     throw new Error(`Private or unreviewed path excluded: ${relative}`);
   }
 }
@@ -111,6 +162,9 @@ export function collectSnapshot(source) {
     }
     validatePath(entry.path);
     if (!licenses.has(entry.license)) throw new Error(`Unknown license: ${entry.path}`);
+    if (reviewedBinaryAssets.has(entry.path) && entry.license !== reviewedBinaryAssets.get(entry.path).license) {
+      throw new Error(`Binary asset license mismatch: ${entry.path}`);
+    }
     const artworkLicense = ['assets/local-compute-hero.png', 'assets/ot-system-hero.png'].includes(entry.path)
       ? 'CC-BY-4.0' : 'LicenseRef-Brand-Reserved';
     if ((reviewedArt.has(entry.path) && entry.license !== artworkLicense) ||
@@ -128,6 +182,9 @@ export function collectSnapshot(source) {
     const sha256 = crypto.createHash('sha256').update(data).digest('hex');
     if (reviewedArt.has(entry.path) && reviewedArt.get(entry.path) !== sha256) {
       throw new Error(`Artwork changed; explicit review required: ${entry.path}`);
+    }
+    if (reviewedBinaryAssets.has(entry.path) && reviewedBinaryAssets.get(entry.path).sha256 !== sha256) {
+      throw new Error(`Binary asset changed; explicit review required: ${entry.path}`);
     }
     return { ...entry, data, sha256 };
   });

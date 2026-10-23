@@ -1,0 +1,64 @@
+{
+  "schema": "etex.rag.search.result.v1",
+  "request_id": "example-1",
+  "status": "completed",
+  "cog_status": 0,
+  "engine": "fixture",
+  "results": [
+    {
+      "document_id": "fixture-001",
+      "row_id": 0,
+      "title": "Transport fixture: first row",
+      "snippet": "Synthetic fixed data. This fixture does not execute an AI model or search a corpus.",
+      "title_truncated": false,
+      "snippet_truncated": false,
+      "dense_score": 3.0,
+      "reranker_logit": null
+    },
+    {
+      "document_id": "fixture-002",
+      "row_id": 1,
+      "title": "Transport fixture: second row",
+      "snippet": "Requests are validated, but query content does not influence these fixed fixture rows.",
+      "title_truncated": false,
+      "snippet_truncated": false,
+      "dense_score": 2.0,
+      "reranker_logit": null
+    }
+  ],
+  "error": null,
+  "provenance": {
+    "snapshot_sha256": null,
+    "index_manifest_sha256": null,
+    "source_sha256": null,
+    "encoder_model_sha256": null,
+    "encoder_tokenizer_sha256": null,
+    "reranker_model_sha256": null,
+    "reranker_tokenizer_sha256": null,
+    "worker_version": "1.0.0",
+    "fixture": true,
+    "native_backend": null,
+    "model_quantization_note": "No model is loaded by the transport fixture."
+  },
+  "execution": {
+    "candidate_count_requested": 3,
+    "candidate_count_effective": 3,
+    "top_k_requested": 2,
+    "returned_count": 2,
+    "rerank_requested": false,
+    "rerank_performed": false,
+    "strategy": "transport_fixture",
+    "index_layout": "fixture",
+    "dense_exactness": {
+      "certified": false,
+      "reference": null,
+      "scope": "Deterministic transport fixture only: no AI inference, real retrieval, or relevance claim.",
+      "source_verified": false,
+      "excluded_count": null,
+      "refined_count": null,
+      "fallback": false
+    },
+    "reranking_scope": "No reranker is present in the transport fixture."
+  },
+  "timings_ms": null
+}

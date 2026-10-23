@@ -1,0 +1,266 @@
+{
+  "kind": "Recorded handoff compatibility fixture, not a new run",
+  "source_sha256": "163efbc329e0b472bf143667343c222ee1e63d8eb8ef7e8cfebd5ea846e594bc",
+  "status": "pass",
+  "engines": [
+    {
+      "engine": "etex",
+      "calls": [
+        {
+          "passed": true,
+          "result": {
+            "cog_status": 0,
+            "engine": "etex",
+            "error": null,
+            "execution": {
+              "candidate_count_effective": 8,
+              "candidate_count_requested": 8,
+              "dense_exactness": {
+                "certified": true,
+                "excluded_count": 8,
+                "fallback": false,
+                "reference": "fp32-products-fp64-eight-lanes-no-fma-v1",
+                "refined_count": 8,
+                "scope": "Exact dense top-k over this immutable snapshot's stored FP32 vectors under the eight-lane FP64 no-FMA scorer; conditional on verified source binding and its checked IEEE environment. This does not certify model quantization, relevance, or global cross-encoder ranking.",
+                "source_verified": true
+              },
+              "index_layout": "packed",
+              "rerank_performed": true,
+              "rerank_requested": true,
+              "reranking_scope": "Only the exact dense top-8 candidates; not global cross-encoder top-k.",
+              "returned_count": 3,
+              "strategy": "bounded",
+              "top_k_requested": 3
+            },
+            "provenance": {
+              "encoder_model_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+              "encoder_tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+              "fixture": false,
+              "index_manifest_sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+              "model_quantization_note": "The bundled INT8 ONNX model can produce embeddings/logits different from its FP32 source model.",
+              "native_backend": "avx512_vnni_tile16_quad4",
+              "reranker_model_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+              "reranker_tokenizer_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+              "snapshot_sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+              "source_sha256": "4cec264be72a3518896257618dd7c5991646d4c1b3e148fbf17d87aa3e17fcf0",
+              "worker_version": "1.0.0"
+            },
+            "request_id": "etex-c-abi-1",
+            "results": [
+              {
+                "dense_score": 0.41216320773666876,
+                "document_id": "vector-ram",
+                "reranker_logit": 2.559621810913086,
+                "row_id": 0,
+                "snippet": "A local retrieval engine can keep quantized vector approximations in memory and map the original floating point vectors from disk. Conservative score bounds eliminate documents that cannot enter the top results. The remaining original vectors are scored precisely. This reduces the number of originals accessed while preserving a specified dense ranking.",
+                "snippet_truncated": false,
+                "title": "Exact vector search with compact filters",
+                "title_truncated": false
+              },
+              {
+                "dense_score": 0.3820806835001013,
+                "document_id": "database",
+                "reranker_logit": -3.9970779418945312,
+                "row_id": 8,
+                "snippet": "A retrieval component can be embedded beside an existing relational database instead of operating as a separate distributed service. Row identifiers connect vector results to document metadata. Snapshot publication and version checks help prevent stale embeddings from being paired with changed documents.",
+                "snippet_truncated": false,
+                "title": "Database integration",
+                "title_truncated": false
+              },
+              {
+                "dense_score": 0.36020050459967834,
+                "document_id": "rag",
+                "reranker_logit": -7.698905944824219,
+                "row_id": 9,
+                "snippet": "A RAG application retrieves passages before a language model composes an answer. Better retrieval can supply useful evidence, but exact nearest-neighbor search alone does not guarantee that passages are relevant or that a generated answer is correct.",
+                "snippet_truncated": false,
+                "title": "Retrieval augmented generation",
+                "title_truncated": false
+              }
+            ],
+            "schema": "etex.rag.search.result.v1",
+            "status": "completed",
+            "timings_ms": {
+              "dense_search": 2.7788850020442624,
+              "documents_and_reranking": 212.57565799896838,
+              "encoder": 9.228536997397896,
+              "total": 224.58307999841054
+            }
+          }
+        },
+        {
+          "passed": true,
+          "result": {
+            "cog_status": 0,
+            "engine": "etex",
+            "error": null,
+            "execution": {
+              "candidate_count_effective": 8,
+              "candidate_count_requested": 8,
+              "dense_exactness": {
+                "certified": true,
+                "excluded_count": 8,
+                "fallback": false,
+                "reference": "fp32-products-fp64-eight-lanes-no-fma-v1",
+                "refined_count": 8,
+                "scope": "Exact dense top-k over this immutable snapshot's stored FP32 vectors under the eight-lane FP64 no-FMA scorer; conditional on verified source binding and its checked IEEE environment. This does not certify model quantization, relevance, or global cross-encoder ranking.",
+                "source_verified": true
+              },
+              "index_layout": "packed",
+              "rerank_performed": true,
+              "rerank_requested": true,
+              "reranking_scope": "Only the exact dense top-8 candidates; not global cross-encoder top-k.",
+              "returned_count": 3,
+              "strategy": "bounded",
+              "top_k_requested": 3
+            },
+            "provenance": {
+              "encoder_model_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+              "encoder_tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+              "fixture": false,
+              "index_manifest_sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+              "model_quantization_note": "The bundled INT8 ONNX model can produce embeddings/logits different from its FP32 source model.",
+              "native_backend": "avx512_vnni_tile16_quad4",
+              "reranker_model_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+              "reranker_tokenizer_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+              "snapshot_sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+              "source_sha256": "4cec264be72a3518896257618dd7c5991646d4c1b3e148fbf17d87aa3e17fcf0",
+              "worker_version": "1.0.0"
+            },
+            "request_id": "etex-c-abi-2",
+            "results": [
+              {
+                "dense_score": 0.41216320773666876,
+                "document_id": "vector-ram",
+                "reranker_logit": 2.559621810913086,
+                "row_id": 0,
+                "snippet": "A local retrieval engine can keep quantized vector approximations in memory and map the original floating point vectors from disk. Conservative score bounds eliminate documents that cannot enter the top results. The remaining original vectors are scored precisely. This reduces the number of originals accessed while preserving a specified dense ranking.",
+                "snippet_truncated": false,
+                "title": "Exact vector search with compact filters",
+                "title_truncated": false
+              },
+              {
+                "dense_score": 0.3820806835001013,
+                "document_id": "database",
+                "reranker_logit": -3.9970779418945312,
+                "row_id": 8,
+                "snippet": "A retrieval component can be embedded beside an existing relational database instead of operating as a separate distributed service. Row identifiers connect vector results to document metadata. Snapshot publication and version checks help prevent stale embeddings from being paired with changed documents.",
+                "snippet_truncated": false,
+                "title": "Database integration",
+                "title_truncated": false
+              },
+              {
+                "dense_score": 0.36020050459967834,
+                "document_id": "rag",
+                "reranker_logit": -7.698905944824219,
+                "row_id": 9,
+                "snippet": "A RAG application retrieves passages before a language model composes an answer. Better retrieval can supply useful evidence, but exact nearest-neighbor search alone does not guarantee that passages are relevant or that a generated answer is correct.",
+                "snippet_truncated": false,
+                "title": "Retrieval augmented generation",
+                "title_truncated": false
+              }
+            ],
+            "schema": "etex.rag.search.result.v1",
+            "status": "completed",
+            "timings_ms": {
+              "dense_search": 1.199911999719916,
+              "documents_and_reranking": 249.05494099948555,
+              "encoder": 5.883100002392894,
+              "total": 256.13795300159836
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "direct_worker_comparison": {
+    "passed": true,
+    "request": {
+      "schema": "etex.rag.search.request.v1",
+      "request_id": "etex-direct-control-1",
+      "query": "How can local document retrieval protect data?",
+      "candidate_count": 8,
+      "top_k": 3,
+      "rerank": true
+    },
+    "result": {
+      "cog_status": 0,
+      "engine": "etex",
+      "error": null,
+      "execution": {
+        "candidate_count_effective": 8,
+        "candidate_count_requested": 8,
+        "dense_exactness": {
+          "certified": true,
+          "excluded_count": 8,
+          "fallback": false,
+          "reference": "fp32-products-fp64-eight-lanes-no-fma-v1",
+          "refined_count": 8,
+          "scope": "Exact dense top-k over this immutable snapshot's stored FP32 vectors under the eight-lane FP64 no-FMA scorer; conditional on verified source binding and its checked IEEE environment. This does not certify model quantization, relevance, or global cross-encoder ranking.",
+          "source_verified": true
+        },
+        "index_layout": "packed",
+        "rerank_performed": true,
+        "rerank_requested": true,
+        "reranking_scope": "Only the exact dense top-8 candidates; not global cross-encoder top-k.",
+        "returned_count": 3,
+        "strategy": "bounded",
+        "top_k_requested": 3
+      },
+      "provenance": {
+        "encoder_model_sha256": "a2173fb279ca2a96bc8a5cbb37b19ebe26ce0cf3fdf47ca852134d401f9c2d79",
+        "encoder_tokenizer_sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+        "fixture": false,
+        "index_manifest_sha256": "45a691fb182e2a325d42f80233b41f32ff519206c3b983605503c93347d945a7",
+        "model_quantization_note": "The bundled INT8 ONNX model can produce embeddings/logits different from its FP32 source model.",
+        "native_backend": "avx512_vnni_tile16_quad4",
+        "reranker_model_sha256": "ec07d6bbc5741b9bd9dfddc0087e958135f285194e83f900d52538711e74d0c6",
+        "reranker_tokenizer_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+        "snapshot_sha256": "a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+        "source_sha256": "4cec264be72a3518896257618dd7c5991646d4c1b3e148fbf17d87aa3e17fcf0",
+        "worker_version": "1.0.0"
+      },
+      "request_id": "etex-direct-control-1",
+      "results": [
+        {
+          "dense_score": 0.41216320773666876,
+          "document_id": "vector-ram",
+          "reranker_logit": 2.559621810913086,
+          "row_id": 0,
+          "snippet": "A local retrieval engine can keep quantized vector approximations in memory and map the original floating point vectors from disk. Conservative score bounds eliminate documents that cannot enter the top results. The remaining original vectors are scored precisely. This reduces the number of originals accessed while preserving a specified dense ranking.",
+          "snippet_truncated": false,
+          "title": "Exact vector search with compact filters",
+          "title_truncated": false
+        },
+        {
+          "dense_score": 0.3820806835001013,
+          "document_id": "database",
+          "reranker_logit": -3.9970779418945312,
+          "row_id": 8,
+          "snippet": "A retrieval component can be embedded beside an existing relational database instead of operating as a separate distributed service. Row identifiers connect vector results to document metadata. Snapshot publication and version checks help prevent stale embeddings from being paired with changed documents.",
+          "snippet_truncated": false,
+          "title": "Database integration",
+          "title_truncated": false
+        },
+        {
+          "dense_score": 0.36020050459967834,
+          "document_id": "rag",
+          "reranker_logit": -7.698905944824219,
+          "row_id": 9,
+          "snippet": "A RAG application retrieves passages before a language model composes an answer. Better retrieval can supply useful evidence, but exact nearest-neighbor search alone does not guarantee that passages are relevant or that a generated answer is correct.",
+          "snippet_truncated": false,
+          "title": "Retrieval augmented generation",
+          "title_truncated": false
+        }
+      ],
+      "schema": "etex.rag.search.result.v1",
+      "status": "completed",
+      "timings_ms": {
+        "dense_search": 0.7261739992827643,
+        "documents_and_reranking": 455.333404999692,
+        "encoder": 24.109787002089433,
+        "total": 480.1693660010642
+      }
+    }
+  }
+}

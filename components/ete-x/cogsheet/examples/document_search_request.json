@@ -1,0 +1,42 @@
+{
+  "contract": "ecos-capability-exchange.v1",
+  "request_id": "request.etex.demo.0001",
+  "idempotency_key": "workbook.demo.sheet1.cellA1.rev1",
+  "capability": "etex.rag.search.v1",
+  "inputs": [
+    {
+      "name": "query",
+      "location": "inline",
+      "media_type": "application/json",
+      "schema": "etex.rag.query.v1",
+      "digest": "sha256:b3f15d3de5c6b8717aa994f605f58af26c6c55eb2c085b27957ae6d7f91c3158",
+      "value": {
+        "query": "How can vector search remain exact after quantization?",
+        "candidate_count": 8,
+        "top_k": 3,
+        "rerank": true
+      }
+    },
+    {
+      "name": "corpus",
+      "location": "artifact",
+      "media_type": "application/json",
+      "schema": "etex.corpus.snapshot.v1",
+      "digest": "sha256:a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4",
+      "artifact_ref": "sha256:a19a20f9952aac8735bfe41d44ec6ddd9a8aee792a8673c33139bd6fe3f8e7d4"
+    }
+  ],
+  "output_schema": "etex.rag.search.result.v1",
+  "placement": "local-required",
+  "constraints": {
+    "network": "deny",
+    "timeout_ms": 60000,
+    "max_output_bytes": 65532,
+    "deterministic_required": false
+  },
+  "application": {
+    "id": "logforce.cogsheet.v1",
+    "version": "handoff-example",
+    "workload_ref": "workbook.demo.sheet1.cellA1.rev1"
+  }
+}

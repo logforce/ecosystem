@@ -1,0 +1,1088 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "request_id",
+    "status",
+    "cog_status",
+    "engine",
+    "results",
+    "error",
+    "provenance",
+    "execution",
+    "timings_ms"
+  ],
+  "properties": {
+    "schema": {
+      "const": "etex.rag.search.result.v1"
+    },
+    "request_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 64,
+          "x-max-utf8-bytes": 64,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "failed"
+      ]
+    },
+    "cog_status": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 11
+    },
+    "engine": {
+      "enum": [
+        "fixture",
+        "etex"
+      ]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "document_id",
+          "row_id",
+          "title",
+          "snippet",
+          "title_truncated",
+          "snippet_truncated",
+          "dense_score",
+          "reranker_logit"
+        ],
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "maxLength": 512,
+            "x-max-utf8-bytes": 512,
+            "minLength": 1
+          },
+          "row_id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9223372036854775807
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "x-max-utf8-bytes": 256
+          },
+          "snippet": {
+            "type": "string",
+            "maxLength": 1536,
+            "x-max-utf8-bytes": 1536
+          },
+          "title_truncated": {
+            "type": "boolean"
+          },
+          "snippet_truncated": {
+            "type": "boolean"
+          },
+          "dense_score": {
+            "type": "number"
+          },
+          "reranker_logit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "maxItems": 20
+    },
+    "error": {
+      "anyOf": [
+        {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "invalid_request"
+                },
+                "message": {
+                  "const": "Request failed validation."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "invalid_sequence"
+                },
+                "message": {
+                  "const": "Sequence must strictly increase within one worker."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "truncated_request"
+                },
+                "message": {
+                  "const": "Request frame ended before completion."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "unsupported_rerank"
+                },
+                "message": {
+                  "const": "Reranking is unavailable in this worker configuration."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "backend_failed"
+                },
+                "message": {
+                  "const": "The configured retrieval backend could not complete the request."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "invalid_backend_result"
+                },
+                "message": {
+                  "const": "The retrieval backend returned an invalid result."
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "const": "output_limit"
+                },
+                "message": {
+                  "const": "Result exceeds the fixed response capacity."
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "provenance": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "snapshot_sha256",
+            "index_manifest_sha256",
+            "source_sha256",
+            "encoder_model_sha256",
+            "encoder_tokenizer_sha256",
+            "reranker_model_sha256",
+            "reranker_tokenizer_sha256",
+            "worker_version",
+            "fixture",
+            "native_backend",
+            "model_quantization_note"
+          ],
+          "properties": {
+            "snapshot_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "index_manifest_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "encoder_model_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "encoder_tokenizer_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reranker_model_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reranker_tokenizer_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "worker_version": {
+              "const": "1.0.0"
+            },
+            "fixture": {
+              "type": "boolean"
+            },
+            "native_backend": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 128,
+                  "x-max-utf8-bytes": 128,
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "model_quantization_note": {
+              "type": "string",
+              "maxLength": 320,
+              "x-max-utf8-bytes": 320,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "execution": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "candidate_count_requested",
+            "candidate_count_effective",
+            "top_k_requested",
+            "returned_count",
+            "rerank_requested",
+            "rerank_performed",
+            "strategy",
+            "index_layout",
+            "dense_exactness",
+            "reranking_scope"
+          ],
+          "properties": {
+            "candidate_count_requested": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "candidate_count_effective": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "top_k_requested": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            },
+            "returned_count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            },
+            "rerank_requested": {
+              "type": "boolean"
+            },
+            "rerank_performed": {
+              "type": "boolean"
+            },
+            "strategy": {
+              "enum": [
+                "raw",
+                "bounded",
+                "transport_fixture"
+              ]
+            },
+            "index_layout": {
+              "enum": [
+                "rowwise",
+                "packed",
+                "fixture"
+              ]
+            },
+            "dense_exactness": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "certified",
+                "reference",
+                "scope",
+                "source_verified",
+                "excluded_count",
+                "refined_count",
+                "fallback"
+              ],
+              "properties": {
+                "certified": {
+                  "type": "boolean"
+                },
+                "reference": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 128,
+                      "x-max-utf8-bytes": 128,
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "scope": {
+                  "type": "string",
+                  "maxLength": 600,
+                  "x-max-utf8-bytes": 600,
+                  "minLength": 1
+                },
+                "source_verified": {
+                  "type": "boolean"
+                },
+                "excluded_count": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "refined_count": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9223372036854775807
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "fallback": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "reranking_scope": {
+              "type": "string",
+              "maxLength": 320,
+              "x-max-utf8-bytes": 320,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timings_ms": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "encoder",
+            "dense_search",
+            "documents_and_reranking",
+            "total"
+          ],
+          "properties": {
+            "encoder": {
+              "type": "number",
+              "minimum": 0
+            },
+            "dense_search": {
+              "type": "number",
+              "minimum": 0
+            },
+            "documents_and_reranking": {
+              "type": "number",
+              "minimum": 0
+            },
+            "total": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:etex:rag:search:result:v1",
+  "title": "ETE-X search result v1",
+  "description": "Finite JSON only. Runtime also checks error/status mapping, wire status equality, UTF-8 byte caps, row ID uniqueness, returned_count, candidate/top_k relationships, rerank/logit presence, fixture labeling and source-bound exactness. No generated answer or query echo.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cog_status": {
+            "const": 0
+          },
+          "request_id": {
+            "type": "string",
+            "maxLength": 64,
+            "x-max-utf8-bytes": 64,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+          },
+          "error": {
+            "type": "null"
+          },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "snapshot_sha256",
+              "index_manifest_sha256",
+              "source_sha256",
+              "encoder_model_sha256",
+              "encoder_tokenizer_sha256",
+              "reranker_model_sha256",
+              "reranker_tokenizer_sha256",
+              "worker_version",
+              "fixture",
+              "native_backend",
+              "model_quantization_note"
+            ],
+            "properties": {
+              "snapshot_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "index_manifest_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "encoder_model_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "encoder_tokenizer_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reranker_model_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reranker_tokenizer_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "worker_version": {
+                "const": "1.0.0"
+              },
+              "fixture": {
+                "type": "boolean"
+              },
+              "native_backend": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "x-max-utf8-bytes": 128,
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model_quantization_note": {
+                "type": "string",
+                "maxLength": 320,
+                "x-max-utf8-bytes": 320,
+                "minLength": 1
+              }
+            }
+          },
+          "execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "candidate_count_requested",
+              "candidate_count_effective",
+              "top_k_requested",
+              "returned_count",
+              "rerank_requested",
+              "rerank_performed",
+              "strategy",
+              "index_layout",
+              "dense_exactness",
+              "reranking_scope"
+            ],
+            "properties": {
+              "candidate_count_requested": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "candidate_count_effective": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "top_k_requested": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "returned_count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "rerank_requested": {
+                "type": "boolean"
+              },
+              "rerank_performed": {
+                "type": "boolean"
+              },
+              "strategy": {
+                "enum": [
+                  "raw",
+                  "bounded",
+                  "transport_fixture"
+                ]
+              },
+              "index_layout": {
+                "enum": [
+                  "rowwise",
+                  "packed",
+                  "fixture"
+                ]
+              },
+              "dense_exactness": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "certified",
+                  "reference",
+                  "scope",
+                  "source_verified",
+                  "excluded_count",
+                  "refined_count",
+                  "fallback"
+                ],
+                "properties": {
+                  "certified": {
+                    "type": "boolean"
+                  },
+                  "reference": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 128,
+                        "x-max-utf8-bytes": 128,
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "scope": {
+                    "type": "string",
+                    "maxLength": 600,
+                    "x-max-utf8-bytes": 600,
+                    "minLength": 1
+                  },
+                  "source_verified": {
+                    "type": "boolean"
+                  },
+                  "excluded_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9223372036854775807
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "refined_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9223372036854775807
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "fallback": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "reranking_scope": {
+                "type": "string",
+                "maxLength": 320,
+                "x-max-utf8-bytes": 320,
+                "minLength": 1
+              }
+            }
+          },
+          "results": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "cog_status": {
+            "minimum": 1
+          },
+          "error": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "invalid_request"
+                  },
+                  "message": {
+                    "const": "Request failed validation."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "invalid_sequence"
+                  },
+                  "message": {
+                    "const": "Sequence must strictly increase within one worker."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "truncated_request"
+                  },
+                  "message": {
+                    "const": "Request frame ended before completion."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "unsupported_rerank"
+                  },
+                  "message": {
+                    "const": "Reranking is unavailable in this worker configuration."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "backend_failed"
+                  },
+                  "message": {
+                    "const": "The configured retrieval backend could not complete the request."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "invalid_backend_result"
+                  },
+                  "message": {
+                    "const": "The retrieval backend returned an invalid result."
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "code",
+                  "message"
+                ],
+                "properties": {
+                  "code": {
+                    "const": "output_limit"
+                  },
+                  "message": {
+                    "const": "Result exceeds the fixed response capacity."
+                  }
+                }
+              }
+            ]
+          },
+          "results": {
+            "maxItems": 0
+          },
+          "provenance": {
+            "type": "null"
+          },
+          "execution": {
+            "type": "null"
+          },
+          "timings_ms": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "engine": {
+            "const": "fixture"
+          },
+          "status": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "timings_ms": {
+            "type": "null"
+          },
+          "provenance": {
+            "properties": {
+              "fixture": {
+                "const": true
+              }
+            }
+          },
+          "execution": {
+            "properties": {
+              "strategy": {
+                "const": "transport_fixture"
+              },
+              "index_layout": {
+                "const": "fixture"
+              },
+              "rerank_performed": {
+                "const": false
+              },
+              "dense_exactness": {
+                "properties": {
+                  "certified": {
+                    "const": false
+                  },
+                  "source_verified": {
+                    "const": false
+                  },
+                  "reference": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "engine": {
+            "const": "etex"
+          },
+          "status": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "timings_ms": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "encoder",
+              "dense_search",
+              "documents_and_reranking",
+              "total"
+            ],
+            "properties": {
+              "encoder": {
+                "type": "number",
+                "minimum": 0
+              },
+              "dense_search": {
+                "type": "number",
+                "minimum": 0
+              },
+              "documents_and_reranking": {
+                "type": "number",
+                "minimum": 0
+              },
+              "total": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          },
+          "provenance": {
+            "properties": {
+              "fixture": {
+                "const": false
+              }
+            }
+          },
+          "execution": {
+            "properties": {
+              "strategy": {
+                "enum": [
+                  "raw",
+                  "bounded"
+                ]
+              },
+              "index_layout": {
+                "enum": [
+                  "rowwise",
+                  "packed"
+                ]
+              },
+              "dense_exactness": {
+                "properties": {
+                  "certified": {
+                    "const": true
+                  },
+                  "source_verified": {
+                    "const": true
+                  },
+                  "reference": {
+                    "const": "fp32-products-fp64-eight-lanes-no-fma-v1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
